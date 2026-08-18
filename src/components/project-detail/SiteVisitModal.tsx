@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, Clock, MapPin, Building2, CheckCircle } from 'lucide-react';
 import { Project, EnquiryPayload } from '@/types/project';
+import { submitLead } from '@/services/leads';
 
 interface SiteVisitModalProps {
   project: Project | null;
@@ -38,18 +39,36 @@ export function SiteVisitModal({ project, isOpen = true, onClose }: SiteVisitMod
 
   if (!project || !isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.preferredDate) {
       setError('Please fill in your name, phone number, and preferred date.');
       return;
     }
     setError('');
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
+
+    try {
+      await submitLead({
+        leadType: 'site_visit',
+        name: formData.name,
+        phone: formData.phone,
+        projectName: project.name,
+        projectId: project.id,
+        location: project.location,
+        configuration: formData.preferredBhk,
+        preferredDate: formData.preferredDate,
+        preferredTime: formData.preferredTime,
+        message: formData.message,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 2500);
+    } catch (err) {
+      setError('Failed to book site visit request.');
+    }
   };
 
   return (

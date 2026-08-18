@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, Briefcase } from 'lucide-react';
+import { X, CheckCircle } from 'lucide-react';
+import { submitLead } from '@/services/leads';
 
 interface CareerApplicationModalProps {
   isOpen: boolean;
@@ -36,18 +37,31 @@ export function CareerApplicationModal({ isOpen, onClose }: CareerApplicationMod
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) {
       setError('Please provide your full name and valid phone number.');
       return;
     }
     setError('');
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
+
+    try {
+      await submitLead({
+        leadType: 'career',
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        message: `[Interest: ${formData.interest}] [Exp: ${formData.experience}] ${formData.message}`,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 2500);
+    } catch (err) {
+      setError('Failed to submit career application.');
+    }
   };
 
   return (

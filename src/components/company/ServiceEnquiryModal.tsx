@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, Briefcase } from 'lucide-react';
 import { ServiceItem } from '@/types/company';
+import { submitLead } from '@/services/leads';
 
 interface ServiceEnquiryModalProps {
   service: ServiceItem | null;
@@ -36,18 +37,31 @@ export function ServiceEnquiryModal({ service, isOpen = true, onClose }: Service
 
   if (!service || !isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) {
       setError('Please provide your name and phone number.');
       return;
     }
     setError('');
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
+
+    try {
+      await submitLead({
+        leadType: 'consultation',
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        message: `[Service Requested: ${service.name}] ${formData.message}`,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 2500);
+    } catch (err) {
+      setError('Failed to submit request.');
+    }
   };
 
   return (

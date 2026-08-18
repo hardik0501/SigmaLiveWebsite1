@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, CheckCircle } from 'lucide-react';
 import { Location } from '@/types/location';
+import { submitLead } from '@/services/leads';
 
 interface LocationEnquiryModalProps {
   location: Location | null;
@@ -40,18 +41,32 @@ export function LocationEnquiryModal({
 
   if (!location || !isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) {
       setError('Please fill in your name and valid phone number.');
       return;
     }
     setError('');
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
+
+    try {
+      await submitLead({
+        leadType: 'property_enquiry',
+        name: formData.name,
+        phone: formData.phone,
+        location: `${location.name}, ${location.city}`,
+        propertyType: formData.propertyType,
+        message: formData.message,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 2500);
+    } catch (err) {
+      setError('Failed to submit enquiry.');
+    }
   };
 
   return (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Building2, MapPin, CheckCircle } from 'lucide-react';
 import { Project, EnquiryPayload } from '@/types/project';
+import { submitLead } from '@/services/leads';
 
 interface EnquiryModalProps {
   project: Project | null;
@@ -37,18 +38,34 @@ export function EnquiryModal({ project, isOpen = true, onClose }: EnquiryModalPr
 
   if (!project || !isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) {
       setError('Please provide your name and valid contact phone number.');
       return;
     }
     setError('');
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
+
+    try {
+      await submitLead({
+        leadType: 'property_enquiry',
+        name: formData.name,
+        phone: formData.phone,
+        projectName: project.name,
+        projectId: project.id,
+        location: project.location,
+        configuration: formData.preferredBhk,
+        message: formData.message,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 2500);
+    } catch (err) {
+      setError('Failed to submit enquiry. Please try again.');
+    }
   };
 
   return (
