@@ -75,12 +75,15 @@ function HomePage() {
   );
 }
 
-function App() {
+function AppLayout() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname === '/admin';
+
   return (
-    <BrowserRouter>
+    <>
       <UtmTracker />
       <ScrollToTop />
-      <Header />
+      {!isAdmin && <Header />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/properties" element={<PropertiesPage />} />
@@ -109,9 +112,17 @@ function App() {
         <Route path="/thank-you" element={<ThankYouPage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
-      <Footer />
-      <MobileLeadBar />
-      <FloatingLeadLauncher />
+      {!isAdmin && <Footer />}
+      {!isAdmin && <MobileLeadBar />}
+      {!isAdmin && <FloatingLeadLauncher />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
     </BrowserRouter>
   );
 }

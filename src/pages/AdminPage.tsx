@@ -283,7 +283,7 @@ export function AdminPage() {
 
   // LOGGED IN CRM DASHBOARD
   return (
-    <div className="min-h-screen bg-sigma-ivory-50 text-sigma-graphite-900 pt-28 pb-20">
+    <div className="min-h-screen bg-sigma-ivory-50 text-sigma-graphite-900 pt-0 pb-20">
       {/* Top Admin Navigation Bar */}
       <div className="bg-sigma-graphite-950 text-white border-b border-white/10 py-4 mb-8">
         <div className="container-content flex flex-wrap items-center justify-between gap-4">
