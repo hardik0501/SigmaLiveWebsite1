@@ -40,6 +40,7 @@ import { RequestPricePage } from '@/pages/RequestPricePage';
 import { RequestCallbackPage } from '@/pages/RequestCallbackPage';
 import { CompareProjectsPage } from '@/pages/CompareProjectsPage';
 import { ThankYouPage } from '@/pages/ThankYouPage';
+import { AdminPage } from '@/pages/AdminPage';
 import { FloatingLeadLauncher } from '@/components/conversion/FloatingLeadLauncher';
 import { UtmTracker } from '@/components/conversion/UtmTracker';
 
@@ -106,6 +107,7 @@ function App() {
         <Route path="/request-callback" element={<RequestCallbackPage />} />
         <Route path="/compare" element={<CompareProjectsPage />} />
         <Route path="/thank-you" element={<ThankYouPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <Footer />
       <MobileLeadBar />

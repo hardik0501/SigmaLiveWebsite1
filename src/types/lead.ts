@@ -10,6 +10,8 @@ export type LeadType =
   | 'contact'
   | 'career';
 
+export type LeadStatus = 'New' | 'Contacted' | 'In Progress' | 'Closed';
+
 export interface UtmParams {
   utmSource?: string;
   utmMedium?: string;
@@ -39,6 +41,7 @@ export interface LeadPayload {
   utmMedium?: string;
   utmCampaign?: string;
   createdAt?: string;
+  status?: LeadStatus;
 }
 
 export interface LeadSubmissionResult {
