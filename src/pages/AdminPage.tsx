@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { LeadPayload, LeadType, LeadStatus } from '@/types/lead';
 import {
   getStoredLeads,
+  syncLeadsFromCloud,
   updateLeadStatus,
   deleteLead,
   exportLeadsToCsv,
@@ -56,33 +57,45 @@ export function AdminPage() {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'name'>('newest');
   const [activeDetailLead, setActiveDetailLead] = useState<LeadPayload | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Load leads & listen for real-time updates
-  const refreshLeads = () => {
+  const refreshLeads = async () => {
+    setIsSyncing(true);
+    // Load local first for immediate response
     setLeads(getStoredLeads());
+    // Then fetch and merge cloud leads across devices/browsers
+    const synced = await syncLeadsFromCloud();
+    setLeads(synced);
+    setIsSyncing(false);
   };
 
   useEffect(() => {
     document.title = 'Sigma Homes | Admin Lead Management CRM';
     if (isAuthenticated) {
       refreshLeads();
+      // Poll cloud API every 8 seconds for live multi-browser / multi-device sync
+      const interval = setInterval(() => {
+        syncLeadsFromCloud().then((synced) => setLeads(synced));
+      }, 8000);
+
+      const handleLeadsUpdated = (e: Event) => {
+        if ('detail' in e) {
+          setLeads((e as CustomEvent).detail);
+        } else {
+          refreshLeads();
+        }
+      };
+
+      window.addEventListener('sigma-leads-updated', handleLeadsUpdated);
+      window.addEventListener('storage', handleLeadsUpdated);
+
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('sigma-leads-updated', handleLeadsUpdated);
+        window.removeEventListener('storage', handleLeadsUpdated);
+      };
     }
-
-    const handleLeadsUpdated = (e: Event) => {
-      if ('detail' in e) {
-        setLeads((e as CustomEvent).detail);
-      } else {
-        refreshLeads();
-      }
-    };
-
-    window.addEventListener('sigma-leads-updated', handleLeadsUpdated);
-    window.addEventListener('storage', handleLeadsUpdated);
-
-    return () => {
-      window.removeEventListener('sigma-leads-updated', handleLeadsUpdated);
-      window.removeEventListener('storage', handleLeadsUpdated);
-    };
   }, [isAuthenticated]);
 
   // Login Handler
@@ -164,10 +177,10 @@ export function AdminPage() {
       })
       .sort((a, b) => {
         if (sortBy === 'newest') {
-          return (new Date(b.createdAt || 0).getTime()) - (new Date(a.createdAt || 0).getTime());
+          return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
         }
         if (sortBy === 'oldest') {
-          return (new Date(a.createdAt || 0).getTime()) - (new Date(b.createdAt || 0).getTime());
+          return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
         }
         if (sortBy === 'name') {
           return a.name.localeCompare(b.name);
@@ -194,7 +207,7 @@ export function AdminPage() {
     return (
       <div className="min-h-screen bg-sigma-graphite-950 text-white flex items-center justify-center p-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
-        
+
         <div className="w-full max-w-md bg-sigma-navy-900/90 border border-white/15 rounded-3xl p-8 shadow-2xl backdrop-blur-xl relative z-10 space-y-6">
           <div className="text-center space-y-2">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-sigma-amber-500/10 border border-sigma-amber-400/30 text-sigma-amber-400 flex items-center justify-center">
@@ -280,7 +293,7 @@ export function AdminPage() {
             </div>
             <div>
               <h1 className="text-lg font-bold font-serif text-white">Sigma Homes Lead Management Engine</h1>
-              <p className="text-[11px] text-sigma-stone-400">Live Customer Enquiries & Lead Pipeline</p>
+              <p className="text-[11px] text-sigma-stone-400">Live Customer Enquiries & Multi-Device Lead Sync</p>
             </div>
           </div>
 
@@ -295,8 +308,11 @@ export function AdminPage() {
 
             <button
               onClick={refreshLeads}
-              className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors"
-              title="Refresh Leads"
+              disabled={isSyncing}
+              className={`p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors ${
+                isSyncing ? 'animate-spin opacity-70' : ''
+              }`}
+              title="Sync Cloud Leads"
             >
               <RefreshCw className="h-4 w-4" />
             </button>

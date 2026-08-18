@@ -2,6 +2,7 @@ import { LeadPayload, LeadSubmissionResult, UtmParams, LeadType, LeadStatus } fr
 
 const SIGMA_WHATSAPP_NUMBER = '919829288341';
 const SIGMA_PHONE_NUMBER = '+91 98292 88341';
+const REMOTE_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a015bde90e4542';
 
 const SEED_LEADS: LeadPayload[] = [
   {
@@ -108,12 +109,65 @@ export function getStoredLeads(): LeadPayload[] {
 }
 
 /**
- * Save leads array and dispatch reactive window event
+ * Fetch leads from Cloud API and merge locally across browsers/devices
+ */
+export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
+  try {
+    const res = await fetch(REMOTE_API_URL);
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.data && Array.isArray(json.data.leads)) {
+        const cloudLeads: LeadPayload[] = json.data.leads;
+        const localLeads = getStoredLeads();
+
+        // Merge cloud leads and local leads by ID
+        const leadMap = new Map<string, LeadPayload>();
+        [...SEED_LEADS, ...localLeads, ...cloudLeads].forEach((l) => {
+          if (l.id) leadMap.set(l.id, l);
+        });
+
+        const merged = Array.from(leadMap.values()).sort(
+          (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+        );
+
+        localStorage.setItem('sigma_leads', JSON.stringify(merged));
+        window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: merged }));
+        return merged;
+      }
+    }
+  } catch (err) {
+    console.warn('[Sigma Leads] Cloud sync read error:', err);
+  }
+  return getStoredLeads();
+}
+
+/**
+ * Push updated leads array to Cloud API
+ */
+export async function syncLeadsToCloud(leads: LeadPayload[]): Promise<void> {
+  try {
+    await fetch(REMOTE_API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'sigma_leads',
+        data: { leads },
+      }),
+    });
+  } catch (err) {
+    console.warn('[Sigma Leads] Cloud sync write error:', err);
+  }
+}
+
+/**
+ * Save leads array and dispatch reactive window event + cloud sync
  */
 export function saveLeads(leads: LeadPayload[]): void {
   try {
     localStorage.setItem('sigma_leads', JSON.stringify(leads));
     window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: leads }));
+    // Asynchronously push to cloud API so other browsers get it
+    syncLeadsToCloud(leads);
   } catch (err) {
     console.warn('[Sigma Leads] Local storage write error:', err);
   }
