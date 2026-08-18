@@ -109,11 +109,16 @@ export function getStoredLeads(): LeadPayload[] {
 }
 
 /**
- * Fetch leads from Cloud API and merge locally across browsers/devices
+ * Fetch leads from Cloud API and merge locally across browsers/devices with 3.5s timeout
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   try {
-    const res = await fetch(REMOTE_API_URL);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+    const res = await fetch(REMOTE_API_URL, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
     if (res.ok) {
       const json = await res.json();
       if (json && json.data && Array.isArray(json.data.leads)) {
@@ -146,6 +151,9 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
  */
 export async function syncLeadsToCloud(leads: LeadPayload[]): Promise<void> {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
     await fetch(REMOTE_API_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -153,7 +161,9 @@ export async function syncLeadsToCloud(leads: LeadPayload[]): Promise<void> {
         name: 'sigma_leads',
         data: { leads },
       }),
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
   } catch (err) {
     console.warn('[Sigma Leads] Cloud sync write error:', err);
   }
