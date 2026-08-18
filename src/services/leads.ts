@@ -88,6 +88,34 @@ const SEED_LEADS: LeadPayload[] = [
 ];
 
 /**
+ * Sanitize raw lead objects to ensure non-null safe properties
+ */
+export function sanitizeLead(l: any): LeadPayload | null {
+  if (!l || typeof l !== 'object') return null;
+  return {
+    ...l,
+    id: String(l.id || `SIG-${Math.floor(100000 + Math.random() * 900000)}`),
+    name: String(l.name || 'Anonymous'),
+    phone: String(l.phone || 'N/A'),
+    email: l.email ? String(l.email) : undefined,
+    projectName: l.projectName ? String(l.projectName) : undefined,
+    projectId: l.projectId ? String(l.projectId) : undefined,
+    location: l.location ? String(l.location) : undefined,
+    configuration: l.configuration ? String(l.configuration) : undefined,
+    preferredDate: l.preferredDate ? String(l.preferredDate) : undefined,
+    preferredTime: l.preferredTime ? String(l.preferredTime) : undefined,
+    message: l.message ? String(l.message) : undefined,
+    sourcePage: l.sourcePage ? String(l.sourcePage) : '/',
+    utmSource: l.utmSource ? String(l.utmSource) : undefined,
+    utmMedium: l.utmMedium ? String(l.utmMedium) : undefined,
+    utmCampaign: l.utmCampaign ? String(l.utmCampaign) : undefined,
+    leadType: (l.leadType as LeadType) || 'contact',
+    status: (l.status as LeadStatus) || 'New',
+    createdAt: l.createdAt ? String(l.createdAt) : new Date().toISOString(),
+  };
+}
+
+/**
  * Get all stored leads with seed fallback
  */
 export function getStoredLeads(): LeadPayload[] {
@@ -96,7 +124,8 @@ export function getStoredLeads(): LeadPayload[] {
     if (data) {
       const parsed = JSON.parse(data);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        const sanitized = parsed.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
+        if (sanitized.length > 0) return sanitized;
       }
     }
     // Initialize seed data if empty
@@ -122,13 +151,14 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
     if (res.ok) {
       const json = await res.json();
       if (json && json.data && Array.isArray(json.data.leads)) {
-        const cloudLeads: LeadPayload[] = json.data.leads;
+        const rawCloudLeads: any[] = json.data.leads;
+        const cloudLeads = rawCloudLeads.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
         const localLeads = getStoredLeads();
 
         // Merge cloud leads and local leads by ID
         const leadMap = new Map<string, LeadPayload>();
         [...SEED_LEADS, ...localLeads, ...cloudLeads].forEach((l) => {
-          if (l.id) leadMap.set(l.id, l);
+          if (l && l.id) leadMap.set(l.id, l);
         });
 
         const merged = Array.from(leadMap.values()).sort(

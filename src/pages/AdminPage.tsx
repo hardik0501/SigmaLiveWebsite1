@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Component, ErrorInfo, ReactNode } from 'react';
 import { LeadPayload, LeadType, LeadStatus } from '@/types/lead';
 import {
   getStoredLeads,
@@ -33,13 +33,68 @@ import {
   RefreshCw,
   ChevronRight,
   X,
+  AlertTriangle,
 } from 'lucide-react';
 
 const ADMIN_USERNAME = 'SigmaHomes';
 const ADMIN_PASS = 'Sigm@homes2026';
 const AUTH_KEY = 'sigma_admin_auth';
 
-export function AdminPage() {
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class AdminErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  public state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+  };
+
+  public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('[Sigma Admin ErrorBoundary Caught]:', error, errorInfo);
+  }
+
+  private handleReset = () => {
+    localStorage.removeItem('sigma_leads');
+    window.location.reload();
+  };
+
+  public render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-sigma-graphite-950 text-white flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-sigma-navy-900 border border-white/10 rounded-3xl p-8 text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-full bg-red-500/20 text-red-400 flex items-center justify-center">
+              <AlertTriangle className="h-8 w-8" />
+            </div>
+            <h2 className="text-xl font-bold font-serif">Admin Portal Encountered an Issue</h2>
+            <p className="text-xs text-sigma-stone-400">
+              An unexpected render error occurred. Click below to reset cache and reload the CRM dashboard cleanly.
+            </p>
+            <button
+              onClick={this.handleReset}
+              className="w-full py-3 bg-sigma-amber-500 hover:bg-sigma-amber-600 text-sigma-graphite-950 rounded-xl font-bold text-xs shadow-lg transition-colors"
+            >
+              Reset Cache & Reload Admin
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function AdminPageContent() {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return localStorage.getItem(AUTH_KEY) === 'true';
@@ -65,9 +120,14 @@ export function AdminPage() {
     // Load local first for immediate response
     setLeads(getStoredLeads());
     // Then fetch and merge cloud leads across devices/browsers
-    const synced = await syncLeadsFromCloud();
-    setLeads(synced);
-    setIsSyncing(false);
+    try {
+      const synced = await syncLeadsFromCloud();
+      if (Array.isArray(synced)) setLeads(synced);
+    } catch (e) {
+      console.warn('[Admin] Sync error:', e);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   useEffect(() => {
@@ -76,11 +136,15 @@ export function AdminPage() {
       refreshLeads();
       // Poll cloud API every 8 seconds for live multi-browser / multi-device sync
       const interval = setInterval(() => {
-        syncLeadsFromCloud().then((synced) => setLeads(synced));
+        syncLeadsFromCloud()
+          .then((synced) => {
+            if (Array.isArray(synced)) setLeads(synced);
+          })
+          .catch(() => {});
       }, 8000);
 
       const handleLeadsUpdated = (e: Event) => {
-        if ('detail' in e) {
+        if ('detail' in e && Array.isArray((e as CustomEvent).detail)) {
           setLeads((e as CustomEvent).detail);
         } else {
           refreshLeads();
@@ -137,24 +201,33 @@ export function AdminPage() {
 
   // Filtered & Sorted Leads Computation
   const filteredLeads = useMemo(() => {
+    if (!Array.isArray(leads)) return [];
     return leads
       .filter((l) => {
+        if (!l) return false;
+        const nameStr = l.name || '';
+        const phoneStr = l.phone || '';
+        const emailStr = l.email || '';
+        const projectStr = l.projectName || '';
+        const locStr = l.location || '';
+        const idStr = l.id || '';
+
         // Search query
         if (searchQuery.trim()) {
           const q = searchQuery.toLowerCase();
-          const matchName = l.name.toLowerCase().includes(q);
-          const matchPhone = l.phone.toLowerCase().includes(q);
-          const matchEmail = l.email?.toLowerCase().includes(q) || false;
-          const matchProject = l.projectName?.toLowerCase().includes(q) || false;
-          const matchLocation = l.location?.toLowerCase().includes(q) || false;
-          const matchId = l.id?.toLowerCase().includes(q) || false;
+          const matchName = nameStr.toLowerCase().includes(q);
+          const matchPhone = phoneStr.toLowerCase().includes(q);
+          const matchEmail = emailStr.toLowerCase().includes(q);
+          const matchProject = projectStr.toLowerCase().includes(q);
+          const matchLocation = locStr.toLowerCase().includes(q);
+          const matchId = idStr.toLowerCase().includes(q);
           if (!matchName && !matchPhone && !matchEmail && !matchProject && !matchLocation && !matchId) {
             return false;
           }
         }
 
         // Type Filter
-        if (selectedType !== 'all' && l.leadType !== selectedType) return false;
+        if (selectedType !== 'all' && (l.leadType || '') !== selectedType) return false;
 
         // Status Filter
         if (selectedStatus !== 'all' && (l.status || 'New') !== selectedStatus) return false;
@@ -163,6 +236,7 @@ export function AdminPage() {
         if (selectedTimeframe !== 'all' && l.createdAt) {
           const leadDate = new Date(l.createdAt).getTime();
           const now = Date.now();
+          if (isNaN(leadDate)) return false;
           if (selectedTimeframe === 'today') {
             const startOfToday = new Date().setHours(0, 0, 0, 0);
             if (leadDate < startOfToday) return false;
@@ -177,13 +251,13 @@ export function AdminPage() {
       })
       .sort((a, b) => {
         if (sortBy === 'newest') {
-          return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+          return new Date(b?.createdAt || 0).getTime() - new Date(a?.createdAt || 0).getTime();
         }
         if (sortBy === 'oldest') {
-          return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+          return new Date(a?.createdAt || 0).getTime() - new Date(b?.createdAt || 0).getTime();
         }
         if (sortBy === 'name') {
-          return a.name.localeCompare(b.name);
+          return (a?.name || '').localeCompare(b?.name || '');
         }
         return 0;
       });
@@ -191,13 +265,14 @@ export function AdminPage() {
 
   // Metric Stats Summary
   const stats = useMemo(() => {
-    const total = leads.length;
+    const safeLeads = Array.isArray(leads) ? leads : [];
+    const total = safeLeads.length;
     const startOfToday = new Date().setHours(0, 0, 0, 0);
-    const todayCount = leads.filter((l) => l.createdAt && new Date(l.createdAt).getTime() >= startOfToday).length;
-    const siteVisits = leads.filter((l) => l.leadType === 'site_visit').length;
-    const priceRequests = leads.filter((l) => l.leadType === 'price_request').length;
-    const investments = leads.filter((l) => l.leadType === 'investment' || l.leadType === 'nri').length;
-    const sellSubmissions = leads.filter((l) => l.leadType === 'sell_property').length;
+    const todayCount = safeLeads.filter((l) => l && l.createdAt && new Date(l.createdAt).getTime() >= startOfToday).length;
+    const siteVisits = safeLeads.filter((l) => l && l.leadType === 'site_visit').length;
+    const priceRequests = safeLeads.filter((l) => l && l.leadType === 'price_request').length;
+    const investments = safeLeads.filter((l) => l && (l.leadType === 'investment' || l.leadType === 'nri')).length;
+    const sellSubmissions = safeLeads.filter((l) => l && l.leadType === 'sell_property').length;
 
     return { total, todayCount, siteVisits, priceRequests, investments, sellSubmissions };
   }, [leads]);
@@ -446,7 +521,12 @@ export function AdminPage() {
                   </tr>
                 ) : (
                   filteredLeads.map((l) => {
-                    const whatsappLink = generateWhatsAppLink({ message: `Hi ${l.name}, following up regarding your enquiry with Sigma Homes.` });
+                    const leadId = l.id || 'SIG-000000';
+                    const leadName = l.name || 'Anonymous';
+                    const leadPhone = l.phone || 'N/A';
+                    const leadTypeStr = (l.leadType || 'enquiry').replace('_', ' ');
+
+                    const whatsappLink = generateWhatsAppLink({ message: `Hi ${leadName}, following up regarding your enquiry with Sigma Homes.` });
                     const statusColor =
                       l.status === 'Closed'
                         ? 'bg-gray-100 text-gray-700 border-gray-300'
@@ -457,25 +537,25 @@ export function AdminPage() {
                         : 'bg-amber-50 text-amber-800 border-amber-300 font-bold';
 
                     return (
-                      <tr key={l.id} className="hover:bg-sigma-stone-50/70 transition-colors">
+                      <tr key={leadId} className="hover:bg-sigma-stone-50/70 transition-colors">
                         <td className="p-4">
-                          <span className="font-bold text-sigma-graphite-900 block">{l.id}</span>
+                          <span className="font-bold text-sigma-graphite-900 block">{leadId}</span>
                           <span className="text-[11px] text-sigma-stone-400 block mt-0.5">
                             {l.createdAt ? new Date(l.createdAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }) : 'N/A'}
                           </span>
                         </td>
 
                         <td className="p-4">
-                          <span className="font-bold text-sigma-graphite-900 block text-sm">{l.name}</span>
+                          <span className="font-bold text-sigma-graphite-900 block text-sm">{leadName}</span>
                           <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-sigma-stone-600 font-sans">{l.phone}</span>
+                            <span className="text-sigma-stone-600 font-sans">{leadPhone}</span>
                             {l.email && <span className="text-[11px] text-sigma-stone-400">({l.email})</span>}
                           </div>
                         </td>
 
                         <td className="p-4">
                           <span className="px-2.5 py-1 bg-sigma-stone-100 border border-sigma-stone-200 text-sigma-blue-800 rounded-lg text-[11px] font-bold uppercase tracking-wider inline-block">
-                            {l.leadType.replace('_', ' ')}
+                            {leadTypeStr}
                           </span>
                         </td>
 
@@ -491,7 +571,7 @@ export function AdminPage() {
                         <td className="p-4">
                           <select
                             value={l.status || 'New'}
-                            onChange={(e) => handleStatusChange(l.id || '', e.target.value as LeadStatus)}
+                            onChange={(e) => handleStatusChange(leadId, e.target.value as LeadStatus)}
                             className={`px-2.5 py-1 rounded-lg border text-[11px] focus:outline-none ${statusColor}`}
                           >
                             <option value="New">New</option>
@@ -522,7 +602,7 @@ export function AdminPage() {
                           </a>
 
                           <a
-                            href={`tel:${l.phone.replace(/\s+/g, '')}`}
+                            href={`tel:${leadPhone.replace(/\s+/g, '')}`}
                             className="p-1.5 bg-sigma-blue-50 text-sigma-blue-700 hover:bg-sigma-blue-700 hover:text-white rounded-lg transition-colors inline-block"
                             title="Call Customer"
                           >
@@ -530,7 +610,7 @@ export function AdminPage() {
                           </a>
 
                           <button
-                            onClick={() => handleDeleteLead(l.id || '')}
+                            onClick={() => handleDeleteLead(leadId)}
                             className="p-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-colors inline-block"
                             title="Delete Lead"
                           >
@@ -565,10 +645,10 @@ export function AdminPage() {
 
             <div className="space-y-1">
               <span className="text-xs font-bold text-sigma-blue-700 uppercase tracking-wider">
-                Ref: {activeDetailLead.id}
+                Ref: {activeDetailLead.id || 'SIG-000000'}
               </span>
               <h2 className="text-2xl font-bold font-serif text-sigma-graphite-900">
-                {activeDetailLead.name}
+                {activeDetailLead.name || 'Anonymous'}
               </h2>
               <p className="text-xs text-sigma-stone-500">
                 Submitted on {activeDetailLead.createdAt ? new Date(activeDetailLead.createdAt).toLocaleString('en-IN') : 'N/A'}
@@ -579,7 +659,7 @@ export function AdminPage() {
               <div className="pt-2 grid grid-cols-2 gap-2">
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Phone Number</span>
-                  <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.phone}</span>
+                  <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.phone || 'N/A'}</span>
                 </div>
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Email Address</span>
@@ -590,7 +670,7 @@ export function AdminPage() {
               <div className="pt-2 grid grid-cols-2 gap-2">
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Lead Type</span>
-                  <span className="text-sigma-blue-800 font-bold uppercase">{activeDetailLead.leadType}</span>
+                  <span className="text-sigma-blue-800 font-bold uppercase">{activeDetailLead.leadType || 'enquiry'}</span>
                 </div>
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Status</span>
@@ -657,7 +737,7 @@ export function AdminPage() {
 
             <div className="pt-4 border-t border-sigma-stone-200 flex gap-2">
               <a
-                href={generateWhatsAppLink({ message: `Hi ${activeDetailLead.name}, following up regarding your enquiry with Sigma Homes.` })}
+                href={generateWhatsAppLink({ message: `Hi ${activeDetailLead.name || 'Customer'}, following up regarding your enquiry with Sigma Homes.` })}
                 target="_blank"
                 rel="noreferrer"
                 className="w-1/2 py-3 bg-sigma-green-600 hover:bg-sigma-green-700 text-white rounded-xl text-xs font-bold shadow-md transition-colors flex items-center justify-center gap-1.5"
@@ -666,7 +746,7 @@ export function AdminPage() {
                 WhatsApp Customer
               </a>
               <a
-                href={`tel:${activeDetailLead.phone.replace(/\s+/g, '')}`}
+                href={`tel:${(activeDetailLead.phone || '').replace(/\s+/g, '')}`}
                 className="w-1/2 py-3 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white rounded-xl text-xs font-bold shadow-md transition-colors flex items-center justify-center gap-1.5"
               >
                 <Phone className="h-4 w-4" />
@@ -677,5 +757,13 @@ export function AdminPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export function AdminPage() {
+  return (
+    <AdminErrorBoundary>
+      <AdminPageContent />
+    </AdminErrorBoundary>
   );
 }
