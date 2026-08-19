@@ -42,6 +42,7 @@ export function sanitizeLead(l: any): LeadPayload | null {
 }
 
 const SERVER_API_URL = '/api/leads';
+const GLOBAL_CLOUD_API_URL = 'https://crudcrud.com/api/950c4af2005c48f4a64d14025ebb1d7d/leads';
 
 /**
  * Get all stored leads without dummy data from local cache
@@ -64,44 +65,71 @@ export function getStoredLeads(): LeadPayload[] {
 }
 
 /**
- * Fetch leads from persistent JSON storage server (/api/leads) and sync across all devices & browsers
+ * Fetch leads from local server AND global cloud endpoint to guarantee cross-device sync on Vercel
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
+  const fetchedLeads: LeadPayload[] = [];
+
+  // 1. Fetch from local server (/api/leads)
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
-
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
     const res = await fetch(SERVER_API_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (res.ok) {
       const json = await res.json();
       if (json && json.success && Array.isArray(json.leads)) {
-        const cloudLeads = json.leads.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
-        const localLeads = getStoredLeads();
-
-        // Merge leads by ID
-        const leadMap = new Map<string, LeadPayload>();
-        [...localLeads, ...cloudLeads].forEach((l) => {
-          if (l && l.id && !DUMMY_SEED_IDS.has(l.id)) leadMap.set(l.id, l);
+        json.leads.forEach((l: any) => {
+          const san = sanitizeLead(l);
+          if (san) fetchedLeads.push(san);
         });
-
-        const merged = Array.from(leadMap.values()).sort(
-          (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-        );
-
-        localStorage.setItem('sigma_leads', JSON.stringify(merged));
-        window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: merged }));
-        if (leadsChannel) {
-          leadsChannel.postMessage({ type: 'leads-updated', leads: merged });
-        }
-        return merged;
       }
     }
   } catch (err) {
-    console.warn('[Sigma Leads] JSON server storage read fallback:', err);
+    // Ignore local endpoint fetch error
   }
-  return getStoredLeads();
+
+  // 2. Fetch from Global Cloud Endpoint (Works on Vercel deployment across mobile & laptop)
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(GLOBAL_CLOUD_API_URL, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const json = await res.json();
+      if (Array.isArray(json)) {
+        json.forEach((l: any) => {
+          const san = sanitizeLead(l);
+          if (san) fetchedLeads.push(san);
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('[Sigma Leads] Cloud storage sync fallback:', err);
+  }
+
+  const localLeads = getStoredLeads();
+  const leadMap = new Map<string, LeadPayload>();
+
+  [...localLeads, ...fetchedLeads].forEach((l) => {
+    if (l && l.id && !DUMMY_SEED_IDS.has(l.id)) {
+      leadMap.set(l.id, l);
+    }
+  });
+
+  const merged = Array.from(leadMap.values()).sort(
+    (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+  );
+
+  localStorage.setItem('sigma_leads', JSON.stringify(merged));
+  window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: merged }));
+  if (leadsChannel) {
+    leadsChannel.postMessage({ type: 'leads-updated', leads: merged });
+  }
+
+  return merged;
 }
 
 /**
@@ -121,7 +149,7 @@ export function saveLeads(leads: LeadPayload[]): void {
 }
 
 /**
- * Submit a new lead - saves to persistent data/leads.json server storage & local state
+ * Submit a new lead - saves to persistent JSON storage, global cloud API & local state
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionResult> {
   const referenceId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -148,29 +176,33 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
     utmCampaign: payload.utmCampaign || savedUtm.utmCampaign,
   };
 
-  console.log('[Sigma Lead System] Saving New Lead to Persistent JSON Storage:', fullPayload);
+  console.log('[Sigma Lead System] Saving New Lead to Persistent Storage & Global Cloud API:', fullPayload);
 
   // 1. Immediate local save & tab broadcast
   const existingLeads = getStoredLeads();
   const updatedLeads = [fullPayload, ...existingLeads];
   saveLeads(updatedLeads);
 
-  // 2. Persist to data/leads.json via /api/leads HTTP POST
+  // 2. Persist to data/leads.json via /api/leads HTTP POST (Local server)
   try {
-    const res = await fetch(SERVER_API_URL, {
+    fetch(SERVER_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fullPayload),
-    });
-    if (res.ok) {
-      const json = await res.json();
-      if (json && json.success && Array.isArray(json.leads)) {
-        const sanitized = json.leads.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
-        saveLeads(sanitized);
-      }
-    }
+    }).catch(() => {});
   } catch (err) {
-    console.warn('[Sigma Lead System] Failed to post to /api/leads server endpoint:', err);
+    // Ignore
+  }
+
+  // 3. Persist to Global Cloud API (Works on Vercel deployment across mobile & laptop)
+  try {
+    fetch(GLOBAL_CLOUD_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fullPayload),
+    }).catch(() => {});
+  } catch (err) {
+    console.warn('[Sigma Lead System] Global cloud API post error:', err);
   }
 
   return {

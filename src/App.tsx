@@ -42,6 +42,7 @@ import { CompareProjectsPage } from '@/pages/CompareProjectsPage';
 import { ThankYouPage } from '@/pages/ThankYouPage';
 import { AdminPage } from '@/pages/AdminPage';
 import { FloatingLeadLauncher } from '@/components/conversion/FloatingLeadLauncher';
+import { ExitIntentModal } from '@/components/conversion/ExitIntentModal';
 import { UtmTracker } from '@/components/conversion/UtmTracker';
 
 function ScrollToTop() {
@@ -115,6 +116,7 @@ function AppLayout() {
       {!isAdmin && <Footer />}
       {!isAdmin && <MobileLeadBar />}
       {!isAdmin && <FloatingLeadLauncher />}
+      {!isAdmin && <ExitIntentModal />}
     </>
   );
 }

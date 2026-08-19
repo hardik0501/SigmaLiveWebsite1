@@ -6,6 +6,7 @@ import { CompanyTimeline } from '@/components/company/CompanyTimeline';
 import { VisionMission } from '@/components/company/VisionMission';
 import { CoreValues } from '@/components/company/CoreValues';
 import { BusinessEcosystem } from '@/components/sections/BusinessEcosystem';
+import { FinalCTA } from '@/components/sections/FinalCTA';
 import { ArrowRight, UserCheck, Briefcase } from 'lucide-react';
 
 export function AboutPage() {
@@ -15,13 +16,13 @@ export function AboutPage() {
 
   return (
     <div className="min-h-screen bg-sigma-ivory-50 text-sigma-graphite-900">
-      {/* Corporate Hero */}
+      {/* 1. Corporate Hero */}
       <AboutHero />
 
-      {/* Verified Stats Strip */}
+      {/* 2. Verified Stats Strip */}
       <CompanyStats />
 
-      {/* Corporate Story & Ethos */}
+      {/* 3. Corporate Story & Ethos */}
       <section className="py-16 md:py-24 bg-white border-b border-sigma-stone-200/60">
         <div className="container-content max-w-4xl space-y-6">
           <span className="eyebrow text-sigma-blue-600">Our Ethos</span>
@@ -39,19 +40,19 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* 25+ Year Journey Timeline */}
+      {/* 4. 25+ Year Journey Timeline */}
       <CompanyTimeline />
 
-      {/* Vision & Mission */}
+      {/* 5. Vision & Mission */}
       <VisionMission />
 
-      {/* Core Values */}
+      {/* 6. Core Values */}
       <CoreValues />
 
-      {/* Integrated Business Ecosystem */}
+      {/* 7. Integrated Business Ecosystem */}
       <BusinessEcosystem />
 
-      {/* Leadership & Founder Connect Callout */}
+      {/* 8. Leadership & Founder Connect Callout */}
       <section className="py-20 bg-sigma-navy-950 text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
         <div className="container-content relative z-10 max-w-2xl space-y-4">
@@ -80,6 +81,9 @@ export function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* 9. Final CTA */}
+      <FinalCTA />
     </div>
   );
 }

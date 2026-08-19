@@ -135,15 +135,17 @@ export function PropertyCard({
   return (
     <div className="group relative flex flex-col bg-white rounded-2xl border border-sigma-stone-200/80 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-sigma-blue-950/5 transition-all duration-500 ease-sigma">
       {/* Image Container */}
-      <div className="relative h-60 w-full overflow-hidden bg-sigma-stone-100">
+      <div className="relative h-64 w-full overflow-hidden bg-sigma-stone-100">
         <img
           src={project.heroImage}
           alt={project.name}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 ease-sigma group-hover:scale-104"
+          className="w-full h-full object-cover transition-transform duration-700 ease-sigma group-hover:scale-103"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        
         <span
-          className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-xs ${
+          className={`absolute top-4 left-4 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide border backdrop-blur-xs shadow-xs ${
             statusColors[project.status]
           }`}
         >
@@ -152,7 +154,7 @@ export function PropertyCard({
 
         <button
           onClick={() => onQuickView(project)}
-          className="absolute bottom-4 right-4 px-3 py-1.5 bg-white/95 backdrop-blur-xs text-sigma-graphite-900 rounded-xl text-xs font-semibold shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white flex items-center gap-1.5"
+          className="absolute bottom-4 right-4 px-3.5 py-1.5 bg-white/95 backdrop-blur-xs text-sigma-graphite-900 rounded-xl text-xs font-bold shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white flex items-center gap-1.5 transform group-hover:translate-y-0 translate-y-1"
         >
           <Eye className="h-3.5 w-3.5 text-sigma-blue-600" />
           Quick View
@@ -162,7 +164,7 @@ export function PropertyCard({
       {/* Card Body */}
       <div className="flex-1 p-6 flex flex-col justify-between">
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-medium text-sigma-stone-500">
+          <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-sigma-stone-500 uppercase">
             <MapPin className="h-3.5 w-3.5 text-sigma-blue-600 shrink-0" />
             <span className="truncate">{project.location}</span>
           </div>
@@ -173,9 +175,9 @@ export function PropertyCard({
             </h3>
           </Link>
 
-          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-semibold text-sigma-stone-600">
-            <span className="flex items-center gap-1">
-              <Building2 className="h-3.5 w-3.5 text-sigma-blue-500" />
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-sigma-stone-600">
+            <span className="flex items-center gap-1 font-semibold text-sigma-graphite-800">
+              <Building2 className="h-3.5 w-3.5 text-sigma-blue-600" />
               {project.propertyType}
             </span>
             <span className="text-sigma-stone-300">•</span>
@@ -198,7 +200,7 @@ export function PropertyCard({
             <span className="block text-[10px] font-bold uppercase tracking-wider text-sigma-stone-400">
               Starting Price
             </span>
-            <span className="text-sm font-bold text-sigma-graphite-900">
+            <span className="text-sm font-bold text-sigma-graphite-900 font-serif">
               {project.priceLabel}
             </span>
           </div>
@@ -207,8 +209,8 @@ export function PropertyCard({
             to={`/projects/${project.slug}`}
             className="inline-flex items-center gap-1 text-xs font-bold text-sigma-blue-700 group-hover:text-sigma-blue-900 transition-colors"
           >
-            View Project
-            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            <span>View Property</span>
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
           </Link>
         </div>
       </div>
