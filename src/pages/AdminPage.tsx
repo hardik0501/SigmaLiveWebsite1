@@ -629,6 +629,7 @@ function AdminPageContent() {
                     const badge = getCategoryBadge(l.leadType);
 
                     const whatsappLink = generateWhatsAppLink({
+                      targetPhone: leadPhone,
                       message: `Hi ${leadName}, following up regarding your ${badge.label} with Sigma Homes.`,
                     });
                     const statusColor =
@@ -892,6 +893,7 @@ function AdminPageContent() {
             <div className="pt-4 border-t border-sigma-stone-200 flex gap-2">
               <a
                 href={generateWhatsAppLink({
+                  targetPhone: activeDetailLead.phone,
                   message: `Hi ${activeDetailLead.name || 'Customer'}, following up regarding your ${
                     getCategoryBadge(activeDetailLead.leadType).label
                   } with Sigma Homes.`,

@@ -283,33 +283,46 @@ export function exportLeadsToCsv(leads: LeadPayload[]): void {
 }
 
 /**
- * Generate context-aware WhatsApp link
+ * Clean phone numbers into WhatsApp compatible international format (e.g. 919829012345)
+ */
+export function formatPhoneForWhatsApp(phone?: string): string {
+  if (!phone) return '';
+  let digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) {
+    digits = '91' + digits;
+  }
+  return digits;
+}
+
+/**
+ * Generate context-aware WhatsApp link targeted at customer's phone number
  */
 export function generateWhatsAppLink(context: {
+  targetPhone?: string;
   type?: LeadType;
   projectName?: string;
   location?: string;
   message?: string;
 }): string {
-  let text = 'Hi Sigma Homes, I would like to inquire about real estate opportunities.';
+  let text = 'Hi, following up regarding your enquiry with Sigma Homes.';
 
   if (context.projectName) {
-    text = `Hi Sigma Homes, I am interested in ${context.projectName}${
+    text = `Hi, following up regarding your interest in ${context.projectName}${
       context.location ? ` in ${context.location}` : ''
-    }. Please share the price sheet and site visit details.`;
+    } with Sigma Homes.`;
   } else if (context.type === 'investment') {
-    text = 'Hi Sigma Homes, I would like to discuss real estate investment opportunities and corridor research.';
+    text = 'Hi, following up regarding your real estate investment advisory request with Sigma Homes.';
   } else if (context.type === 'nri') {
-    text = 'Hi Sigma Homes, I am an NRI looking to explore property investment and virtual tour options in India.';
+    text = 'Hi, following up regarding your NRI property enquiry with Sigma Homes.';
   } else if (context.type === 'sell_property') {
-    text = 'Hi Sigma Homes, I would like to submit my property for evaluation and sales marketing.';
-  } else if (context.location) {
-    text = `Hi Sigma Homes, I am looking for properties in ${context.location}. Please share the available options.`;
+    text = 'Hi, following up regarding your property submission with Sigma Homes.';
   } else if (context.message) {
     text = context.message;
   }
 
-  return `https://wa.me/${SIGMA_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+  const rawPhone = context.targetPhone ? formatPhoneForWhatsApp(context.targetPhone) : SIGMA_WHATSAPP_NUMBER;
+  const phone = rawPhone || SIGMA_WHATSAPP_NUMBER;
+  return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
 
 /**
