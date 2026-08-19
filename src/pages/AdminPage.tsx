@@ -468,6 +468,8 @@ function AdminPageContent() {
                 All Website Forms • Real-Time Broadcast • Updated at {lastUpdated}
               </p>
             </div>
+          </div>
+
           <div className="flex items-center gap-3">
             <button
               onClick={() => exportLeadsToCsv(filteredLeads)}
