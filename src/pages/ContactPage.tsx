@@ -13,6 +13,7 @@ export function ContactPage() {
     message: '',
   });
 
+  const [honeypot, setHoneypot] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -23,8 +24,15 @@ export function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone) {
-      setError('Please fill in your name and phone number.');
+
+    // Silent fail for bot trap honeypot
+    if (honeypot) {
+      setSubmitted(true);
+      return;
+    }
+
+    if (!formData.name.trim() || !formData.phone.trim()) {
+      setError('Please fill in your name and a valid 10-digit mobile number.');
       return;
     }
 
@@ -32,13 +40,19 @@ export function ContactPage() {
     setLoading(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         leadType: 'contact',
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        message: `[Reason: ${formData.reason}] ${formData.message}`,
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        message: `[Reason: ${formData.reason}] ${formData.message.trim()}`,
       });
+
+      if (!res.success) {
+        setLoading(false);
+        setError(res.message || 'Please enter valid contact details (avoid test inputs or dummy numbers).');
+        return;
+      }
 
       setLoading(false);
       setSubmitted(true);
@@ -115,6 +129,17 @@ export function ContactPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Hidden Bot Honeypot */}
+              <input
+                type="text"
+                name="website_url_trap"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                style={{ display: 'none' }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-sigma-stone-500 mb-1">
                   Your Name *

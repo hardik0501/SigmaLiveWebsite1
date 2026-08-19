@@ -7,6 +7,7 @@ import {
   deleteLead,
   exportLeadsToCsv,
   generateWhatsAppLink,
+  purgeTestLeads,
 } from '@/services/leads';
 import {
   Lock,
@@ -23,6 +24,7 @@ import {
   RefreshCw,
   X,
   AlertTriangle,
+  ShieldAlert,
   Radio,
   FileText,
   Building2,
@@ -268,6 +270,14 @@ function AdminPageContent() {
     }
   };
 
+  // Purge Spam / Test Leads
+  const handlePurgeTestLeads = () => {
+    const count = purgeTestLeads();
+    const updated = getStoredLeads();
+    setLeads(updated);
+    alert(count > 0 ? `Successfully removed ${count} test/spam lead(s).` : 'No test/spam leads found.');
+  };
+
   // Category counts map
   const categoryCounts = useMemo(() => {
     const safeLeads = Array.isArray(leads) ? leads : [];
@@ -458,8 +468,6 @@ function AdminPageContent() {
                 All Website Forms • Real-Time Broadcast • Updated at {lastUpdated}
               </p>
             </div>
-          </div>
-
           <div className="flex items-center gap-3">
             <button
               onClick={() => exportLeadsToCsv(filteredLeads)}
@@ -473,12 +481,21 @@ function AdminPageContent() {
             </button>
 
             <button
+              onClick={handlePurgeTestLeads}
+              className="px-3 py-2 bg-amber-600/80 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5"
+              title="Clean up test / dummy submissions"
+            >
+              <ShieldAlert className="h-3.5 w-3.5" />
+              Purge Test Leads
+            </button>
+
+            <button
               onClick={refreshLeads}
               disabled={isSyncing}
               className={`px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
                 isSyncing ? 'opacity-70' : ''
               }`}
-              title="Sync Cloud Data"
+              title="Sync Lead Data"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
               Sync

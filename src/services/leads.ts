@@ -42,10 +42,60 @@ export function sanitizeLead(l: any): LeadPayload | null {
 }
 
 const SERVER_API_URL = '/api/leads';
-const GLOBAL_CLOUD_API_URL = 'https://crudcrud.com/api/950c4af2005c48f4a64d14025ebb1d7d/leads';
 
 /**
- * Get all stored leads without dummy data from local cache
+ * Check if a lead submission is test, spam, or invalid
+ */
+export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean; reason?: string } {
+  if (!lead) return { isSpam: true, reason: 'Invalid submission data.' };
+
+  const name = String(lead.name || '').trim().toLowerCase();
+  const rawPhone = String(lead.phone || '').trim();
+  const digitsOnly = rawPhone.replace(/\D/g, '');
+  const message = String(lead.message || '').trim().toLowerCase();
+
+  const spamKeywords = [
+    'test', 'testing', 'dds', 'asdf', 'qwerty', 'dummy', 'admin',
+    'demo', 'sample', 'fake', 'abcd', '1234', 'temp', 'foobar', 'xxx'
+  ];
+
+  // 1. Name validation
+  if (!name || name.length < 2) {
+    return { isSpam: true, reason: 'Please enter a valid full name.' };
+  }
+  if (spamKeywords.some((kw) => name.includes(kw))) {
+    return { isSpam: true, reason: 'Test names are not allowed.' };
+  }
+
+  // 2. Phone validation
+  const invalidPhones = [
+    '0000000000', '1111111111', '2222222222', '3333333333', '4444444444',
+    '5555555555', '6666666666', '7777777777', '8888888888', '9999999999',
+    '1234567890', '9876543210', '0123456789'
+  ];
+
+  if (!digitsOnly || digitsOnly.length < 10) {
+    return { isSpam: true, reason: 'Please enter a valid 10-digit mobile number.' };
+  }
+
+  const last10 = digitsOnly.slice(-10);
+  if (invalidPhones.includes(last10)) {
+    return { isSpam: true, reason: 'Please enter a valid, genuine mobile number.' };
+  }
+
+  // 3. Message validation
+  if (message) {
+    const cleanMsg = message.replace(/\[reason:[^\]]+\]/i, '').trim();
+    if (cleanMsg && spamKeywords.includes(cleanMsg)) {
+      return { isSpam: true, reason: 'Please enter a detailed requirement.' };
+    }
+  }
+
+  return { isSpam: false };
+}
+
+/**
+ * Get all stored leads without dummy/test data from local cache
  */
 export function getStoredLeads(): LeadPayload[] {
   try {
@@ -53,7 +103,9 @@ export function getStoredLeads(): LeadPayload[] {
     if (data) {
       const parsed = JSON.parse(data);
       if (Array.isArray(parsed)) {
-        const sanitized = parsed.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
+        const sanitized = parsed
+          .map(sanitizeLead)
+          .filter((l): l is LeadPayload => l !== null && !isTestOrSpamLead(l).isSpam);
         return sanitized;
       }
     }
@@ -65,12 +117,12 @@ export function getStoredLeads(): LeadPayload[] {
 }
 
 /**
- * Fetch leads from local server AND global cloud endpoint to guarantee cross-device sync on Vercel
+ * Fetch leads from local server to guarantee sync
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   const fetchedLeads: LeadPayload[] = [];
 
-  // 1. Fetch from local server (/api/leads)
+  // Fetch from local server (/api/leads)
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -82,7 +134,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
       if (json && json.success && Array.isArray(json.leads)) {
         json.leads.forEach((l: any) => {
           const san = sanitizeLead(l);
-          if (san) fetchedLeads.push(san);
+          if (san && !isTestOrSpamLead(san).isSpam) fetchedLeads.push(san);
         });
       }
     }
@@ -90,31 +142,11 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
     // Ignore local endpoint fetch error
   }
 
-  // 2. Fetch from Global Cloud Endpoint (Works on Vercel deployment across mobile & laptop)
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
-    const res = await fetch(GLOBAL_CLOUD_API_URL, { signal: controller.signal });
-    clearTimeout(timeoutId);
-
-    if (res.ok) {
-      const json = await res.json();
-      if (Array.isArray(json)) {
-        json.forEach((l: any) => {
-          const san = sanitizeLead(l);
-          if (san) fetchedLeads.push(san);
-        });
-      }
-    }
-  } catch (err) {
-    console.warn('[Sigma Leads] Cloud storage sync fallback:', err);
-  }
-
   const localLeads = getStoredLeads();
   const leadMap = new Map<string, LeadPayload>();
 
   [...localLeads, ...fetchedLeads].forEach((l) => {
-    if (l && l.id && !DUMMY_SEED_IDS.has(l.id)) {
+    if (l && l.id && !DUMMY_SEED_IDS.has(l.id) && !isTestOrSpamLead(l).isSpam) {
       leadMap.set(l.id, l);
     }
   });
@@ -149,9 +181,35 @@ export function saveLeads(leads: LeadPayload[]): void {
 }
 
 /**
- * Submit a new lead - saves to persistent JSON storage, global cloud API & local state
+ * Purge test/spam leads from storage
+ */
+export function purgeTestLeads(): number {
+  const existing = getStoredLeads();
+  const validLeads = existing.filter((l) => !isTestOrSpamLead(l).isSpam);
+  const purgedCount = existing.length - validLeads.length;
+
+  saveLeads(validLeads);
+  fetch(SERVER_API_URL, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ leads: validLeads }),
+  }).catch(() => {});
+
+  return purgedCount;
+}
+
+/**
+ * Submit a new lead - saves to persistent JSON storage & local state after validation
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionResult> {
+  const check = isTestOrSpamLead(payload);
+  if (check.isSpam) {
+    return {
+      success: false,
+      message: check.reason || 'Invalid lead submission. Please provide valid contact details.',
+    };
+  }
+
   const referenceId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
   const timestamp = new Date().toISOString();
 
@@ -176,7 +234,7 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
     utmCampaign: payload.utmCampaign || savedUtm.utmCampaign,
   };
 
-  console.log('[Sigma Lead System] Saving New Lead to Persistent Storage & Global Cloud API:', fullPayload);
+  console.log('[Sigma Lead System] Saving New Valid Lead:', fullPayload);
 
   // 1. Immediate local save & tab broadcast
   const existingLeads = getStoredLeads();
@@ -192,17 +250,6 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
     }).catch(() => {});
   } catch (err) {
     // Ignore
-  }
-
-  // 3. Persist to Global Cloud API (Works on Vercel deployment across mobile & laptop)
-  try {
-    fetch(GLOBAL_CLOUD_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(fullPayload),
-    }).catch(() => {});
-  } catch (err) {
-    console.warn('[Sigma Lead System] Global cloud API post error:', err);
   }
 
   return {
