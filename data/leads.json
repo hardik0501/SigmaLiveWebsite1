@@ -1,15 +1,1 @@
-[
-  {
-    "leadType": "location_enquiry",
-    "name": "Rohan Sharma",
-    "phone": "9950177381",
-    "location": "Mansarovar, Jaipur",
-    "propertyType": "Plots & Land",
-    "message": "Looking for a plot in Mansarovar, Jaipur",
-    "id": "SIG-962134",
-    "status": "New",
-    "createdAt": "2026-08-19T01:56:52.643Z",
-    "sourceUrl": "http://localhost:5173/locations/mansarovar-jaipur",
-    "sourcePage": "/locations/mansarovar-jaipur"
-  }
-]
+[]
