@@ -4,97 +4,23 @@ const SIGMA_WHATSAPP_NUMBER = '919829288341';
 const SIGMA_PHONE_NUMBER = '+91 98292 88341';
 const REMOTE_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a015bde90e4542';
 
-const SEED_LEADS: LeadPayload[] = [
-  {
-    id: 'SIG-839201',
-    leadType: 'site_visit',
-    name: 'Rajesh Agarwal',
-    phone: '+91 98290 12345',
-    email: 'rajesh.agarwal@example.com',
-    projectName: 'Anukampa Sky Lounge',
-    projectId: 'anukampa-sky-lounge',
-    location: 'Mansarovar Extension, Jaipur',
-    configuration: '3 BHK High-Rise Apartment',
-    preferredDate: '2026-08-20',
-    preferredTime: 'Morning (10 AM - 1 PM)',
-    message: 'Interested in touring corner 3 BHK unit on 8th floor.',
-    sourcePage: '/projects/anukampa-sky-lounge',
-    utmSource: 'google',
-    utmMedium: 'cpc',
-    utmCampaign: 'mansarovar_highrise',
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-    status: 'New',
-  },
-  {
-    id: 'SIG-710492',
-    leadType: 'price_request',
-    name: 'Priya Sharma',
-    phone: '+91 94140 67890',
-    email: 'priya.s@example.com',
-    projectName: 'Arihant Dynasty',
-    projectId: 'arihant-dynasty',
-    location: 'Mansarovar, Jaipur',
-    configuration: '2 BHK Smart Apartment',
-    message: 'Requesting breakdown of floor rise charges and GST benefits.',
-    sourcePage: '/projects/arihant-dynasty',
-    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-    status: 'Contacted',
-  },
-  {
-    id: 'SIG-559102',
-    leadType: 'investment',
-    name: 'Vikram Singh Shekhawat',
-    phone: '+91 98291 98765',
-    email: 'v.shekhawat@example.com',
-    location: 'Jaipur Ring Road Corridor',
-    budget: '₹80 Lakhs - ₹1.2 Crores',
-    propertyType: 'Land & Plot Opportunities',
-    message: 'Looking for 200 sq. yard plot near Ring Road junction for 3-year holding period.',
-    sourcePage: '/investment',
-    utmSource: 'facebook',
-    utmMedium: 'social',
-    utmCampaign: 'investment_corridor',
-    createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-    status: 'In Progress',
-  },
-  {
-    id: 'SIG-409182',
-    leadType: 'nri',
-    name: 'Dr. Amit Mehta',
-    phone: '+1 408 555 0192',
-    email: 'dramitmehta@example.com',
-    location: 'Vaishali Nagar, Jaipur',
-    budget: '₹1.5 Crores+',
-    propertyType: 'Luxury Villa',
-    message: 'NRI residing in San Jose, USA. Requesting virtual video site walkthrough for 4 BHK villa.',
-    sourcePage: '/nri-services',
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-    status: 'New',
-  },
-  {
-    id: 'SIG-391029',
-    leadType: 'sell_property',
-    name: 'Mahesh Khandelwal',
-    phone: '+91 98293 44556',
-    email: 'm.khandelwal@example.com',
-    location: 'Kalwar Road, Jaipur',
-    propertyType: 'Independent Villa',
-    budget: '₹65 Lakhs',
-    message: 'Want to sell my 3 BHK independent villa (1800 sq ft) constructed in 2021.',
-    sourcePage: '/sell-property',
-    createdAt: new Date(Date.now() - 3600000 * 36).toISOString(),
-    status: 'Closed',
-  },
-];
+// BroadcastChannel for instant cross-tab real-time sync
+const leadsChannel = typeof window !== 'undefined' && 'BroadcastChannel' in window ? new BroadcastChannel('sigma_leads_channel') : null;
+
+// Legacy Seed IDs to filter out if previously cached in localStorage
+const DUMMY_SEED_IDS = new Set(['SIG-839201', 'SIG-710492', 'SIG-559102', 'SIG-409182', 'SIG-391029']);
 
 /**
  * Sanitize raw lead objects to ensure non-null safe properties
  */
 export function sanitizeLead(l: any): LeadPayload | null {
   if (!l || typeof l !== 'object') return null;
+  const leadId = String(l.id || `SIG-${Math.floor(100000 + Math.random() * 900000)}`);
+  if (DUMMY_SEED_IDS.has(leadId)) return null;
+
   return {
     ...l,
-    id: String(l.id || `SIG-${Math.floor(100000 + Math.random() * 900000)}`),
+    id: leadId,
     name: String(l.name || 'Anonymous'),
     phone: String(l.phone || 'N/A'),
     email: l.email ? String(l.email) : undefined,
@@ -115,50 +41,49 @@ export function sanitizeLead(l: any): LeadPayload | null {
   };
 }
 
+const SERVER_API_URL = '/api/leads';
+
 /**
- * Get all stored leads with seed fallback
+ * Get all stored leads without dummy data from local cache
  */
 export function getStoredLeads(): LeadPayload[] {
   try {
     const data = localStorage.getItem('sigma_leads');
     if (data) {
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         const sanitized = parsed.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
-        if (sanitized.length > 0) return sanitized;
+        return sanitized;
       }
     }
-    // Initialize seed data if empty
-    localStorage.setItem('sigma_leads', JSON.stringify(SEED_LEADS));
-    return SEED_LEADS;
+    return [];
   } catch (err) {
     console.warn('[Sigma Leads] Local storage read error:', err);
-    return SEED_LEADS;
+    return [];
   }
 }
 
 /**
- * Fetch leads from Cloud API and merge locally across browsers/devices with 3.5s timeout
+ * Fetch leads from persistent JSON storage server (/api/leads) and sync across all devices & browsers
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
 
-    const res = await fetch(REMOTE_API_URL, { signal: controller.signal });
+    const res = await fetch(SERVER_API_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (res.ok) {
       const json = await res.json();
-      if (json && json.data && Array.isArray(json.data.leads)) {
-        const rawCloudLeads: any[] = json.data.leads;
-        const cloudLeads = rawCloudLeads.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
+      if (json && json.success && Array.isArray(json.leads)) {
+        const cloudLeads = json.leads.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
         const localLeads = getStoredLeads();
 
-        // Merge cloud leads and local leads by ID
+        // Merge leads by ID
         const leadMap = new Map<string, LeadPayload>();
-        [...SEED_LEADS, ...localLeads, ...cloudLeads].forEach((l) => {
-          if (l && l.id) leadMap.set(l.id, l);
+        [...localLeads, ...cloudLeads].forEach((l) => {
+          if (l && l.id && !DUMMY_SEED_IDS.has(l.id)) leadMap.set(l.id, l);
         });
 
         const merged = Array.from(leadMap.values()).sort(
@@ -167,54 +92,36 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
 
         localStorage.setItem('sigma_leads', JSON.stringify(merged));
         window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: merged }));
+        if (leadsChannel) {
+          leadsChannel.postMessage({ type: 'leads-updated', leads: merged });
+        }
         return merged;
       }
     }
   } catch (err) {
-    console.warn('[Sigma Leads] Cloud sync read error:', err);
+    console.warn('[Sigma Leads] JSON server storage read fallback:', err);
   }
   return getStoredLeads();
 }
 
 /**
- * Push updated leads array to Cloud API
- */
-export async function syncLeadsToCloud(leads: LeadPayload[]): Promise<void> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
-
-    await fetch(REMOTE_API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'sigma_leads',
-        data: { leads },
-      }),
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-  } catch (err) {
-    console.warn('[Sigma Leads] Cloud sync write error:', err);
-  }
-}
-
-/**
- * Save leads array and dispatch reactive window event + cloud sync
+ * Save leads array to local storage and broadcast to open tabs
  */
 export function saveLeads(leads: LeadPayload[]): void {
   try {
-    localStorage.setItem('sigma_leads', JSON.stringify(leads));
-    window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: leads }));
-    // Asynchronously push to cloud API so other browsers get it
-    syncLeadsToCloud(leads);
+    const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
+    localStorage.setItem('sigma_leads', JSON.stringify(cleanLeads));
+    window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: cleanLeads }));
+    if (leadsChannel) {
+      leadsChannel.postMessage({ type: 'leads-updated', leads: cleanLeads });
+    }
   } catch (err) {
     console.warn('[Sigma Leads] Local storage write error:', err);
   }
 }
 
 /**
- * Submit a new lead
+ * Submit a new lead - saves to persistent data/leads.json server storage & local state
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionResult> {
   const referenceId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -241,11 +148,30 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
     utmCampaign: payload.utmCampaign || savedUtm.utmCampaign,
   };
 
-  console.log('[Sigma Lead System] New Lead Created:', fullPayload);
+  console.log('[Sigma Lead System] Saving New Lead to Persistent JSON Storage:', fullPayload);
 
+  // 1. Immediate local save & tab broadcast
   const existingLeads = getStoredLeads();
   const updatedLeads = [fullPayload, ...existingLeads];
   saveLeads(updatedLeads);
+
+  // 2. Persist to data/leads.json via /api/leads HTTP POST
+  try {
+    const res = await fetch(SERVER_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fullPayload),
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.success && Array.isArray(json.leads)) {
+        const sanitized = json.leads.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
+        saveLeads(sanitized);
+      }
+    }
+  } catch (err) {
+    console.warn('[Sigma Lead System] Failed to post to /api/leads server endpoint:', err);
+  }
 
   return {
     success: true,
@@ -255,21 +181,40 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
 }
 
 /**
- * Update a lead's status tag
+ * Update a lead's status tag & sync to persistent storage
  */
 export function updateLeadStatus(id: string, status: LeadStatus): void {
   const leads = getStoredLeads();
   const updated = leads.map((l) => (l.id === id ? { ...l, status } : l));
   saveLeads(updated);
+
+  // Push updated list to server
+  fetch(SERVER_API_URL, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ leads: updated }),
+  }).catch((err) => console.warn('[Sigma Leads] Server status update error:', err));
 }
 
 /**
- * Delete a lead by ID
+ * Delete a lead by ID & sync to persistent storage
  */
 export function deleteLead(id: string): void {
   const leads = getStoredLeads();
   const updated = leads.filter((l) => l.id !== id);
   saveLeads(updated);
+
+  // Send DELETE to server endpoint
+  fetch(`${SERVER_API_URL}/${id}`, {
+    method: 'DELETE',
+  }).catch(() => {
+    // Fallback PUT
+    fetch(SERVER_API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leads: updated }),
+    }).catch((err) => console.warn('[Sigma Leads] Server delete error:', err));
+  });
 }
 
 /**

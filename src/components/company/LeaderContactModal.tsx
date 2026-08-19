@@ -47,7 +47,7 @@ export function LeaderContactModal({ leader, isOpen = true, onClose }: LeaderCon
 
     try {
       await submitLead({
-        leadType: 'contact',
+        leadType: 'leader_contact',
         name: formData.name,
         phone: formData.phone,
         email: formData.email,

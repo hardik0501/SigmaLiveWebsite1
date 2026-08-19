@@ -7,7 +7,6 @@ import {
   deleteLead,
   exportLeadsToCsv,
   generateWhatsAppLink,
-  SIGMA_PHONE_NUMBER,
 } from '@/services/leads';
 import {
   Lock,
@@ -16,24 +15,24 @@ import {
   EyeOff,
   LogOut,
   Search,
-  Filter,
   Download,
   Phone,
   MessageCircle,
   Trash2,
   ExternalLink,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  TrendingUp,
-  Building2,
-  Globe,
-  Tag,
-  ShieldCheck,
   RefreshCw,
-  ChevronRight,
   X,
   AlertTriangle,
+  Radio,
+  FileText,
+  Building2,
+  Calendar,
+  Clock,
+  Briefcase,
+  MapPin,
+  CheckCircle2,
+  Inbox,
+  Send,
 } from 'lucide-react';
 
 const ADMIN_USERNAME = 'SigmaHomes';
@@ -76,15 +75,15 @@ class AdminErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryStat
             <div className="w-14 h-14 mx-auto rounded-full bg-red-500/20 text-red-400 flex items-center justify-center">
               <AlertTriangle className="h-8 w-8" />
             </div>
-            <h2 className="text-xl font-bold font-serif">Admin Portal Encountered an Issue</h2>
+            <h2 className="text-xl font-bold font-serif">Admin Portal Render Error</h2>
             <p className="text-xs text-sigma-stone-400">
-              An unexpected render error occurred. Click below to reset cache and reload the CRM dashboard cleanly.
+              An unexpected error occurred. Click below to clear cache and reload cleanly.
             </p>
             <button
               onClick={this.handleReset}
               className="w-full py-3 bg-sigma-amber-500 hover:bg-sigma-amber-600 text-sigma-graphite-950 rounded-xl font-bold text-xs shadow-lg transition-colors"
             >
-              Reset Cache & Reload Admin
+              Clear Cache & Reload Admin
             </button>
           </div>
         </div>
@@ -93,6 +92,56 @@ class AdminErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryStat
     return this.props.children;
   }
 }
+
+// Map each leadType to category styling & labels
+function getCategoryBadge(leadType?: string) {
+  switch (leadType) {
+    case 'site_visit':
+      return { label: 'Site Visit Booking', color: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: '📍' };
+    case 'price_request':
+      return { label: 'Cost Sheet Request', color: 'bg-blue-100 text-blue-800 border-blue-300', icon: '💰' };
+    case 'property_enquiry':
+      return { label: 'Property Enquiry', color: 'bg-indigo-100 text-indigo-800 border-indigo-300', icon: '🏠' };
+    case 'sell_property':
+      return { label: 'Sell Property Listing', color: 'bg-amber-100 text-amber-900 border-amber-300', icon: '🏷️' };
+    case 'callback':
+      return { label: 'Callback Request', color: 'bg-purple-100 text-purple-800 border-purple-300', icon: '📞' };
+    case 'career':
+      return { label: 'Career Application', color: 'bg-teal-100 text-teal-800 border-teal-300', icon: '💼' };
+    case 'service_enquiry':
+      return { label: 'Service Consultation', color: 'bg-cyan-100 text-cyan-800 border-cyan-300', icon: '🛠️' };
+    case 'leader_contact':
+      return { label: 'Executive Contact', color: 'bg-violet-100 text-violet-800 border-violet-300', icon: '👔' };
+    case 'location_enquiry':
+      return { label: 'Location Guide Request', color: 'bg-sky-100 text-sky-800 border-sky-300', icon: '🗺️' };
+    case 'consultation':
+      return { label: 'Guided Consultation', color: 'bg-orange-100 text-orange-800 border-orange-300', icon: '💬' };
+    case 'contact':
+      return { label: 'Contact Us Message', color: 'bg-slate-100 text-slate-800 border-slate-300', icon: '✉️' };
+    case 'investment':
+      return { label: 'Investment Advisory', color: 'bg-rose-100 text-rose-800 border-rose-300', icon: '📈' };
+    case 'nri':
+      return { label: 'NRI Advisory', color: 'bg-pink-100 text-pink-800 border-pink-300', icon: '✈️' };
+    default:
+      return { label: 'General Enquiry', color: 'bg-gray-100 text-gray-800 border-gray-300', icon: '📝' };
+  }
+}
+
+const CATEGORY_TABS = [
+  { id: 'all', label: 'All Submissions', icon: '🌐' },
+  { id: 'site_visit', label: 'Site Visits', icon: '📍' },
+  { id: 'price_request', label: 'Cost Sheets', icon: '💰' },
+  { id: 'property_enquiry', label: 'Property Enquiries', icon: '🏠' },
+  { id: 'sell_property', label: 'Sell Property', icon: '🏷️' },
+  { id: 'callback', label: 'Callback Requests', icon: '📞' },
+  { id: 'career', label: 'Career Applications', icon: '💼' },
+  { id: 'service_enquiry', label: 'Service Consultations', icon: '🛠️' },
+  { id: 'leader_contact', label: 'Executive Contact', icon: '👔' },
+  { id: 'location_enquiry', label: 'Location Guides', icon: '🗺️' },
+  { id: 'consultation', label: 'Guided Consultations', icon: '💬' },
+  { id: 'contact', label: 'Contact Messages', icon: '✉️' },
+  { id: 'investment_nri', label: 'Investment & NRI', icon: '📈' },
+];
 
 function AdminPageContent() {
   // Authentication State
@@ -107,19 +156,18 @@ function AdminPageContent() {
   // CRM Leads State
   const [leads, setLeads] = useState<LeadPayload[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedTimeframe, setSelectedTimeframe] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'name'>('newest');
   const [activeDetailLead, setActiveDetailLead] = useState<LeadPayload | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<string>(new Date().toLocaleTimeString());
 
   // Load leads & listen for real-time updates
   const refreshLeads = async () => {
     setIsSyncing(true);
-    // Load local first for immediate response
     setLeads(getStoredLeads());
-    // Then fetch and merge cloud leads across devices/browsers
     try {
       const synced = await syncLeadsFromCloud();
       if (Array.isArray(synced)) setLeads(synced);
@@ -127,34 +175,53 @@ function AdminPageContent() {
       console.warn('[Admin] Sync error:', e);
     } finally {
       setIsSyncing(false);
+      setLastUpdated(new Date().toLocaleTimeString());
     }
   };
 
   useEffect(() => {
-    document.title = 'Sigma Homes | Admin Lead Management CRM';
+    document.title = 'Sigma Homes | Real-Time CRM Dashboard';
     if (isAuthenticated) {
       refreshLeads();
-      // Poll cloud API every 8 seconds for live multi-browser / multi-device sync
+
+      // Setup BroadcastChannel for instant multi-tab real-time update
+      let bc: BroadcastChannel | null = null;
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        bc = new BroadcastChannel('sigma_leads_channel');
+        bc.onmessage = (event) => {
+          if (event.data && event.data.type === 'leads-updated' && Array.isArray(event.data.leads)) {
+            setLeads(event.data.leads);
+            setLastUpdated(new Date().toLocaleTimeString());
+          }
+        };
+      }
+
+      // Poll cloud storage every 6 seconds for live multi-browser / multi-device sync
       const interval = setInterval(() => {
         syncLeadsFromCloud()
           .then((synced) => {
-            if (Array.isArray(synced)) setLeads(synced);
+            if (Array.isArray(synced)) {
+              setLeads(synced);
+              setLastUpdated(new Date().toLocaleTimeString());
+            }
           })
           .catch(() => {});
-      }, 8000);
+      }, 6000);
 
       const handleLeadsUpdated = (e: Event) => {
         if ('detail' in e && Array.isArray((e as CustomEvent).detail)) {
           setLeads((e as CustomEvent).detail);
         } else {
-          refreshLeads();
+          setLeads(getStoredLeads());
         }
+        setLastUpdated(new Date().toLocaleTimeString());
       };
 
       window.addEventListener('sigma-leads-updated', handleLeadsUpdated);
       window.addEventListener('storage', handleLeadsUpdated);
 
       return () => {
+        if (bc) bc.close();
         clearInterval(interval);
         window.removeEventListener('sigma-leads-updated', handleLeadsUpdated);
         window.removeEventListener('storage', handleLeadsUpdated);
@@ -184,7 +251,8 @@ function AdminPageContent() {
   // Lead Status Change
   const handleStatusChange = (id: string, newStatus: LeadStatus) => {
     updateLeadStatus(id, newStatus);
-    refreshLeads();
+    const updated = getStoredLeads();
+    setLeads(updated);
     if (activeDetailLead && activeDetailLead.id === id) {
       setActiveDetailLead({ ...activeDetailLead, status: newStatus });
     }
@@ -192,12 +260,30 @@ function AdminPageContent() {
 
   // Lead Delete
   const handleDeleteLead = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this enquiry record?')) {
+    if (window.confirm('Are you sure you want to delete this form submission record?')) {
       deleteLead(id);
-      refreshLeads();
+      const updated = getStoredLeads();
+      setLeads(updated);
       if (activeDetailLead?.id === id) setActiveDetailLead(null);
     }
   };
+
+  // Category counts map
+  const categoryCounts = useMemo(() => {
+    const safeLeads = Array.isArray(leads) ? leads : [];
+    const counts: Record<string, number> = { all: safeLeads.length };
+
+    CATEGORY_TABS.forEach((cat) => {
+      if (cat.id === 'all') return;
+      if (cat.id === 'investment_nri') {
+        counts[cat.id] = safeLeads.filter((l) => l && (l.leadType === 'investment' || l.leadType === 'nri')).length;
+      } else {
+        counts[cat.id] = safeLeads.filter((l) => l && l.leadType === cat.id).length;
+      }
+    });
+
+    return counts;
+  }, [leads]);
 
   // Filtered & Sorted Leads Computation
   const filteredLeads = useMemo(() => {
@@ -211,6 +297,7 @@ function AdminPageContent() {
         const projectStr = l.projectName || '';
         const locStr = l.location || '';
         const idStr = l.id || '';
+        const msgStr = l.message || '';
 
         // Search query
         if (searchQuery.trim()) {
@@ -221,13 +308,20 @@ function AdminPageContent() {
           const matchProject = projectStr.toLowerCase().includes(q);
           const matchLocation = locStr.toLowerCase().includes(q);
           const matchId = idStr.toLowerCase().includes(q);
-          if (!matchName && !matchPhone && !matchEmail && !matchProject && !matchLocation && !matchId) {
+          const matchMsg = msgStr.toLowerCase().includes(q);
+          if (!matchName && !matchPhone && !matchEmail && !matchProject && !matchLocation && !matchId && !matchMsg) {
             return false;
           }
         }
 
-        // Type Filter
-        if (selectedType !== 'all' && (l.leadType || '') !== selectedType) return false;
+        // Category Filter
+        if (selectedCategory !== 'all') {
+          if (selectedCategory === 'investment_nri') {
+            if (l.leadType !== 'investment' && l.leadType !== 'nri') return false;
+          } else if ((l.leadType || '') !== selectedCategory) {
+            return false;
+          }
+        }
 
         // Status Filter
         if (selectedStatus !== 'all' && (l.status || 'New') !== selectedStatus) return false;
@@ -261,21 +355,7 @@ function AdminPageContent() {
         }
         return 0;
       });
-  }, [leads, searchQuery, selectedType, selectedStatus, selectedTimeframe, sortBy]);
-
-  // Metric Stats Summary
-  const stats = useMemo(() => {
-    const safeLeads = Array.isArray(leads) ? leads : [];
-    const total = safeLeads.length;
-    const startOfToday = new Date().setHours(0, 0, 0, 0);
-    const todayCount = safeLeads.filter((l) => l && l.createdAt && new Date(l.createdAt).getTime() >= startOfToday).length;
-    const siteVisits = safeLeads.filter((l) => l && l.leadType === 'site_visit').length;
-    const priceRequests = safeLeads.filter((l) => l && l.leadType === 'price_request').length;
-    const investments = safeLeads.filter((l) => l && (l.leadType === 'investment' || l.leadType === 'nri')).length;
-    const sellSubmissions = safeLeads.filter((l) => l && l.leadType === 'sell_property').length;
-
-    return { total, todayCount, siteVisits, priceRequests, investments, sellSubmissions };
-  }, [leads]);
+  }, [leads, searchQuery, selectedCategory, selectedStatus, selectedTimeframe, sortBy]);
 
   // LOGIN SCREEN
   if (!isAuthenticated) {
@@ -289,7 +369,7 @@ function AdminPageContent() {
               <Lock className="h-7 w-7" />
             </div>
             <h1 className="text-2xl font-bold font-serif text-white">Sigma Group CRM</h1>
-            <p className="text-xs text-sigma-stone-300">Enter administrator credentials to access the lead management system.</p>
+            <p className="text-xs text-sigma-stone-300">Real-Time Form Submissions & Enquiry Portal</p>
           </div>
 
           {loginError && (
@@ -349,33 +429,44 @@ function AdminPageContent() {
           </form>
 
           <div className="text-center pt-2 text-[11px] text-sigma-stone-500">
-            Authorized Sigma Homes Personnel Only
+            Authorized Sigma Group Personnel Only
           </div>
         </div>
       </div>
     );
   }
 
-  // LOGGED IN CRM DASHBOARD
+  // LOGGED IN REAL-TIME CRM DASHBOARD
   return (
     <div className="min-h-screen bg-sigma-ivory-50 text-sigma-graphite-900 pt-0 pb-20">
-      {/* Top Admin Navigation Bar */}
-      <div className="bg-sigma-graphite-950 text-white border-b border-white/10 py-4 mb-8">
+      {/* Header Bar */}
+      <div className="bg-sigma-graphite-950 text-white border-b border-white/10 py-4 mb-6 shadow-md">
         <div className="container-content flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-sigma-amber-500 text-sigma-graphite-950 font-black text-sm flex items-center justify-center">
-              CRM
+            <div className="w-10 h-10 rounded-xl bg-sigma-amber-500 text-sigma-graphite-950 font-black text-xs flex items-center justify-center shadow-md">
+              LIVE
             </div>
             <div>
-              <h1 className="text-lg font-bold font-serif text-white">Sigma Homes Lead Management Engine</h1>
-              <p className="text-[11px] text-sigma-stone-400">Live Customer Enquiries & Multi-Device Lead Sync</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-bold font-serif text-white">Sigma Homes Form Fillup Dashboard</h1>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 border border-emerald-500/30 text-emerald-300">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
+                  Real-Time Sync Active
+                </span>
+              </div>
+              <p className="text-[11px] text-sigma-stone-400">
+                All Website Forms • Real-Time Broadcast • Updated at {lastUpdated}
+              </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => exportLeadsToCsv(filteredLeads)}
-              className="px-4 py-2 bg-sigma-green-600 hover:bg-sigma-green-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5"
+              disabled={filteredLeads.length === 0}
+              className={`px-4 py-2 bg-sigma-green-600 hover:bg-sigma-green-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5 ${
+                filteredLeads.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
               <Download className="h-3.5 w-3.5" />
               Export CSV ({filteredLeads.length})
@@ -384,12 +475,13 @@ function AdminPageContent() {
             <button
               onClick={refreshLeads}
               disabled={isSyncing}
-              className={`p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors ${
-                isSyncing ? 'animate-spin opacity-70' : ''
+              className={`px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
+                isSyncing ? 'opacity-70' : ''
               }`}
-              title="Sync Cloud Leads"
+              title="Sync Cloud Data"
             >
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+              Sync
             </button>
 
             <button
@@ -403,68 +495,55 @@ function AdminPageContent() {
         </div>
       </div>
 
-      <div className="container-content">
-        {/* Metric Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-2xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sigma-stone-400 block">Total Leads</span>
-            <span className="text-2xl font-bold font-serif text-sigma-graphite-900 mt-1 block">{stats.total}</span>
-          </div>
-          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-2xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sigma-amber-600 block">Today's Leads</span>
-            <span className="text-2xl font-bold font-serif text-sigma-graphite-900 mt-1 block">{stats.todayCount}</span>
-          </div>
-          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-2xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sigma-blue-600 block">Site Visits</span>
-            <span className="text-2xl font-bold font-serif text-sigma-graphite-900 mt-1 block">{stats.siteVisits}</span>
-          </div>
-          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-2xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sigma-green-600 block">Cost Sheet Requests</span>
-            <span className="text-2xl font-bold font-serif text-sigma-graphite-900 mt-1 block">{stats.priceRequests}</span>
-          </div>
-          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-2xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 block">Investment & NRI</span>
-            <span className="text-2xl font-bold font-serif text-sigma-graphite-900 mt-1 block">{stats.investments}</span>
-          </div>
-          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-2xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 block">Seller Submissions</span>
-            <span className="text-2xl font-bold font-serif text-sigma-graphite-900 mt-1 block">{stats.sellSubmissions}</span>
+      <div className="container-content space-y-6">
+        {/* Category Navigation Pills Bar */}
+        <div className="bg-white p-3 rounded-2xl border border-sigma-stone-200/80 shadow-xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-sigma-stone-400 block px-2 mb-2">
+            Select Form Category:
+          </span>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
+            {CATEGORY_TABS.map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              const count = categoryCounts[cat.id] || 0;
+
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-2 border ${
+                    isActive
+                      ? 'bg-sigma-graphite-950 text-white border-sigma-graphite-950 shadow-sm scale-102'
+                      : 'bg-sigma-stone-50 hover:bg-sigma-stone-100 text-sigma-stone-700 border-sigma-stone-200'
+                  }`}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                  <span
+                    className={`px-1.5 py-0.5 rounded-md text-[10px] font-extrabold ${
+                      isActive ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-sigma-stone-200 text-sigma-stone-800'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Filter & Control Bar */}
-        <div className="p-4 md:p-6 bg-white rounded-3xl border border-sigma-stone-200/80 shadow-sm mb-6 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        {/* Filter Controls */}
+        <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Search Input */}
             <div className="relative lg:col-span-2">
               <Search className="h-4 w-4 text-sigma-stone-400 absolute left-3.5 top-3" />
               <input
                 type="text"
-                placeholder="Search name, phone, email, project or ID..."
+                placeholder="Search name, phone, email, project, location or message..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
               />
-            </div>
-
-            {/* Lead Type Filter */}
-            <div>
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
-              >
-                <option value="all">All Lead Types</option>
-                <option value="site_visit">Site Visit Requests</option>
-                <option value="price_request">Cost Sheet Requests</option>
-                <option value="investment">Investment Advisory</option>
-                <option value="nri">NRI Consultation</option>
-                <option value="sell_property">Sell Property</option>
-                <option value="callback">Callback Requests</option>
-                <option value="consultation">Guided Consultation</option>
-                <option value="contact">Contact Page Enquiry</option>
-                <option value="career">Career Interest</option>
-              </select>
             </div>
 
             {/* Status Filter */}
@@ -474,7 +553,7 @@ function AdminPageContent() {
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
               >
-                <option value="all">All Statuses</option>
+                <option value="all">All CRM Statuses</option>
                 <option value="New">Status: New</option>
                 <option value="Contacted">Status: Contacted</option>
                 <option value="In Progress">Status: In Progress</option>
@@ -490,7 +569,7 @@ function AdminPageContent() {
                 className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
               >
                 <option value="all">All Time</option>
-                <option value="today">Today</option>
+                <option value="today">Submitted Today</option>
                 <option value="7days">Last 7 Days</option>
                 <option value="30days">Last 30 Days</option>
               </select>
@@ -498,35 +577,60 @@ function AdminPageContent() {
           </div>
         </div>
 
-        {/* Lead Records Table */}
+        {/* Lead Table or Empty State */}
         <div className="bg-white rounded-3xl border border-sigma-stone-200/80 shadow-xl overflow-hidden">
-          <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full text-left border-collapse min-w-[900px]">
-              <thead>
-                <tr className="border-b border-sigma-stone-200 bg-sigma-stone-50 text-[11px] font-bold uppercase tracking-wider text-sigma-stone-500">
-                  <th className="p-4">Ref ID / Time</th>
-                  <th className="p-4">Customer Details</th>
-                  <th className="p-4">Intent / Type</th>
-                  <th className="p-4">Target Project / Location</th>
-                  <th className="p-4">CRM Status</th>
-                  <th className="p-4 text-right">Quick Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-sigma-stone-200/60 text-xs font-medium">
-                {filteredLeads.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="p-12 text-center text-sigma-stone-500">
-                      No enquiries matching current search and filter criteria.
-                    </td>
+          {filteredLeads.length === 0 ? (
+            <div className="p-12 text-center space-y-4 max-w-md mx-auto">
+              <div className="w-16 h-16 mx-auto rounded-full bg-sigma-amber-50 text-sigma-amber-600 flex items-center justify-center border border-sigma-amber-200/60">
+                <Inbox className="h-8 w-8" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold font-serif text-sigma-graphite-900">
+                  {leads.length === 0 ? 'No Form Submissions Yet' : 'No Submissions Match Filters'}
+                </h3>
+                <p className="text-xs text-sigma-stone-500 leading-relaxed">
+                  {leads.length === 0
+                    ? 'All forms filled on the website will instantly show up here in real time with complete details and form categories.'
+                    : 'Try clearing search keywords or changing category tabs to see other submissions.'}
+                </p>
+              </div>
+              {leads.length === 0 && (
+                <div className="pt-2">
+                  <a
+                    href="/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white rounded-xl font-bold text-xs shadow-md transition-colors"
+                  >
+                    <Send className="h-3.5 w-3.5" />
+                    Open Main Website & Fill a Form
+                  </a>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="overflow-x-auto no-scrollbar">
+              <table className="w-full text-left border-collapse min-w-[950px]">
+                <thead>
+                  <tr className="border-b border-sigma-stone-200 bg-sigma-stone-50 text-[11px] font-bold uppercase tracking-wider text-sigma-stone-500">
+                    <th className="p-4">Ref ID / Time</th>
+                    <th className="p-4">Form Category</th>
+                    <th className="p-4">Customer Info</th>
+                    <th className="p-4">Target / Context</th>
+                    <th className="p-4">CRM Status</th>
+                    <th className="p-4 text-right">Quick Actions</th>
                   </tr>
-                ) : (
-                  filteredLeads.map((l) => {
+                </thead>
+                <tbody className="divide-y divide-sigma-stone-200/60 text-xs font-medium">
+                  {filteredLeads.map((l) => {
                     const leadId = l.id || 'SIG-000000';
                     const leadName = l.name || 'Anonymous';
                     const leadPhone = l.phone || 'N/A';
-                    const leadTypeStr = (l.leadType || 'enquiry').replace('_', ' ');
+                    const badge = getCategoryBadge(l.leadType);
 
-                    const whatsappLink = generateWhatsAppLink({ message: `Hi ${leadName}, following up regarding your enquiry with Sigma Homes.` });
+                    const whatsappLink = generateWhatsAppLink({
+                      message: `Hi ${leadName}, following up regarding your ${badge.label} with Sigma Homes.`,
+                    });
                     const statusColor =
                       l.status === 'Closed'
                         ? 'bg-gray-100 text-gray-700 border-gray-300'
@@ -538,41 +642,57 @@ function AdminPageContent() {
 
                     return (
                       <tr key={leadId} className="hover:bg-sigma-stone-50/70 transition-colors">
+                        {/* Ref ID / Time */}
                         <td className="p-4">
-                          <span className="font-bold text-sigma-graphite-900 block">{leadId}</span>
+                          <span className="font-bold font-mono text-sigma-graphite-900 block">{leadId}</span>
                           <span className="text-[11px] text-sigma-stone-400 block mt-0.5">
-                            {l.createdAt ? new Date(l.createdAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }) : 'N/A'}
+                            {l.createdAt
+                              ? new Date(l.createdAt).toLocaleString('en-IN', {
+                                  dateStyle: 'short',
+                                  timeStyle: 'short',
+                                })
+                              : 'N/A'}
                           </span>
                         </td>
 
+                        {/* Form Category Badge */}
+                        <td className="p-4">
+                          <span
+                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold inline-flex items-center gap-1.5 shadow-2xs ${badge.color}`}
+                          >
+                            <span>{badge.icon}</span>
+                            <span>{badge.label}</span>
+                          </span>
+                        </td>
+
+                        {/* Customer Info */}
                         <td className="p-4">
                           <span className="font-bold text-sigma-graphite-900 block text-sm">{leadName}</span>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-sigma-stone-600 font-sans">{leadPhone}</span>
-                            {l.email && <span className="text-[11px] text-sigma-stone-400">({l.email})</span>}
+                          <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                            <span className="text-sigma-stone-700 font-sans font-semibold">{leadPhone}</span>
+                            {l.email && <span className="text-[11px] text-sigma-stone-500">({l.email})</span>}
                           </div>
                         </td>
 
-                        <td className="p-4">
-                          <span className="px-2.5 py-1 bg-sigma-stone-100 border border-sigma-stone-200 text-sigma-blue-800 rounded-lg text-[11px] font-bold uppercase tracking-wider inline-block">
-                            {leadTypeStr}
-                          </span>
-                        </td>
-
+                        {/* Target / Context */}
                         <td className="p-4">
                           <span className="font-bold text-sigma-graphite-900 block">
-                            {l.projectName || l.location || 'General Inquiry'}
+                            {l.projectName || l.location || 'General Website Enquiry'}
                           </span>
                           {l.configuration && (
-                            <span className="text-[11px] text-sigma-stone-500 block">{l.configuration}</span>
+                            <span className="text-[11px] text-sigma-stone-500 block">Config: {l.configuration}</span>
+                          )}
+                          {l.budget && (
+                            <span className="text-[11px] text-sigma-stone-500 block">Budget: {l.budget}</span>
                           )}
                         </td>
 
+                        {/* CRM Status */}
                         <td className="p-4">
                           <select
                             value={l.status || 'New'}
                             onChange={(e) => handleStatusChange(leadId, e.target.value as LeadStatus)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] focus:outline-none ${statusColor}`}
+                            className={`px-2.5 py-1 rounded-lg border text-[11px] focus:outline-none cursor-pointer ${statusColor}`}
                           >
                             <option value="New">New</option>
                             <option value="Contacted">Contacted</option>
@@ -581,11 +701,12 @@ function AdminPageContent() {
                           </select>
                         </td>
 
+                        {/* Actions */}
                         <td className="p-4 text-right space-x-1.5">
                           <button
                             onClick={() => setActiveDetailLead(l)}
                             className="px-2.5 py-1.5 bg-sigma-stone-100 hover:bg-sigma-stone-200 text-sigma-graphite-900 rounded-lg text-[11px] font-bold transition-colors inline-flex items-center gap-1"
-                            title="View Full Metadata"
+                            title="View Full Submission Details"
                           >
                             <ExternalLink className="h-3 w-3" />
                             Details
@@ -612,22 +733,22 @@ function AdminPageContent() {
                           <button
                             onClick={() => handleDeleteLead(leadId)}
                             className="p-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-colors inline-block"
-                            title="Delete Lead"
+                            title="Delete Submission Record"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </td>
                       </tr>
                     );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Lead Full Detail Modal */}
+      {/* Form Submission Detail Modal */}
       {activeDetailLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
@@ -643,23 +764,37 @@ function AdminPageContent() {
               <X className="h-5 w-5" />
             </button>
 
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-sigma-blue-700 uppercase tracking-wider">
-                Ref: {activeDetailLead.id || 'SIG-000000'}
-              </span>
+            {/* Modal Header */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span
+                  className={`px-2.5 py-1 rounded-lg border text-xs font-bold inline-flex items-center gap-1.5 ${
+                    getCategoryBadge(activeDetailLead.leadType).color
+                  }`}
+                >
+                  <span>{getCategoryBadge(activeDetailLead.leadType).icon}</span>
+                  <span>{getCategoryBadge(activeDetailLead.leadType).label}</span>
+                </span>
+                <span className="text-xs font-mono font-bold text-sigma-blue-700">
+                  Ref: {activeDetailLead.id || 'SIG-000000'}
+                </span>
+              </div>
+
               <h2 className="text-2xl font-bold font-serif text-sigma-graphite-900">
                 {activeDetailLead.name || 'Anonymous'}
               </h2>
               <p className="text-xs text-sigma-stone-500">
-                Submitted on {activeDetailLead.createdAt ? new Date(activeDetailLead.createdAt).toLocaleString('en-IN') : 'N/A'}
+                Submitted on{' '}
+                {activeDetailLead.createdAt ? new Date(activeDetailLead.createdAt).toLocaleString('en-IN') : 'N/A'}
               </p>
             </div>
 
+            {/* Structured Fields Grid */}
             <div className="space-y-3 divide-y divide-sigma-stone-200/60 text-xs">
-              <div className="pt-2 grid grid-cols-2 gap-2">
+              <div className="pt-2 grid grid-cols-2 gap-3">
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Phone Number</span>
-                  <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.phone || 'N/A'}</span>
+                  <span className="text-sigma-graphite-900 font-bold text-sm">{activeDetailLead.phone || 'N/A'}</span>
                 </div>
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Email Address</span>
@@ -667,13 +802,13 @@ function AdminPageContent() {
                 </div>
               </div>
 
-              <div className="pt-2 grid grid-cols-2 gap-2">
+              <div className="pt-2 grid grid-cols-2 gap-3">
                 <div>
-                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Lead Type</span>
-                  <span className="text-sigma-blue-800 font-bold uppercase">{activeDetailLead.leadType || 'enquiry'}</span>
+                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Form Category</span>
+                  <span className="text-sigma-blue-800 font-bold uppercase">{activeDetailLead.leadType}</span>
                 </div>
                 <div>
-                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Status</span>
+                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">CRM Status</span>
                   <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.status || 'New'}</span>
                 </div>
               </div>
@@ -699,8 +834,22 @@ function AdminPageContent() {
                 </div>
               )}
 
+              {activeDetailLead.propertyType && (
+                <div className="pt-2">
+                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Property Type</span>
+                  <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.propertyType}</span>
+                </div>
+              )}
+
+              {activeDetailLead.configuration && (
+                <div className="pt-2">
+                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block font-sans">Configuration</span>
+                  <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.configuration}</span>
+                </div>
+              )}
+
               {activeDetailLead.preferredDate && (
-                <div className="pt-2 grid grid-cols-2 gap-2">
+                <div className="pt-2 grid grid-cols-2 gap-3">
                   <div>
                     <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Preferred Date</span>
                     <span className="text-sigma-graphite-900 font-bold">{activeDetailLead.preferredDate}</span>
@@ -714,30 +863,39 @@ function AdminPageContent() {
 
               {activeDetailLead.message && (
                 <div className="pt-2">
-                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block mb-1">Message / Requirements</span>
-                  <div className="p-3 bg-sigma-stone-50 rounded-xl border border-sigma-stone-200 text-sigma-graphite-900 leading-relaxed font-mono text-[11px]">
+                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block mb-1">
+                    Submitted Message / Form Details
+                  </span>
+                  <div className="p-3.5 bg-sigma-stone-50 rounded-xl border border-sigma-stone-200 text-sigma-graphite-900 leading-relaxed font-mono text-xs whitespace-pre-wrap">
                     {activeDetailLead.message}
                   </div>
                 </div>
               )}
 
-              <div className="pt-2 grid grid-cols-2 gap-2">
+              <div className="pt-2 grid grid-cols-2 gap-3">
                 <div>
-                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Source Page</span>
-                  <span className="text-sigma-stone-700">{activeDetailLead.sourcePage || '/'}</span>
+                  <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">Submitted Page</span>
+                  <span className="text-sigma-stone-700 font-mono text-[11px]">{activeDetailLead.sourcePage || '/'}</span>
                 </div>
                 <div>
                   <span className="text-sigma-stone-400 font-bold uppercase tracking-wider block">UTM Source / Campaign</span>
-                  <span className="text-sigma-stone-700">
-                    {activeDetailLead.utmSource ? `${activeDetailLead.utmSource} / ${activeDetailLead.utmCampaign || 'organic'}` : 'Direct / Organic'}
+                  <span className="text-sigma-stone-700 font-mono text-[11px]">
+                    {activeDetailLead.utmSource
+                      ? `${activeDetailLead.utmSource} / ${activeDetailLead.utmCampaign || 'organic'}`
+                      : 'Direct / Organic'}
                   </span>
                 </div>
               </div>
             </div>
 
+            {/* Quick Actions */}
             <div className="pt-4 border-t border-sigma-stone-200 flex gap-2">
               <a
-                href={generateWhatsAppLink({ message: `Hi ${activeDetailLead.name || 'Customer'}, following up regarding your enquiry with Sigma Homes.` })}
+                href={generateWhatsAppLink({
+                  message: `Hi ${activeDetailLead.name || 'Customer'}, following up regarding your ${
+                    getCategoryBadge(activeDetailLead.leadType).label
+                  } with Sigma Homes.`,
+                })}
                 target="_blank"
                 rel="noreferrer"
                 className="w-1/2 py-3 bg-sigma-green-600 hover:bg-sigma-green-700 text-white rounded-xl text-xs font-bold shadow-md transition-colors flex items-center justify-center gap-1.5"

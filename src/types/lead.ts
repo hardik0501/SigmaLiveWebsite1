@@ -8,7 +8,10 @@ export type LeadType =
   | 'callback'
   | 'consultation'
   | 'contact'
-  | 'career';
+  | 'career'
+  | 'service_enquiry'
+  | 'leader_contact'
+  | 'location_enquiry';
 
 export type LeadStatus = 'New' | 'Contacted' | 'In Progress' | 'Closed';
 

@@ -47,7 +47,7 @@ export function ServiceEnquiryModal({ service, isOpen = true, onClose }: Service
 
     try {
       await submitLead({
-        leadType: 'consultation',
+        leadType: 'service_enquiry',
         name: formData.name,
         phone: formData.phone,
         email: formData.email,

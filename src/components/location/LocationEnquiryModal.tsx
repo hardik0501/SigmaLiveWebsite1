@@ -51,7 +51,7 @@ export function LocationEnquiryModal({
 
     try {
       await submitLead({
-        leadType: 'property_enquiry',
+        leadType: 'location_enquiry',
         name: formData.name,
         phone: formData.phone,
         location: `${location.name}, ${location.city}`,
