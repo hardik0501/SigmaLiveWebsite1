@@ -62,6 +62,16 @@ export const navItems: NavItem[] = [
     ],
   },
   {
+    label: 'Blogs',
+    href: '/blogs',
+    children: [
+      { label: 'All Market Insights', href: '/blogs' },
+      { label: 'Market Trends', href: '/blogs' },
+      { label: 'NRI Advisory Guides', href: '/blogs' },
+      { label: 'Buyer & Legal Guides', href: '/blogs' },
+    ],
+  },
+  {
     label: 'Careers',
     href: '/careers',
     children: [

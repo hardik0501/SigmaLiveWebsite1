@@ -9,6 +9,8 @@ import {
   generateWhatsAppLink,
   purgeTestLeads,
 } from '@/services/leads';
+import { BlogPost } from '@/types/blog';
+import { fetchBlogs, createBlog, updateBlog, deleteBlog } from '@/services/blogs';
 import {
   Lock,
   User,
@@ -35,6 +37,10 @@ import {
   CheckCircle2,
   Inbox,
   Send,
+  Plus,
+  Edit,
+  BookOpen,
+  Globe,
 } from 'lucide-react';
 
 const ADMIN_USERNAME = 'SigmaHomes';
@@ -155,6 +161,9 @@ function AdminPageContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
 
+  // Main Portal View State: 'crm' (Leads) or 'blogs' (Blog CMS)
+  const [activeMainSection, setActiveMainSection] = useState<'crm' | 'blogs'>('crm');
+
   // CRM Leads State
   const [leads, setLeads] = useState<LeadPayload[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -165,6 +174,71 @@ function AdminPageContent() {
   const [activeDetailLead, setActiveDetailLead] = useState<LeadPayload | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>(new Date().toLocaleTimeString());
+
+  // Blog CMS State
+  const [blogsList, setBlogsList] = useState<BlogPost[]>([]);
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
+  const [editingBlogId, setEditingBlogId] = useState<string | null>(null);
+  const [blogForm, setBlogForm] = useState<Partial<BlogPost>>({
+    title: '',
+    slug: '',
+    excerpt: '',
+    content: '',
+    category: 'Market Trends',
+    author: 'Sigma Advisory Desk',
+    readTime: '5 min read',
+    coverImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    published: true,
+  });
+
+  const refreshBlogs = async () => {
+    try {
+      const data = await fetchBlogs(true);
+      if (Array.isArray(data)) setBlogsList(data);
+    } catch (e) {}
+  };
+
+  const handleOpenNewBlog = () => {
+    setEditingBlogId(null);
+    setBlogForm({
+      title: '',
+      slug: '',
+      excerpt: '',
+      content: '',
+      category: 'Market Trends',
+      author: 'Sigma Advisory Desk',
+      readTime: '5 min read',
+      coverImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      published: true,
+    });
+    setIsBlogModalOpen(true);
+  };
+
+  const handleOpenEditBlog = (blog: BlogPost) => {
+    setEditingBlogId(blog.id);
+    setBlogForm({ ...blog });
+    setIsBlogModalOpen(true);
+  };
+
+  const handleSaveBlog = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!blogForm.title) return;
+    if (editingBlogId) {
+      await updateBlog(editingBlogId, blogForm);
+    } else {
+      await createBlog(blogForm);
+    }
+    setIsBlogModalOpen(false);
+    setEditingBlogId(null);
+    refreshBlogs();
+  };
+
+  const handleDeleteBlogClick = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this blog post?')) {
+      await deleteBlog(id);
+      refreshBlogs();
+    }
+  };
 
   // Load leads & listen for real-time updates
   const refreshLeads = async () => {
@@ -185,6 +259,7 @@ function AdminPageContent() {
     document.title = 'Sigma Homes | Real-Time CRM Dashboard';
     if (isAuthenticated) {
       refreshLeads();
+      refreshBlogs();
 
       // Setup BroadcastChannel for instant multi-tab real-time update
       let bc: BroadcastChannel | null = null;
@@ -514,41 +589,292 @@ function AdminPageContent() {
         </div>
       </div>
 
-      <div className="container-content space-y-6">
-        {/* Category Navigation Pills Bar */}
-        <div className="bg-white p-3 rounded-2xl border border-sigma-stone-200/80 shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-sigma-stone-400 block px-2 mb-2">
-            Select Form Category:
-          </span>
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
-            {CATEGORY_TABS.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              const count = categoryCounts[cat.id] || 0;
+      {/* Main Portal Section Switcher Tabs */}
+      <div className="container-content mb-6 flex items-center gap-3">
+        <button
+          onClick={() => setActiveMainSection('crm')}
+          className={`px-5 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 border transition-all ${
+            activeMainSection === 'crm'
+              ? 'bg-sigma-blue-700 text-white border-sigma-blue-700 shadow-md'
+              : 'bg-white text-sigma-stone-700 hover:bg-sigma-stone-100 border-sigma-stone-200/80 shadow-2xs'
+          }`}
+        >
+          <Radio className="h-4 w-4" />
+          Form Leads CRM ({leads.length})
+        </button>
 
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-2 border ${
-                    isActive
-                      ? 'bg-sigma-graphite-950 text-white border-sigma-graphite-950 shadow-sm scale-102'
-                      : 'bg-sigma-stone-50 hover:bg-sigma-stone-100 text-sigma-stone-700 border-sigma-stone-200'
-                  }`}
-                >
-                  <span>{cat.icon}</span>
-                  <span>{cat.label}</span>
-                  <span
-                    className={`px-1.5 py-0.5 rounded-md text-[10px] font-extrabold ${
-                      isActive ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-sigma-stone-200 text-sigma-stone-800'
+        <button
+          onClick={() => setActiveMainSection('blogs')}
+          className={`px-5 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 border transition-all ${
+            activeMainSection === 'blogs'
+              ? 'bg-sigma-blue-700 text-white border-sigma-blue-700 shadow-md'
+              : 'bg-white text-sigma-stone-700 hover:bg-sigma-stone-100 border-sigma-stone-200/80 shadow-2xs'
+          }`}
+        >
+          <BookOpen className="h-4 w-4" />
+          Blog CMS Articles ({blogsList.length})
+        </button>
+      </div>
+
+      {activeMainSection === 'blogs' ? (
+        <div className="container-content space-y-6">
+          {/* Blog CMS Header */}
+          <div className="p-6 bg-white rounded-3xl border border-sigma-stone-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold font-serif text-sigma-graphite-900 flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-sigma-blue-700" />
+                Blog CMS Manager & Content Publishing
+              </h2>
+              <p className="text-xs text-sigma-stone-500 font-sans">
+                Create, update, publish, or delete blog posts served directly from backend databases.
+              </p>
+            </div>
+
+            <button
+              onClick={handleOpenNewBlog}
+              className="px-5 py-2.5 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
+            >
+              <Plus className="h-4 w-4" />
+              Create New Blog Article
+            </button>
+          </div>
+
+          {/* Blogs List Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogsList.map((blog) => (
+              <div
+                key={blog.id}
+                className="bg-white rounded-3xl border border-sigma-stone-200/80 shadow-xs overflow-hidden flex flex-col justify-between p-5 space-y-4"
+              >
+                <div className="space-y-3">
+                  <div className="aspect-video rounded-2xl overflow-hidden bg-sigma-stone-100 relative">
+                    <img src={blog.coverImage} alt={blog.title} className="w-full h-full object-cover" />
+                    <span
+                      className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase shadow-xs ${
+                        blog.published !== false
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-amber-500 text-sigma-graphite-950'
+                      }`}
+                    >
+                      {blog.published !== false ? 'Published' : 'Draft'}
+                    </span>
+                  </div>
+
+                  <span className="text-[0.65rem] font-bold text-sigma-blue-700 uppercase tracking-wider block">
+                    {blog.category}
+                  </span>
+
+                  <h3 className="text-base font-bold font-serif text-sigma-graphite-900 leading-snug line-clamp-2">
+                    {blog.title}
+                  </h3>
+
+                  <p className="text-xs text-sigma-stone-600 line-clamp-2 leading-relaxed">
+                    {blog.excerpt}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-sigma-stone-100 flex items-center justify-between text-xs">
+                  <span className="text-[0.65rem] text-sigma-stone-400 font-semibold">{blog.date}</span>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={`/blogs/${blog.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-2 bg-sigma-stone-100 hover:bg-sigma-stone-200 text-sigma-graphite-700 rounded-lg text-xs"
+                      title="Preview live blog page"
+                    >
+                      <Globe className="h-3.5 w-3.5" />
+                    </a>
+                    <button
+                      onClick={() => handleOpenEditBlog(blog)}
+                      className="px-3 py-1.5 bg-sigma-blue-50 hover:bg-sigma-blue-100 text-sigma-blue-800 rounded-lg text-xs font-bold flex items-center gap-1"
+                    >
+                      <Edit className="h-3.5 w-3.5" /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteBlogClick(blog.id)}
+                      className="p-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs font-bold"
+                      title="Delete article"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Modal for Creating / Editing Blog */}
+          {isBlogModalOpen && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+              <div className="bg-white max-w-2xl w-full rounded-3xl p-6 md:p-8 shadow-2xl border border-sigma-stone-200 my-8 space-y-6">
+                <div className="flex items-center justify-between border-b border-sigma-stone-200 pb-4">
+                  <h3 className="text-xl font-bold font-serif text-sigma-graphite-900">
+                    {editingBlogId ? 'Edit Blog Article' : 'Create New Blog Article'}
+                  </h3>
+                  <button
+                    onClick={() => setIsBlogModalOpen(false)}
+                    className="p-2 text-sigma-stone-400 hover:text-sigma-graphite-900 rounded-xl"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveBlog} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-sigma-stone-600 uppercase mb-1">
+                      Article Title *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Why Jaipur is Emerging as North India's Top Real Estate Corridor"
+                      value={blogForm.title || ''}
+                      onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-sigma-stone-600 uppercase mb-1">
+                        Category *
+                      </label>
+                      <select
+                        value={blogForm.category || 'Market Trends'}
+                        onChange={(e) => setBlogForm({ ...blogForm, category: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                      >
+                        <option value="Market Trends">Market Trends</option>
+                        <option value="NRI Advisory">NRI Advisory</option>
+                        <option value="Buyer Guides">Buyer Guides</option>
+                        <option value="Legal & FEMA">Legal & FEMA</option>
+                        <option value="Investment">Investment</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-sigma-stone-600 uppercase mb-1">
+                        Author Name
+                      </label>
+                      <input
+                        type="text"
+                        value={blogForm.author || ''}
+                        onChange={(e) => setBlogForm({ ...blogForm, author: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-sigma-stone-600 uppercase mb-1">
+                      Short Excerpt *
+                    </label>
+                    <textarea
+                      rows={2}
+                      required
+                      placeholder="Brief summary displayed on article cards..."
+                      value={blogForm.excerpt || ''}
+                      onChange={(e) => setBlogForm({ ...blogForm, excerpt: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-sigma-stone-600 uppercase mb-1">
+                      Full Article Body Content (Markdown Supported) *
+                    </label>
+                    <textarea
+                      rows={8}
+                      required
+                      placeholder="Write your article content here. Use ### for subheadings and - for bullet points..."
+                      value={blogForm.content || ''}
+                      onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-mono text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-sigma-stone-600 uppercase mb-1">
+                      Cover Image URL
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="https://images.unsplash.com/..."
+                      value={blogForm.coverImage || ''}
+                      onChange={(e) => setBlogForm({ ...blogForm, coverImage: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-2">
+                    <label className="flex items-center gap-2 text-xs font-bold text-sigma-graphite-900 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={blogForm.published !== false}
+                        onChange={(e) => setBlogForm({ ...blogForm, published: e.target.checked })}
+                        className="rounded border-sigma-stone-300 text-sigma-blue-700 focus:ring-sigma-blue-500 h-4 w-4"
+                      />
+                      Publish Immediately on Website
+                    </label>
+                  </div>
+
+                  <div className="pt-4 border-t border-sigma-stone-200 flex justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsBlogModalOpen(false)}
+                      className="px-5 py-2.5 bg-sigma-stone-100 hover:bg-sigma-stone-200 text-sigma-graphite-900 text-xs font-bold rounded-xl"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-6 py-2.5 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white text-xs font-bold rounded-xl shadow-md"
+                    >
+                      {editingBlogId ? 'Update Article' : 'Publish Article'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="container-content space-y-6">
+          {/* Category Navigation Pills Bar */}
+          <div className="bg-white p-3 rounded-2xl border border-sigma-stone-200/80 shadow-xs">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-sigma-stone-400 block px-2 mb-2">
+              Select Form Category:
+            </span>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
+              {CATEGORY_TABS.map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                const count = categoryCounts[cat.id] || 0;
+
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-2 border ${
+                      isActive
+                        ? 'bg-sigma-graphite-950 text-white border-sigma-graphite-950 shadow-sm scale-102'
+                        : 'bg-sigma-stone-50 hover:bg-sigma-stone-100 text-sigma-stone-700 border-sigma-stone-200'
                     }`}
                   >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
+                    <span>{cat.icon}</span>
+                    <span>{cat.label}</span>
+                    <span
+                      className={`px-1.5 py-0.5 rounded-md text-[10px] font-extrabold ${
+                        isActive ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-sigma-stone-200 text-sigma-stone-800'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
         {/* Filter Controls */}
         <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-xs">
@@ -767,6 +1093,7 @@ function AdminPageContent() {
           )}
         </div>
       </div>
+    )}
 
       {/* Form Submission Detail Modal */}
       {activeDetailLead && (

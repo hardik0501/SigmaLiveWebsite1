@@ -21,6 +21,8 @@ import { PropertiesPage } from '@/pages/PropertiesPage';
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
 import { LocationsHubPage } from '@/pages/LocationsHubPage';
 import { LocationDetailPage } from '@/pages/LocationDetailPage';
+import { BlogListPage } from '@/pages/BlogListPage';
+import { BlogDetailPage } from '@/pages/BlogDetailPage';
 import { AboutPage } from '@/pages/AboutPage';
 import { FounderPage } from '@/pages/FounderPage';
 import { LeadershipHubPage } from '@/pages/LeadershipHubPage';
@@ -92,6 +94,8 @@ function AppLayout() {
         <Route path="/projects/:slug" element={<ProjectDetailPage />} />
         <Route path="/locations" element={<LocationsHubPage />} />
         <Route path="/locations/:slug" element={<LocationDetailPage />} />
+        <Route path="/blogs" element={<BlogListPage />} />
+        <Route path="/blogs/:slug" element={<BlogDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/founder" element={<FounderPage />} />
         <Route path="/leadership" element={<LeadershipHubPage />} />
