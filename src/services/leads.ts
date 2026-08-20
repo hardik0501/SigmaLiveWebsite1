@@ -41,6 +41,14 @@ export function sanitizeLead(l: any): LeadPayload | null {
   };
 }
 
+function getBackendUrl(): string {
+  if (typeof window === 'undefined') return 'http://localhost:5000/api/leads';
+  const hostname = window.location.hostname || 'localhost';
+  const port = '5000';
+  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+  return `${protocol}//${hostname}:${port}/api/leads`;
+}
+
 const SERVER_API_URL = '/api/leads';
 const PRIMARY_CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a01d1fee335779';
 const BACKUP_CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a015bde90e4542';
@@ -68,16 +76,36 @@ export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean;
 }
 
 /**
- * Push updated leads array to persistent global cloud storage (laptop <-> mobile <-> all devices)
+ * Push updated leads array to persistent Express backend server and global cloud storage
  */
 export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
   const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
   const payload = {
     name: 'sigma_homes_crm_leads_db_2026',
+    leads: cleanLeads,
     data: { leads: cleanLeads },
   };
 
   let success = false;
+
+  // 1. Push to Express Backend Server (Direct DB sync)
+  try {
+    const backendUrl = getBackendUrl();
+    await fetch(backendUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leads: cleanLeads }),
+    });
+    fetch(SERVER_API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leads: cleanLeads }),
+    }).catch(() => {});
+  } catch (err) {
+    // Ignore backend connection error
+  }
+
+  // 2. Push to Primary Cloud API
   try {
     const res = await fetch(PRIMARY_CLOUD_API_URL, {
       method: 'PUT',
@@ -89,6 +117,7 @@ export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
     console.warn('[Sigma Leads] Primary cloud update error:', err);
   }
 
+  // 3. Push to Backup Cloud API
   try {
     await fetch(BACKUP_CLOUD_API_URL, {
       method: 'PUT',
@@ -125,29 +154,33 @@ export function getStoredLeads(): LeadPayload[] {
 }
 
 /**
- * Fetch leads from global cloud endpoint to guarantee real-time cross-device sync (Laptop <-> Mobile <-> Any Browser)
+ * Fetch leads from Express backend server AND global cloud endpoint to guarantee real-time cross-device sync
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   const fetchedLeads: LeadPayload[] = [];
 
-  // 1. Fetch from local server (/api/leads)
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2500);
-    const res = await fetch(SERVER_API_URL, { signal: controller.signal });
-    clearTimeout(timeoutId);
+  // 1. Fetch from Express Backend Server (Direct Server Storage)
+  const serverUrls = [getBackendUrl(), SERVER_API_URL];
+  for (const url of serverUrls) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2500);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
 
-    if (res.ok) {
-      const json = await res.json();
-      if (json && json.success && Array.isArray(json.leads)) {
-        json.leads.forEach((l: any) => {
-          const san = sanitizeLead(l);
-          if (san) fetchedLeads.push(san);
-        });
+      if (res.ok) {
+        const json = await res.json();
+        const rawArr = json?.leads || (Array.isArray(json) ? json : []);
+        if (Array.isArray(rawArr)) {
+          rawArr.forEach((l: any) => {
+            const san = sanitizeLead(l);
+            if (san) fetchedLeads.push(san);
+          });
+        }
       }
+    } catch (err) {
+      // Ignore local endpoint fetch error
     }
-  } catch (err) {
-    // Ignore local endpoint fetch error
   }
 
   // 2. Fetch from Primary Global Cloud Endpoint (Enables cross-device Laptop <-> Mobile real-time sync)
