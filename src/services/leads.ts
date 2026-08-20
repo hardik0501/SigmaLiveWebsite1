@@ -41,19 +41,20 @@ export function sanitizeLead(l: any): LeadPayload | null {
   };
 }
 
+const LIVE_VERCEL_BACKEND_URL = 'https://sigmabackend-psi.vercel.app/api/leads.js';
+
 function getBackendUrl(): string {
-  if (typeof window === 'undefined') return '/api/leads';
+  if (typeof window === 'undefined') return LIVE_VERCEL_BACKEND_URL;
   const hostname = window.location.hostname || 'localhost';
-  // On Vercel or live production domains, use relative /api/leads Serverless route directly
   if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-    return '/api/leads';
+    return LIVE_VERCEL_BACKEND_URL;
   }
   const port = '5000';
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
   return `${protocol}//${hostname}:${port}/api/leads`;
 }
 
-const SERVER_API_URL = '/api/leads';
+const SERVER_API_URL = LIVE_VERCEL_BACKEND_URL;
 
 let cachedCloudKey = '851f5e5ebe1e4ce0ad43fd3a91b626f5';
 

@@ -67,11 +67,13 @@ Schedule a site visit with Sigma Homes to explore inventory in Mansarovar Extens
   },
 ];
 
+const LIVE_VERCEL_BLOGS_URL = 'https://sigmabackend-psi.vercel.app/api/blogs.js';
+
 function getBlogsApiUrl(): string {
-  if (typeof window === 'undefined') return '/api/blogs';
+  if (typeof window === 'undefined') return LIVE_VERCEL_BLOGS_URL;
   const hostname = window.location.hostname || 'localhost';
   if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-    return '/api/blogs';
+    return LIVE_VERCEL_BLOGS_URL;
   }
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
   return `${protocol}//${hostname}:5000/api/blogs`;
