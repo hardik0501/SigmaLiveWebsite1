@@ -45,14 +45,13 @@ const SERVER_API_URL = '/api/leads';
 const GLOBAL_CLOUD_API_URL = 'https://crudcrud.com/api/f7102b6544d74b26b591e3915c00b22e/leads';
 
 /**
- * Check if a lead submission is test, spam, or invalid
+ * Check if a lead submission is test or spam for purging purposes
  */
 export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean; reason?: string } {
   if (!lead) return { isSpam: true, reason: 'Invalid submission data.' };
 
   const name = String(lead.name || '').trim().toLowerCase();
   const rawPhone = String(lead.phone || '').trim();
-  const digitsOnly = rawPhone.replace(/\D/g, '');
   const message = String(lead.message || '').trim().toLowerCase();
 
   const spamKeywords = [
@@ -60,43 +59,15 @@ export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean;
     'demo', 'sample', 'fake', 'abcd', '1234', 'temp', 'foobar', 'xxx'
   ];
 
-  // 1. Name validation
-  if (!name || name.length < 2) {
-    return { isSpam: true, reason: 'Please enter a valid full name.' };
-  }
-  if (spamKeywords.some((kw) => name.includes(kw))) {
-    return { isSpam: true, reason: 'Test names are not allowed.' };
-  }
+  // Helper check for admin purge action only
+  const isSpam = spamKeywords.some((kw) => name.includes(kw) || message.includes(kw)) ||
+    ['0000000000', '1111111111', '1234567890'].some((p) => rawPhone.includes(p));
 
-  // 2. Phone validation
-  const invalidPhones = [
-    '0000000000', '1111111111', '2222222222', '3333333333', '4444444444',
-    '5555555555', '6666666666', '7777777777', '8888888888', '9999999999',
-    '1234567890', '9876543210', '0123456789'
-  ];
-
-  if (!digitsOnly || digitsOnly.length < 10) {
-    return { isSpam: true, reason: 'Please enter a valid 10-digit mobile number.' };
-  }
-
-  const last10 = digitsOnly.slice(-10);
-  if (invalidPhones.includes(last10)) {
-    return { isSpam: true, reason: 'Please enter a valid, genuine mobile number.' };
-  }
-
-  // 3. Message validation
-  if (message) {
-    const cleanMsg = message.replace(/\[reason:[^\]]+\]/i, '').trim();
-    if (cleanMsg && spamKeywords.includes(cleanMsg)) {
-      return { isSpam: true, reason: 'Please enter a detailed requirement.' };
-    }
-  }
-
-  return { isSpam: false };
+  return { isSpam };
 }
 
 /**
- * Get all stored leads without dummy/test data from local cache
+ * Get all stored leads from local storage cache
  */
 export function getStoredLeads(): LeadPayload[] {
   try {
@@ -106,7 +77,7 @@ export function getStoredLeads(): LeadPayload[] {
       if (Array.isArray(parsed)) {
         const sanitized = parsed
           .map(sanitizeLead)
-          .filter((l): l is LeadPayload => l !== null && !isTestOrSpamLead(l).isSpam);
+          .filter((l): l is LeadPayload => l !== null);
         return sanitized;
       }
     }
@@ -135,7 +106,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
       if (json && json.success && Array.isArray(json.leads)) {
         json.leads.forEach((l: any) => {
           const san = sanitizeLead(l);
-          if (san && !isTestOrSpamLead(san).isSpam) fetchedLeads.push(san);
+          if (san) fetchedLeads.push(san);
         });
       }
     }
@@ -155,7 +126,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
       if (Array.isArray(json)) {
         json.forEach((l: any) => {
           const san = sanitizeLead(l);
-          if (san && !isTestOrSpamLead(san).isSpam) fetchedLeads.push(san);
+          if (san) fetchedLeads.push(san);
         });
       }
     }
@@ -167,7 +138,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   const leadMap = new Map<string, LeadPayload>();
 
   [...localLeads, ...fetchedLeads].forEach((l) => {
-    if (l && l.id && !DUMMY_SEED_IDS.has(l.id) && !isTestOrSpamLead(l).isSpam) {
+    if (l && l.id && !DUMMY_SEED_IDS.has(l.id)) {
       leadMap.set(l.id, l);
     }
   });
@@ -190,7 +161,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
  */
 export function saveLeads(leads: LeadPayload[]): void {
   try {
-    const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id) && !isTestOrSpamLead(l).isSpam);
+    const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
     localStorage.setItem('sigma_leads', JSON.stringify(cleanLeads));
     window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: cleanLeads }));
     if (leadsChannel) {
@@ -202,7 +173,7 @@ export function saveLeads(leads: LeadPayload[]): void {
 }
 
 /**
- * Purge test/spam leads from storage
+ * Purge test/spam leads from storage when triggered by Admin
  */
 export function purgeTestLeads(): number {
   const existing = getStoredLeads();
@@ -220,19 +191,15 @@ export function purgeTestLeads(): number {
 }
 
 /**
- * Submit a new lead - saves to persistent JSON storage, global cloud API & local state after validation
+ * Submit a new lead - saves to persistent JSON storage, global cloud API & local state
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionResult> {
-  const check = isTestOrSpamLead(payload);
-  if (check.isSpam) {
-    return {
-      success: false,
-      message: check.reason || 'Invalid lead submission. Please provide valid contact details.',
-    };
-  }
-
   const referenceId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
   const timestamp = new Date().toISOString();
+
+  // Ensure mandatory fields have safe fallbacks so form submit never fails
+  const name = (payload.name || '').trim() || 'Valued Visitor';
+  const phone = (payload.phone || '').trim() || 'N/A';
 
   // Retrieve saved UTM parameters if available
   let savedUtm: UtmParams = {};
@@ -245,6 +212,8 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
 
   const fullPayload: LeadPayload = {
     ...payload,
+    name,
+    phone,
     id: referenceId,
     status: 'New',
     createdAt: timestamp,
