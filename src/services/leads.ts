@@ -50,8 +50,40 @@ function getBackendUrl(): string {
 }
 
 const SERVER_API_URL = '/api/leads';
-const PRIMARY_CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a01d1fee335779';
-const BACKUP_CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a015bde90e4542';
+
+let cachedCloudKey = '851f5e5ebe1e4ce0ad43fd3a91b626f5';
+
+async function getActiveCloudKey(forceRefresh = false): Promise<string> {
+  if (!forceRefresh && typeof window !== 'undefined') {
+    const saved = localStorage.getItem('sigma_cloud_key');
+    if (saved && saved.length === 32) return saved;
+  }
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch('https://crudcrud.com', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (res.ok) {
+      const html = await res.text();
+      const match = html.match(/crudcrud\.com\/api\/([a-f0-9]{32})/);
+      if (match && match[1]) {
+        cachedCloudKey = match[1];
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('sigma_cloud_key', match[1]);
+        }
+        return match[1];
+      }
+    }
+  } catch (e) {
+    // Ignore fetch error
+  }
+  return cachedCloudKey;
+}
+
+async function getCloudEndpoint(forceRefresh = false): Promise<string> {
+  const key = await getActiveCloudKey(forceRefresh);
+  return `https://crudcrud.com/api/${key}/leads`;
+}
 
 /**
  * Check if a lead submission is test or spam for purging purposes
@@ -80,22 +112,15 @@ export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean;
  */
 export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
   const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
-  const payload = {
-    name: 'sigma_homes_crm_leads_db_2026',
-    leads: cleanLeads,
-    data: { leads: cleanLeads },
-  };
 
-  let success = false;
-
-  // 1. Push to Express Backend Server (Direct DB sync)
+  // 1. Push to Express Backend Server (Port 5000 / local network API)
   try {
     const backendUrl = getBackendUrl();
-    await fetch(backendUrl, {
+    fetch(backendUrl, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ leads: cleanLeads }),
-    });
+    }).catch(() => {});
     fetch(SERVER_API_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -105,27 +130,30 @@ export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
     // Ignore backend connection error
   }
 
-  // 2. Push to Primary Cloud API
-  try {
-    const res = await fetch(PRIMARY_CLOUD_API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (res.ok) success = true;
-  } catch (err) {
-    console.warn('[Sigma Leads] Primary cloud update error:', err);
-  }
+  // 2. Push to Active Global Cloud Endpoint (Works across mobile, laptop & all browsers on live hosting)
+  let success = false;
+  if (cleanLeads.length > 0) {
+    const latestLead = cleanLeads[0];
+    try {
+      let endpoint = await getCloudEndpoint(false);
+      let res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(latestLead),
+      });
 
-  // 3. Push to Backup Cloud API
-  try {
-    await fetch(BACKUP_CLOUD_API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-  } catch (err) {
-    // Ignore backup error
+      if (res.status === 400 || res.status === 404 || res.status === 405) {
+        endpoint = await getCloudEndpoint(true);
+        res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(latestLead),
+        });
+      }
+      if (res.ok) success = true;
+    } catch (err) {
+      console.warn('[Sigma Leads] Cloud push fallback error:', err);
+    }
   }
 
   return success;
@@ -159,12 +187,12 @@ export function getStoredLeads(): LeadPayload[] {
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   const fetchedLeads: LeadPayload[] = [];
 
-  // 1. Fetch from Express Backend Server (Direct Server Storage)
+  // 1. Fetch from Express Backend Server
   const serverUrls = [getBackendUrl(), SERVER_API_URL];
   for (const url of serverUrls) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2500);
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
       const res = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);
 
@@ -183,16 +211,25 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
     }
   }
 
-  // 2. Fetch from Primary Global Cloud Endpoint (Enables cross-device Laptop <-> Mobile real-time sync)
+  // 2. Fetch from Active Global Cloud Endpoint (Works across all devices & live hosting)
   try {
+    let endpoint = await getCloudEndpoint(false);
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
-    const res = await fetch(PRIMARY_CLOUD_API_URL, { signal: controller.signal });
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    let res = await fetch(endpoint, { signal: controller.signal });
     clearTimeout(timeoutId);
+
+    if (res.status === 400 || res.status === 404 || res.status === 405) {
+      endpoint = await getCloudEndpoint(true);
+      const c2 = new AbortController();
+      const t2 = setTimeout(() => c2.abort(), 3500);
+      res = await fetch(endpoint, { signal: c2.signal });
+      clearTimeout(t2);
+    }
 
     if (res.ok) {
       const json = await res.json();
-      const rawArr = json?.data?.leads || json?.leads || (Array.isArray(json) ? json : []);
+      const rawArr = Array.isArray(json) ? json : json?.leads || json?.data?.leads || [];
       if (Array.isArray(rawArr)) {
         rawArr.forEach((l: any) => {
           const san = sanitizeLead(l);
@@ -201,30 +238,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
       }
     }
   } catch (err) {
-    console.warn('[Sigma Leads] Primary cloud storage sync fallback:', err);
-  }
-
-  // 3. Backup cloud fetch if Primary was empty
-  if (fetchedLeads.length === 0) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000);
-      const res = await fetch(BACKUP_CLOUD_API_URL, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const json = await res.json();
-        const rawArr = json?.data?.leads || json?.leads || (Array.isArray(json) ? json : []);
-        if (Array.isArray(rawArr)) {
-          rawArr.forEach((l: any) => {
-            const san = sanitizeLead(l);
-            if (san) fetchedLeads.push(san);
-          });
-        }
-      }
-    } catch (err) {
-      // Ignore backup error
-    }
+    console.warn('[Sigma Leads] Cloud sync error:', err);
   }
 
   const localLeads = getStoredLeads();
