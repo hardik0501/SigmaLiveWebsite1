@@ -1,5 +1,9 @@
 import { BlogPost } from '@/types/blog';
 
+// ─── Backend API Configuration ───────────────────────────────────────────────
+const BACKEND_BASE_URL = 'https://sigmabackend-psi.vercel.app';
+const API_BLOGS_URL = `${BACKEND_BASE_URL}/api/blogs.js`;
+
 const SEED_BLOGS: BlogPost[] = [
   {
     id: 'blog-101',
@@ -67,67 +71,50 @@ Schedule a site visit with Sigma Homes to explore inventory in Mansarovar Extens
   },
 ];
 
-const LIVE_VERCEL_BLOGS_URL = 'https://sigmabackend-psi.vercel.app/api/blogs.js';
-
-function getBlogsApiUrl(): string {
-  if (typeof window === 'undefined') return LIVE_VERCEL_BLOGS_URL;
-  const hostname = window.location.hostname || 'localhost';
-  if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-    return LIVE_VERCEL_BLOGS_URL;
-  }
-  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  return `${protocol}//${hostname}:5000/api/blogs`;
-}
-
 /**
- * Fetch blogs from backend API with fallback seed data
+ * Fetch blogs from backend API with fallback to seed data
  */
 export async function fetchBlogs(includeUnpublished = false): Promise<BlogPost[]> {
-  const apiUrls = [getBlogsApiUrl(), '/api/blogs'];
+  try {
+    const fullUrl = includeUnpublished ? `${API_BLOGS_URL}?admin=true` : API_BLOGS_URL;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(fullUrl, { signal: controller.signal });
+    clearTimeout(timeoutId);
 
-  for (const url of apiUrls) {
-    try {
-      const fullUrl = includeUnpublished ? `${url}?admin=true` : url;
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2500);
-      const res = await fetch(fullUrl, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const json = await res.json();
-        if (json && json.success && Array.isArray(json.blogs) && json.blogs.length > 0) {
-          localStorage.setItem('sigma_blogs_cache', JSON.stringify(json.blogs));
-          return json.blogs;
-        }
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.success && Array.isArray(json.blogs) && json.blogs.length > 0) {
+        localStorage.setItem('sigma_blogs_cache', JSON.stringify(json.blogs));
+        return json.blogs;
       }
-    } catch (err) {
-      // Fallback
     }
+  } catch (err) {
+    console.warn('[Blogs Service] Backend fetch failed:', err);
   }
 
-  // Read local cache or return SEED_BLOGS
+  // Offline fallback: local cache then seed data
   try {
     const cached = localStorage.getItem('sigma_blogs_cache');
     if (cached) {
       const parsed = JSON.parse(cached);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
-  } catch (e) {}
+  } catch {}
 
   return SEED_BLOGS;
 }
 
 /**
- * Fetch a single blog article by ID or slug
+ * Fetch a single blog article by slug
  */
 export async function fetchBlogBySlug(slug: string): Promise<BlogPost | null> {
   const blogs = await fetchBlogs(true);
-  const found = blogs.find((b) => b.slug === slug || b.id === slug);
-  return found || null;
+  return blogs.find((b) => b.slug === slug || b.id === slug) || null;
 }
 
 /**
- * Create a new blog post on backend API
+ * Create a new blog post on backend
  */
 export async function createBlog(post: Partial<BlogPost>): Promise<BlogPost> {
   const blogId = `blog-${Date.now()}`;
@@ -153,8 +140,7 @@ export async function createBlog(post: Partial<BlogPost>): Promise<BlogPost> {
   };
 
   try {
-    const apiUrl = getBlogsApiUrl();
-    await fetch(apiUrl, {
+    await fetch(API_BLOGS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newPost),
@@ -163,46 +149,33 @@ export async function createBlog(post: Partial<BlogPost>): Promise<BlogPost> {
     console.warn('[Blogs Service] Backend create error:', err);
   }
 
-  // Update local cache
-  const existing = await fetchBlogs(true);
-  const updated = [newPost, ...existing];
-  localStorage.setItem('sigma_blogs_cache', JSON.stringify(updated));
-
   return newPost;
 }
 
 /**
- * Update an existing blog post on backend API
+ * Update an existing blog post on backend (uses query param ?id=)
  */
 export async function updateBlog(id: string, updateData: Partial<BlogPost>): Promise<void> {
   try {
-    const apiUrl = `${getBlogsApiUrl()}/${id}`;
-    await fetch(apiUrl, {
+    await fetch(`${API_BLOGS_URL}?id=${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updateData),
+      body: JSON.stringify({ ...updateData, id }),
     });
   } catch (err) {
     console.warn('[Blogs Service] Backend update error:', err);
   }
-
-  const existing = await fetchBlogs(true);
-  const updated = existing.map((b) => (b.id === id || b.slug === id ? { ...b, ...updateData } : b));
-  localStorage.setItem('sigma_blogs_cache', JSON.stringify(updated));
 }
 
 /**
- * Delete a blog post on backend API
+ * Delete a blog post from backend (uses query param ?id=)
  */
 export async function deleteBlog(id: string): Promise<void> {
   try {
-    const apiUrl = `${getBlogsApiUrl()}/${id}`;
-    await fetch(apiUrl, { method: 'DELETE' });
+    await fetch(`${API_BLOGS_URL}?id=${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
   } catch (err) {
     console.warn('[Blogs Service] Backend delete error:', err);
   }
-
-  const existing = await fetchBlogs(true);
-  const updated = existing.filter((b) => b.id !== id && b.slug !== id);
-  localStorage.setItem('sigma_blogs_cache', JSON.stringify(updated));
 }

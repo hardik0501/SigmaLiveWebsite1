@@ -326,30 +326,32 @@ function AdminPageContent() {
   };
 
   // Lead Status Change
-  const handleStatusChange = (id: string, newStatus: LeadStatus) => {
-    updateLeadStatus(id, newStatus);
-    const updated = getStoredLeads();
+  const handleStatusChange = async (id: string, newStatus: LeadStatus) => {
+    await updateLeadStatus(id, newStatus);
+    const updated = await syncLeadsFromCloud();
     setLeads(updated);
+    setLastUpdated(new Date().toLocaleTimeString());
     if (activeDetailLead && activeDetailLead.id === id) {
       setActiveDetailLead({ ...activeDetailLead, status: newStatus });
     }
   };
 
-  // Lead Delete
-  const handleDeleteLead = (id: string) => {
+  // Lead Delete — real-time delete from backend
+  const handleDeleteLead = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this form submission record?')) {
-      deleteLead(id);
-      const updated = getStoredLeads();
-      setLeads(updated);
+      const remaining = await deleteLead(id);
+      setLeads(remaining);
+      setLastUpdated(new Date().toLocaleTimeString());
       if (activeDetailLead?.id === id) setActiveDetailLead(null);
     }
   };
 
   // Purge Spam / Test Leads
-  const handlePurgeTestLeads = () => {
-    const count = purgeTestLeads();
-    const updated = getStoredLeads();
+  const handlePurgeTestLeads = async () => {
+    const count = await purgeTestLeads();
+    const updated = await syncLeadsFromCloud();
     setLeads(updated);
+    setLastUpdated(new Date().toLocaleTimeString());
     alert(count > 0 ? `Successfully removed ${count} test/spam lead(s).` : 'No test/spam leads found.');
   };
 

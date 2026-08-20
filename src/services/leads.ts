@@ -2,16 +2,28 @@ import { LeadPayload, LeadSubmissionResult, UtmParams, LeadType, LeadStatus } fr
 
 const SIGMA_WHATSAPP_NUMBER = '919829288341';
 const SIGMA_PHONE_NUMBER = '+91 98292 88341';
-const REMOTE_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a015bde90e4542';
 
-// BroadcastChannel for instant cross-tab real-time sync
-const leadsChannel = typeof window !== 'undefined' && 'BroadcastChannel' in window ? new BroadcastChannel('sigma_leads_channel') : null;
+// ─── Backend API Configuration ───────────────────────────────────────────────
+const BACKEND_BASE_URL = 'https://sigmabackend-psi.vercel.app';
+const API_LEADS_URL = `${BACKEND_BASE_URL}/api/leads.js`;
 
-// Legacy Seed IDs to filter out if previously cached in localStorage
-const DUMMY_SEED_IDS = new Set(['SIG-839201', 'SIG-710492', 'SIG-559102', 'SIG-409182', 'SIG-391029']);
+// BroadcastChannel for instant cross-tab sync
+const leadsChannel =
+  typeof window !== 'undefined' && 'BroadcastChannel' in window
+    ? new BroadcastChannel('sigma_leads_channel')
+    : null;
+
+// Legacy seed IDs to filter out
+const DUMMY_SEED_IDS = new Set([
+  'SIG-839201',
+  'SIG-710492',
+  'SIG-559102',
+  'SIG-409182',
+  'SIG-391029',
+]);
 
 /**
- * Sanitize raw lead objects to ensure non-null safe properties
+ * Sanitize raw lead objects to ensure safe properties
  */
 export function sanitizeLead(l: any): LeadPayload | null {
   if (!l || typeof l !== 'object') return null;
@@ -41,57 +53,8 @@ export function sanitizeLead(l: any): LeadPayload | null {
   };
 }
 
-const LIVE_VERCEL_BACKEND_URL = 'https://sigmabackend-psi.vercel.app/api/leads.js';
-
-function getBackendUrl(): string {
-  if (typeof window === 'undefined') return LIVE_VERCEL_BACKEND_URL;
-  const hostname = window.location.hostname || 'localhost';
-  if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-    return LIVE_VERCEL_BACKEND_URL;
-  }
-  const port = '5000';
-  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  return `${protocol}//${hostname}:${port}/api/leads`;
-}
-
-const SERVER_API_URL = LIVE_VERCEL_BACKEND_URL;
-
-let cachedCloudKey = '851f5e5ebe1e4ce0ad43fd3a91b626f5';
-
-async function getActiveCloudKey(forceRefresh = false): Promise<string> {
-  if (!forceRefresh && typeof window !== 'undefined') {
-    const saved = localStorage.getItem('sigma_cloud_key');
-    if (saved && saved.length === 32) return saved;
-  }
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-    const res = await fetch('https://crudcrud.com', { signal: controller.signal });
-    clearTimeout(timeoutId);
-    if (res.ok) {
-      const html = await res.text();
-      const match = html.match(/crudcrud\.com\/api\/([a-f0-9]{32})/);
-      if (match && match[1]) {
-        cachedCloudKey = match[1];
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('sigma_cloud_key', match[1]);
-        }
-        return match[1];
-      }
-    }
-  } catch (e) {
-    // Ignore fetch error
-  }
-  return cachedCloudKey;
-}
-
-async function getCloudEndpoint(forceRefresh = false): Promise<string> {
-  const key = await getActiveCloudKey(forceRefresh);
-  return `https://crudcrud.com/api/${key}/leads`;
-}
-
 /**
- * Check if a lead submission is test or spam for purging purposes
+ * Check if a lead is test/spam
  */
 export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean; reason?: string } {
   if (!lead) return { isSpam: true, reason: 'Invalid submission data.' };
@@ -102,215 +65,92 @@ export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean;
 
   const spamKeywords = [
     'test', 'testing', 'dds', 'asdf', 'qwerty', 'dummy', 'admin',
-    'demo', 'sample', 'fake', 'abcd', '1234', 'temp', 'foobar', 'xxx'
+    'demo', 'sample', 'fake', 'abcd', '1234', 'temp', 'foobar', 'xxx',
   ];
 
-  // Helper check for admin purge action only
-  const isSpam = spamKeywords.some((kw) => name.includes(kw) || message.includes(kw)) ||
+  const isSpam =
+    spamKeywords.some((kw) => name.includes(kw) || message.includes(kw)) ||
     ['0000000000', '1111111111', '1234567890'].some((p) => rawPhone.includes(p));
 
   return { isSpam };
 }
 
-/**
- * Push updated leads array to persistent Express backend server and global cloud storage
- */
-export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
-  const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
+// ─── LOCAL CACHE (read-through only, backend is source of truth) ─────────────
 
-  // 1. Push to Express Backend Server (Port 5000 / local network API)
-  try {
-    const backendUrl = getBackendUrl();
-    fetch(backendUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ leads: cleanLeads }),
-    }).catch(() => {});
-    fetch(SERVER_API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ leads: cleanLeads }),
-    }).catch(() => {});
-  } catch (err) {
-    // Ignore backend connection error
-  }
-
-  // 2. Push to Active Global Cloud Endpoint (Works across mobile, laptop & all browsers on live hosting)
-  let success = false;
-  if (cleanLeads.length > 0) {
-    const latestLead = cleanLeads[0];
-    try {
-      let endpoint = await getCloudEndpoint(false);
-      let res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(latestLead),
-      });
-
-      if (res.status === 400 || res.status === 404 || res.status === 405) {
-        endpoint = await getCloudEndpoint(true);
-        res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(latestLead),
-        });
-      }
-      if (res.ok) success = true;
-    } catch (err) {
-      console.warn('[Sigma Leads] Cloud push fallback error:', err);
-    }
-  }
-
-  return success;
-}
-
-/**
- * Get all stored leads from local storage cache
- */
-export function getStoredLeads(): LeadPayload[] {
+function getCachedLeads(): LeadPayload[] {
   try {
     const data = localStorage.getItem('sigma_leads');
     if (data) {
       const parsed = JSON.parse(data);
       if (Array.isArray(parsed)) {
-        const sanitized = parsed
-          .map(sanitizeLead)
-          .filter((l): l is LeadPayload => l !== null);
-        return sanitized;
+        return parsed.map(sanitizeLead).filter((l): l is LeadPayload => l !== null);
       }
     }
-    return [];
-  } catch (err) {
-    console.warn('[Sigma Leads] Local storage read error:', err);
-    return [];
+  } catch {}
+  return [];
+}
+
+function setCachedLeads(leads: LeadPayload[]): void {
+  try {
+    localStorage.setItem('sigma_leads', JSON.stringify(leads));
+  } catch {}
+}
+
+function broadcastLeads(leads: LeadPayload[]): void {
+  window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: leads }));
+  if (leadsChannel) {
+    leadsChannel.postMessage({ type: 'leads-updated', leads });
   }
 }
 
+// ─── BACKEND API CALLS (Single Source of Truth) ──────────────────────────────
+
 /**
- * Fetch leads from Express backend server AND global cloud endpoint to guarantee real-time cross-device sync
+ * Fetch all leads from the Vercel backend. Falls back to local cache if offline.
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
-  const fetchedLeads: LeadPayload[] = [];
-
-  // 1. Fetch from Express Backend Server
-  const serverUrls = [getBackendUrl(), SERVER_API_URL];
-  for (const url of serverUrls) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
-      const res = await fetch(url, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const json = await res.json();
-        const rawArr = json?.leads || (Array.isArray(json) ? json : []);
-        if (Array.isArray(rawArr)) {
-          rawArr.forEach((l: any) => {
-            const san = sanitizeLead(l);
-            if (san) fetchedLeads.push(san);
-          });
-        }
-      }
-    } catch (err) {
-      // Ignore local endpoint fetch error
-    }
-  }
-
-  // 2. Fetch from Active Global Cloud Endpoint (Works across all devices & live hosting)
   try {
-    let endpoint = await getCloudEndpoint(false);
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
-    let res = await fetch(endpoint, { signal: controller.signal });
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(API_LEADS_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
-
-    if (res.status === 400 || res.status === 404 || res.status === 405) {
-      endpoint = await getCloudEndpoint(true);
-      const c2 = new AbortController();
-      const t2 = setTimeout(() => c2.abort(), 3500);
-      res = await fetch(endpoint, { signal: c2.signal });
-      clearTimeout(t2);
-    }
 
     if (res.ok) {
       const json = await res.json();
-      const rawArr = Array.isArray(json) ? json : json?.leads || json?.data?.leads || [];
+      const rawArr = json?.leads || (Array.isArray(json) ? json : []);
       if (Array.isArray(rawArr)) {
-        rawArr.forEach((l: any) => {
-          const san = sanitizeLead(l);
-          if (san) fetchedLeads.push(san);
-        });
+        const leads = rawArr
+          .map(sanitizeLead)
+          .filter((l): l is LeadPayload => l !== null)
+          .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+
+        setCachedLeads(leads);
+        broadcastLeads(leads);
+        return leads;
       }
     }
   } catch (err) {
-    console.warn('[Sigma Leads] Cloud sync error:', err);
+    console.warn('[Sigma Leads] Backend fetch failed, using local cache:', err);
   }
 
-  const localLeads = getStoredLeads();
-  const leadMap = new Map<string, LeadPayload>();
-
-  [...localLeads, ...fetchedLeads].forEach((l) => {
-    if (l && l.id && !DUMMY_SEED_IDS.has(l.id)) {
-      leadMap.set(l.id, l);
-    }
-  });
-
-  const merged = Array.from(leadMap.values()).sort(
-    (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-  );
-
-  localStorage.setItem('sigma_leads', JSON.stringify(merged));
-  window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: merged }));
-  if (leadsChannel) {
-    leadsChannel.postMessage({ type: 'leads-updated', leads: merged });
-  }
-
-  return merged;
+  // Offline fallback: return local cache
+  return getCachedLeads();
 }
 
 /**
- * Save leads array to local storage and broadcast to open tabs
+ * Get stored leads (from local cache). Use syncLeadsFromCloud() for fresh data.
  */
-export function saveLeads(leads: LeadPayload[]): void {
-  try {
-    const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
-    localStorage.setItem('sigma_leads', JSON.stringify(cleanLeads));
-    window.dispatchEvent(new CustomEvent('sigma-leads-updated', { detail: cleanLeads }));
-    if (leadsChannel) {
-      leadsChannel.postMessage({ type: 'leads-updated', leads: cleanLeads });
-    }
-  } catch (err) {
-    console.warn('[Sigma Leads] Local storage write error:', err);
-  }
+export function getStoredLeads(): LeadPayload[] {
+  return getCachedLeads();
 }
 
 /**
- * Purge test/spam leads from storage when triggered by Admin
- */
-export function purgeTestLeads(): number {
-  const existing = getStoredLeads();
-  const validLeads = existing.filter((l) => !isTestOrSpamLead(l).isSpam);
-  const purgedCount = existing.length - validLeads.length;
-
-  saveLeads(validLeads);
-  pushLeadsToCloud(validLeads);
-  fetch(SERVER_API_URL, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ leads: validLeads }),
-  }).catch(() => {});
-
-  return purgedCount;
-}
-
-/**
- * Submit a new lead - saves to persistent JSON storage, global cloud API & local state
+ * Submit a new lead to the backend
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionResult> {
   const referenceId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
   const timestamp = new Date().toISOString();
 
-  // Ensure mandatory fields have safe fallbacks so form submit never fails
   const name = (payload.name || '').trim() || 'Valued Visitor';
   const phone = (payload.phone || '').trim() || 'N/A';
 
@@ -319,9 +159,7 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
   try {
     const utmStr = sessionStorage.getItem('sigma_utm_params');
     if (utmStr) savedUtm = JSON.parse(utmStr);
-  } catch (e) {
-    // Ignore
-  }
+  } catch {}
 
   const fullPayload: LeadPayload = {
     ...payload,
@@ -337,27 +175,33 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
     utmCampaign: payload.utmCampaign || savedUtm.utmCampaign,
   };
 
-  console.log('[Sigma Lead System] Saving New Valid Lead:', fullPayload);
+  console.log('[Sigma Lead System] Submitting lead to backend:', fullPayload);
 
-  // 1. Immediate local save & tab broadcast
-  const existingLeads = getStoredLeads();
-  const updatedLeads = [fullPayload, ...existingLeads];
-  saveLeads(updatedLeads);
+  // Optimistic local update
+  const existing = getCachedLeads();
+  const updated = [fullPayload, ...existing];
+  setCachedLeads(updated);
+  broadcastLeads(updated);
 
-  // 2. Persist to Global Cloud API (Works across mobile, laptop & all devices)
-  pushLeadsToCloud(updatedLeads).catch((err) => {
-    console.warn('[Sigma Lead System] Global cloud API post error:', err);
-  });
-
-  // 3. Persist to data/leads.json via /api/leads HTTP POST if local server active
+  // POST to backend (source of truth)
   try {
-    fetch(SERVER_API_URL, {
+    const res = await fetch(API_LEADS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fullPayload),
-    }).catch(() => {});
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.leads && Array.isArray(json.leads)) {
+        const serverLeads = json.leads
+          .map(sanitizeLead)
+          .filter((l: LeadPayload | null): l is LeadPayload => l !== null);
+        setCachedLeads(serverLeads);
+        broadcastLeads(serverLeads);
+      }
+    }
   } catch (err) {
-    // Ignore
+    console.warn('[Sigma Lead System] Backend POST failed:', err);
   }
 
   return {
@@ -368,46 +212,102 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
 }
 
 /**
- * Update a lead's status tag & sync to persistent storage
+ * Push full leads array to backend (bulk replace)
  */
-export function updateLeadStatus(id: string, status: LeadStatus): void {
-  const leads = getStoredLeads();
-  const updated = leads.map((l) => (l.id === id ? { ...l, status } : l));
-  saveLeads(updated);
-  pushLeadsToCloud(updated);
-
-  // Push updated list to server
-  fetch(SERVER_API_URL, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ leads: updated }),
-  }).catch((err) => console.warn('[Sigma Leads] Server status update error:', err));
-}
-
-/**
- * Delete a lead by ID & sync to persistent storage
- */
-export function deleteLead(id: string): void {
-  const leads = getStoredLeads();
-  const updated = leads.filter((l) => l.id !== id);
-  saveLeads(updated);
-  pushLeadsToCloud(updated);
-
-  // Send DELETE to server endpoint
-  fetch(`${SERVER_API_URL}/${id}`, {
-    method: 'DELETE',
-  }).catch(() => {
-    // Fallback PUT
-    fetch(SERVER_API_URL, {
+export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
+  const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
+  try {
+    const res = await fetch(API_LEADS_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ leads: updated }),
-    }).catch((err) => console.warn('[Sigma Leads] Server delete error:', err));
-  });
+      body: JSON.stringify({ leads: cleanLeads }),
+    });
+    if (res.ok) {
+      setCachedLeads(cleanLeads);
+      broadcastLeads(cleanLeads);
+      return true;
+    }
+  } catch (err) {
+    console.warn('[Sigma Leads] Backend PUT failed:', err);
+  }
+  return false;
 }
 
 /**
- * Export leads to CSV file format
+ * Save leads to local cache and broadcast (used for optimistic updates)
+ */
+export function saveLeads(leads: LeadPayload[]): void {
+  const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
+  setCachedLeads(cleanLeads);
+  broadcastLeads(cleanLeads);
+}
+
+/**
+ * Update a lead's status and sync to backend
+ */
+export async function updateLeadStatus(id: string, status: LeadStatus): Promise<void> {
+  // Optimistic local update
+  const leads = getCachedLeads();
+  const updated = leads.map((l) => (l.id === id ? { ...l, status } : l));
+  setCachedLeads(updated);
+  broadcastLeads(updated);
+
+  // Sync full list to backend
+  await pushLeadsToCloud(updated);
+}
+
+/**
+ * Delete a lead by ID from the backend and local cache
+ */
+export async function deleteLead(id: string): Promise<LeadPayload[]> {
+  // Optimistic local delete
+  const leads = getCachedLeads();
+  const filtered = leads.filter((l) => l.id !== id);
+  setCachedLeads(filtered);
+  broadcastLeads(filtered);
+
+  // DELETE from backend (query param format)
+  try {
+    const res = await fetch(`${API_LEADS_URL}?id=${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.leads && Array.isArray(json.leads)) {
+        const serverLeads = json.leads
+          .map(sanitizeLead)
+          .filter((l: LeadPayload | null): l is LeadPayload => l !== null);
+        setCachedLeads(serverLeads);
+        broadcastLeads(serverLeads);
+        return serverLeads;
+      }
+    }
+  } catch (err) {
+    console.warn('[Sigma Leads] Backend DELETE failed:', err);
+    // Fallback: PUT the filtered list
+    await pushLeadsToCloud(filtered);
+  }
+
+  return filtered;
+}
+
+/**
+ * Purge test/spam leads from backend
+ */
+export async function purgeTestLeads(): Promise<number> {
+  const existing = getCachedLeads();
+  const validLeads = existing.filter((l) => !isTestOrSpamLead(l).isSpam);
+  const purgedCount = existing.length - validLeads.length;
+
+  setCachedLeads(validLeads);
+  broadcastLeads(validLeads);
+  await pushLeadsToCloud(validLeads);
+
+  return purgedCount;
+}
+
+/**
+ * Export leads to CSV
  */
 export function exportLeadsToCsv(leads: LeadPayload[]): void {
   if (leads.length === 0) return;
@@ -472,7 +372,7 @@ export function exportLeadsToCsv(leads: LeadPayload[]): void {
 }
 
 /**
- * Clean phone numbers into WhatsApp compatible international format (e.g. 919829012345)
+ * Clean phone numbers into WhatsApp compatible format
  */
 export function formatPhoneForWhatsApp(phone?: string): string {
   if (!phone) return '';
@@ -484,7 +384,7 @@ export function formatPhoneForWhatsApp(phone?: string): string {
 }
 
 /**
- * Generate context-aware WhatsApp link targeted at customer's phone number
+ * Generate WhatsApp link
  */
 export function generateWhatsAppLink(context: {
   targetPhone?: string;
@@ -515,7 +415,7 @@ export function generateWhatsAppLink(context: {
 }
 
 /**
- * Extract UTM campaign parameters from current URL
+ * Extract UTM campaign parameters from URL
  */
 export function getUtmParams(): UtmParams {
   const urlParams = new URLSearchParams(window.location.search);
