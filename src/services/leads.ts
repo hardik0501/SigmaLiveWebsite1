@@ -42,7 +42,8 @@ export function sanitizeLead(l: any): LeadPayload | null {
 }
 
 const SERVER_API_URL = '/api/leads';
-const GLOBAL_CLOUD_API_URL = 'https://crudcrud.com/api/f7102b6544d74b26b591e3915c00b22e/leads';
+const PRIMARY_CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a01d1fee335779';
+const BACKUP_CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a015bde90e4542';
 
 /**
  * Check if a lead submission is test or spam for purging purposes
@@ -64,6 +65,41 @@ export function isTestOrSpamLead(lead: Partial<LeadPayload>): { isSpam: boolean;
     ['0000000000', '1111111111', '1234567890'].some((p) => rawPhone.includes(p));
 
   return { isSpam };
+}
+
+/**
+ * Push updated leads array to persistent global cloud storage (laptop <-> mobile <-> all devices)
+ */
+export async function pushLeadsToCloud(leads: LeadPayload[]): Promise<boolean> {
+  const cleanLeads = leads.filter((l) => l && l.id && !DUMMY_SEED_IDS.has(l.id));
+  const payload = {
+    name: 'sigma_homes_crm_leads_db_2026',
+    data: { leads: cleanLeads },
+  };
+
+  let success = false;
+  try {
+    const res = await fetch(PRIMARY_CLOUD_API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) success = true;
+  } catch (err) {
+    console.warn('[Sigma Leads] Primary cloud update error:', err);
+  }
+
+  try {
+    await fetch(BACKUP_CLOUD_API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    // Ignore backup error
+  }
+
+  return success;
 }
 
 /**
@@ -89,7 +125,7 @@ export function getStoredLeads(): LeadPayload[] {
 }
 
 /**
- * Fetch leads from local server AND global cloud endpoint to guarantee cross-device sync (Laptop <-> Mobile)
+ * Fetch leads from global cloud endpoint to guarantee real-time cross-device sync (Laptop <-> Mobile <-> Any Browser)
  */
 export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   const fetchedLeads: LeadPayload[] = [];
@@ -97,7 +133,7 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
   // 1. Fetch from local server (/api/leads)
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
     const res = await fetch(SERVER_API_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
 
@@ -114,24 +150,48 @@ export async function syncLeadsFromCloud(): Promise<LeadPayload[]> {
     // Ignore local endpoint fetch error
   }
 
-  // 2. Fetch from Global Cloud Endpoint (Enables cross-device Laptop <-> Mobile real-time sync on Vercel)
+  // 2. Fetch from Primary Global Cloud Endpoint (Enables cross-device Laptop <-> Mobile real-time sync)
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 4000);
-    const res = await fetch(GLOBAL_CLOUD_API_URL, { signal: controller.signal });
+    const res = await fetch(PRIMARY_CLOUD_API_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (res.ok) {
       const json = await res.json();
-      if (Array.isArray(json)) {
-        json.forEach((l: any) => {
+      const rawArr = json?.data?.leads || json?.leads || (Array.isArray(json) ? json : []);
+      if (Array.isArray(rawArr)) {
+        rawArr.forEach((l: any) => {
           const san = sanitizeLead(l);
           if (san) fetchedLeads.push(san);
         });
       }
     }
   } catch (err) {
-    console.warn('[Sigma Leads] Cloud storage sync fallback:', err);
+    console.warn('[Sigma Leads] Primary cloud storage sync fallback:', err);
+  }
+
+  // 3. Backup cloud fetch if Primary was empty
+  if (fetchedLeads.length === 0) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch(BACKUP_CLOUD_API_URL, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        const json = await res.json();
+        const rawArr = json?.data?.leads || json?.leads || (Array.isArray(json) ? json : []);
+        if (Array.isArray(rawArr)) {
+          rawArr.forEach((l: any) => {
+            const san = sanitizeLead(l);
+            if (san) fetchedLeads.push(san);
+          });
+        }
+      }
+    } catch (err) {
+      // Ignore backup error
+    }
   }
 
   const localLeads = getStoredLeads();
@@ -181,6 +241,7 @@ export function purgeTestLeads(): number {
   const purgedCount = existing.length - validLeads.length;
 
   saveLeads(validLeads);
+  pushLeadsToCloud(validLeads);
   fetch(SERVER_API_URL, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -231,7 +292,12 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
   const updatedLeads = [fullPayload, ...existingLeads];
   saveLeads(updatedLeads);
 
-  // 2. Persist to data/leads.json via /api/leads HTTP POST (Local server)
+  // 2. Persist to Global Cloud API (Works across mobile, laptop & all devices)
+  pushLeadsToCloud(updatedLeads).catch((err) => {
+    console.warn('[Sigma Lead System] Global cloud API post error:', err);
+  });
+
+  // 3. Persist to data/leads.json via /api/leads HTTP POST if local server active
   try {
     fetch(SERVER_API_URL, {
       method: 'POST',
@@ -240,17 +306,6 @@ export async function submitLead(payload: LeadPayload): Promise<LeadSubmissionRe
     }).catch(() => {});
   } catch (err) {
     // Ignore
-  }
-
-  // 3. Persist to Global Cloud API (Works on Vercel deployment across mobile & laptop)
-  try {
-    fetch(GLOBAL_CLOUD_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(fullPayload),
-    }).catch(() => {});
-  } catch (err) {
-    console.warn('[Sigma Lead System] Global cloud API post error:', err);
   }
 
   return {
@@ -267,6 +322,7 @@ export function updateLeadStatus(id: string, status: LeadStatus): void {
   const leads = getStoredLeads();
   const updated = leads.map((l) => (l.id === id ? { ...l, status } : l));
   saveLeads(updated);
+  pushLeadsToCloud(updated);
 
   // Push updated list to server
   fetch(SERVER_API_URL, {
@@ -283,6 +339,7 @@ export function deleteLead(id: string): void {
   const leads = getStoredLeads();
   const updated = leads.filter((l) => l.id !== id);
   saveLeads(updated);
+  pushLeadsToCloud(updated);
 
   // Send DELETE to server endpoint
   fetch(`${SERVER_API_URL}/${id}`, {
