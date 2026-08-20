@@ -42,8 +42,12 @@ export function sanitizeLead(l: any): LeadPayload | null {
 }
 
 function getBackendUrl(): string {
-  if (typeof window === 'undefined') return 'http://localhost:5000/api/leads';
+  if (typeof window === 'undefined') return '/api/leads';
   const hostname = window.location.hostname || 'localhost';
+  // On Vercel or live production domains, use relative /api/leads Serverless route directly
+  if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+    return '/api/leads';
+  }
   const port = '5000';
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
   return `${protocol}//${hostname}:${port}/api/leads`;
