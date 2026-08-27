@@ -71,7 +71,7 @@ export function ExploreLocations() {
                       {active.description}
                     </p>
                     <Link
-                      to={`/locations/${active.id}-jaipur`}
+                      to={`/locations/${active.slug}`}
                       className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-lg px-5 py-2.5 hover:bg-white/10 transition-colors duration-300 w-fit"
                     >
                       Explore {active.name} Guide

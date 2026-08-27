@@ -71,12 +71,16 @@ const megaMenuData: Record<string, {
       { label: 'Vaishali Nagar', href: '/locations/vaishali-nagar-jaipur', icon: MapPin, colorClass: 'bg-emerald-500/10 text-emerald-600' },
       { label: 'Jagatpura', href: '/locations/jagatpura-jaipur', icon: MapPin, colorClass: 'bg-sigma-amber-500/10 text-sigma-amber-600' },
       { label: 'Kalwar Road', href: '/locations/kalwar-road-jaipur', icon: MapPin, colorClass: 'bg-purple-500/10 text-purple-600' },
+      { label: 'Noida (NCR)', href: '/locations/noida-ncr', icon: MapPin, colorClass: 'bg-sigma-blue-500/10 text-sigma-blue-600' },
+      { label: 'Gurgaon (NCR)', href: '/locations/gurgaon-ncr', icon: MapPin, colorClass: 'bg-emerald-500/10 text-emerald-600' },
+      { label: 'Dubai (Intl.)', href: '/locations/dubai-international', icon: MapPin, colorClass: 'bg-sigma-amber-500/10 text-sigma-amber-600' },
+      { label: 'Dholera Smart City', href: '/locations/dholera-smart-city', icon: MapPin, colorClass: 'bg-rose-500/10 text-rose-600' },
     ],
     links: [
       { label: 'Mansarovar Ext.', href: '/locations/mansarovar-extension-jaipur' },
       { label: 'Kalwar Growth Corridor', href: '/locations/kalwar-road-jaipur' },
-      { label: 'Vaishali Prime Hub', href: '/locations/vaishali-nagar-jaipur' },
-      { label: 'Jagatpura Connectivity', href: '/locations/jagatpura-jaipur' },
+      { label: 'Noida Expressway', href: '/locations/noida-ncr' },
+      { label: 'Gurgaon Golf Course Rd', href: '/locations/gurgaon-ncr' },
     ],
     featured: {
       image: 'https://images.pexels.com/photos/38505310/pexels-photo-38505310.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1920',

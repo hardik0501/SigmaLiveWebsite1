@@ -1,4 +1,5 @@
 import { ArrowRight, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { ArrowButton } from '@/components/ui/Button';
@@ -6,10 +7,18 @@ import { markets } from '@/data/site';
 
 const marketImages: Record<string, string> = {
   jaipur: 'https://images.pexels.com/photos/3581694/pexels-photo-3581694.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  noida: 'https://images.pexels.com/photos/9432498/pexels-photo-9432498.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  gurgaon: 'https://images.pexels.com/photos/17764447/pexels-photo-17764447.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  dubai: 'https://images.pexels.com/photos/15480429/pexels-photo-15480429.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  dholera: 'https://images.pexels.com/photos/17079478/pexels-photo-17079478.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  noida: '/images/locations/noida.jpg',
+  gurgaon: '/images/locations/gurgaon.jpg',
+  dubai: '/images/locations/dubai.jpg',
+  dholera: '/images/locations/dholera.jpg',
+};
+
+const slugMap: Record<string, string> = {
+  jaipur: '/locations',
+  noida: '/locations/noida-ncr',
+  gurgaon: '/locations/gurgaon-ncr',
+  dubai: '/locations/dubai-international',
+  dholera: '/locations/dholera-smart-city',
 };
 
 export function WorkingMarkets() {
@@ -30,8 +39,8 @@ export function WorkingMarkets() {
         <Stagger className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" stagger={0.08}>
           {markets.map((market) => (
             <StaggerItem key={market.id}>
-              <a
-                href="#locations"
+              <Link
+                to={slugMap[market.id] || '/locations'}
                 className="group relative block overflow-hidden rounded-xl bg-sigma-graphite-900 h-[280px] md:h-[320px]"
               >
                 <img
@@ -57,7 +66,7 @@ export function WorkingMarkets() {
                   </p>
                   <ArrowRight className="mt-3 h-4 w-4 text-sigma-amber-400 transition-transform duration-300 group-hover:translate-x-1" />
                 </div>
-              </a>
+              </Link>
             </StaggerItem>
           ))}
         </Stagger>

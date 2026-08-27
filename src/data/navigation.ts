@@ -36,6 +36,10 @@ export const navItems: NavItem[] = [
       { label: 'Vaishali Nagar', href: '/locations/vaishali-nagar-jaipur' },
       { label: 'Kalwar Road', href: '/locations/kalwar-road-jaipur' },
       { label: 'Jagatpura', href: '/locations/jagatpura-jaipur' },
+      { label: 'Noida (NCR)', href: '/locations/noida-ncr' },
+      { label: 'Gurgaon (NCR)', href: '/locations/gurgaon-ncr' },
+      { label: 'Dubai (International)', href: '/locations/dubai-international' },
+      { label: 'Dholera (Smart City)', href: '/locations/dholera-smart-city' },
     ],
   },
   {
@@ -108,8 +112,10 @@ export const footerNav = {
     { label: 'Jaipur (Mansarovar)', href: '/locations/mansarovar-jaipur' },
     { label: 'Vaishali Nagar', href: '/locations/vaishali-nagar-jaipur' },
     { label: 'Kalwar Road', href: '/locations/kalwar-road-jaipur' },
-    { label: 'Noida (NCR)', href: '/locations' },
-    { label: 'Gurgaon (NCR)', href: '/locations' },
+    { label: 'Noida (NCR)', href: '/locations/noida-ncr' },
+    { label: 'Gurgaon (NCR)', href: '/locations/gurgaon-ncr' },
+    { label: 'Dubai (International)', href: '/locations/dubai-international' },
+    { label: 'Dholera (Smart City)', href: '/locations/dholera-smart-city' },
   ],
 };
 

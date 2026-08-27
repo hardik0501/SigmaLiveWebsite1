@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { locationsData } from '@/data/locationsData';
+import { Link } from 'react-router-dom';
 import { LocationsHero } from '@/components/location/LocationsHero';
 import { LocationExplorer } from '@/components/location/LocationExplorer';
 import { WorkingMarkets } from '@/components/sections/WorkingMarkets';
@@ -49,29 +50,33 @@ export function LocationsHubPage() {
       id: 'noida',
       name: 'Noida (NCR)',
       status: 'Working Zone',
+      slug: 'noida-ncr',
       description: 'Expanding presence in the Delhi NCR real estate corridor along Noida Expressway.',
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+      image: '/images/locations/noida.jpg',
     },
     {
       id: 'gurgaon',
       name: 'Gurgaon (NCR)',
       status: 'Working Zone',
+      slug: 'gurgaon-ncr',
       description: 'Targeting premium residential and commercial high-rise opportunities.',
-      image: 'https://images.pexels.com/photos/38772545/pexels-photo-38772545.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+      image: '/images/locations/gurgaon.jpg',
     },
     {
       id: 'dubai',
       name: 'Dubai (UAE)',
       status: 'Future Zone',
+      slug: 'dubai-international',
       description: 'International expansion for NRI clients and global real estate investors.',
-      image: 'https://images.pexels.com/photos/3787839/pexels-photo-3787839.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+      image: '/images/locations/dubai.jpg',
     },
     {
       id: 'dholera',
       name: 'Dholera (Gujarat)',
       status: 'Future Zone',
+      slug: 'dholera-smart-city',
       description: 'Smart city land investment opportunities on the Delhi-Mumbai Industrial Corridor.',
-      image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+      image: '/images/locations/dholera.jpg',
     },
   ];
 
@@ -169,8 +174,9 @@ export function LocationsHubPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {secondaryMarkets.map((m) => (
-              <div
+              <Link
                 key={m.id}
+                to={`/locations/${m.slug}`}
                 className="group relative flex flex-col bg-white/[0.03] backdrop-blur-md rounded-3xl border border-white/5 overflow-hidden shadow-lg p-8 justify-between space-y-6 hover:border-sigma-amber-500/30 transition-all duration-300"
               >
                 <div>
@@ -185,10 +191,10 @@ export function LocationsHubPage() {
                 </div>
 
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs md:text-sm font-semibold text-sigma-blue-100/60">
-                  <span>Inquire Opportunities</span>
+                  <span>Explore Opportunities</span>
                   <ArrowRight className="h-4 w-4 text-sigma-blue-100/40 group-hover:text-sigma-amber-400 transition-colors group-hover:translate-x-1" />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
