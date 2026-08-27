@@ -4,279 +4,275 @@ export const projectsData: Project[] = [
   {
     id: 'anukampa-sky-lounge',
     slug: 'anukampa-sky-lounge',
-    name: 'Anukampa Sky Lounge',
-    tagline: '8 Bigha Sky Residence Township with 50,000 Sq.Ft. Grand Club',
+    name: 'Anukampa Sky Lounges',
+    tagline: 'Premium 2 BHK Residences opposite Anukampa Platina',
     city: 'Jaipur',
-    location: 'Kesar Chauraha, Arjun Marg, Mansarovar Extension, Jaipur',
+    location: 'Mansarovar Extension, Jaipur',
     locality: 'Mansarovar Extension',
-    address: 'Kesar Chauraha, Arjun Marg, Mansarovar Extension, Near Hotel Hyatt Regency, Jaipur, Rajasthan 302020',
+    address: 'Opposite Anukampa Platina, Iskcon Road, Mansarovar Extension, Jaipur, Rajasthan 302020',
     landParcel: '8 Bighas',
     propertyType: 'Apartments',
-    configurations: ['3 BHK', '4 BHK'],
-    status: 'new-launch',
-    priceFrom: 5368000,
-    priceLabel: 'BSP ₹5,900/Sq.Ft. · Starting ₹53.68L*',
-    priceIndicative: true,
-    areaFrom: 910,
-    areaTo: 1650,
-    areaLabel: '910 – 1,650 Sq.Ft.',
+    configurations: ['2 BHK'],
+    status: 'ready-to-move',
+    priceFrom: 5009100,
+    priceLabel: '₹50.09L – ₹64.25L*',
+    priceIndicative: false,
+    areaFrom: 849,
+    areaTo: 1089,
+    areaLabel: '849 – 1,089 Sq.Ft.',
     heroImage: 'https://images.pexels.com/photos/38772545/pexels-photo-38772545.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     thumbnail: 'https://images.pexels.com/photos/38772545/pexels-photo-38772545.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    shortDescription: 'Large-format sky residence township with expansive 50,000 Sq.Ft. club and 72,000 Sq.Ft. podium garden.',
-    usp: '8 Bigha land parcel with 50,000 Sq.Ft. Grand Club and 72,000 Sq.Ft. Podium Garden near Hyatt Regency.',
+    shortDescription: 'Premium 2 BHK apartments on Iskcon Road spread across an 8 Bigha land parcel, featuring Rajasthan’s largest operational clubhouse.',
+    usp: '8 Bigha township opposite Anukampa Platina with 50,000 Sq.Ft. operational clubhouse & 550+ families shifted.',
     highlights: [
-      '8 Bighas grand land parcel',
-      '50,000 Sq.Ft. Grand Club House',
-      '72,000 Sq.Ft. Podium Garden & sports deck',
-      'Near Hotel Hyatt Regency',
+      'BSP: ₹5,900/- Per Sq.Ft.',
+      'Township spread over 8 Bigha Land parcel',
+      '50,000 Sq.Ft. Operational Clubhouse',
+      '550+ Families already shifted (696 flats total)',
     ],
     featured: true,
     priority: 1,
-    tags: ['Luxury', 'Investment', 'End Use'],
-    approvalStatus: 'RERA Approved',
+    tags: ['Luxury', 'Investment', 'Ready to Move'],
+    approvalStatus: 'JDA Approved',
     developer: 'Sigma Group',
 
     overview: {
-      title: 'A New Paradigm of Sky Residence Community',
-      description: 'Anukampa Sky Lounge is a flagship 8 Bigha residential enclave positioned at Kesar Chauraha, Mansarovar Extension. Designed around open green spaces, active sports infrastructure, and luxury club amenities, it brings high-rise community living to Jaipur’s fastest appreciating residential corridor.',
+      title: 'Experience Elevated Sky Residence Living',
+      description: '🏡 Anukampa SkyLounges is a premium ready-to-move residential enclave positioned opposite Anukampa Platina on Iskcon Road, Mansarovar Extension. Boasting a vast 8 Bigha land parcel, it offers 2 BHK flats with private terraces and 3-side open layout options. The township features one of Rajasthan’s largest operational clubhouses spanning 50,000 Sq.Ft. and a massive 72,000 Sq.Ft. podium garden. Join a vibrant neighborhood with over 550+ families already living here.',
     },
 
     detailedHighlights: [
       {
-        number: '8 BIGHAS',
-        label: 'Grand Land Parcel',
-        description: 'A contiguous master-planned enclave providing expansive open space and vehicular separation.',
+        number: '550+',
+        label: 'Families Shifted',
+        description: 'Highly active community with 550+ families already residing in the complex.',
         image: 'https://images.pexels.com/photos/38772545/pexels-photo-38772545.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
       },
       {
         number: '50,000 SQ.FT.',
-        label: 'Grand Club House',
-        description: 'Multi-level sports, wellness, and social hub featuring indoor games, temperature-controlled pool, and banquet facilities.',
+        label: 'Operational Club',
+        description: 'Rajasthan’s premier multi-level clubhouse featuring temperature pool, badminton and cafe lounges.',
         image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
       },
       {
         number: '72,000 SQ.FT.',
         label: 'Podium Garden',
-        description: 'Elevated vehicle-free green landscape with walking tracks, serene water bodies, and outdoor seating gazebos.',
+        description: 'Vehicle-free elevated green gardens with senior citizen seating and walkways.',
         image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
       },
     ],
 
     visualUsps: [
       {
-        title: 'Sports & Active Lifestyle Hub',
-        description: 'Includes full-size tennis court, half basketball court, cricket practice pitch, and kids play park.',
-        tag: 'Sports First',
-      },
-      {
-        title: 'Strategic Mansarovar Extension Location',
-        description: 'Situated at Kesar Chauraha on Arjun Marg, directly adjacent to Hotel Hyatt Regency.',
+        title: 'Iskcon Road Connectivity',
+        description: 'Directly situated on a 200 ft. wide road opposite Anukampa Platina.',
         tag: 'Connectivity',
       },
       {
-        title: 'High Rental & Capital Appreciation',
-        description: 'High-density employment corridor proximity ensures strong long-term yields for investors.',
-        tag: 'Investment Potential',
+        title: '3-Side Open Flats',
+        description: 'Maximum daylight, ventilation, and optional private terrace options.',
+        tag: 'Design',
       },
     ],
 
     detailedConfigurations: [
       {
-        type: '3 BHK Sky Apartment',
-        area: '910 – 1,280 Sq.Ft.',
-        bedrooms: 3,
-        bathrooms: 3,
-        balconies: 2,
-        price: '₹53.68 Lakhs*',
+        type: '2 BHK Compact Sky',
+        area: '849 Sq.Ft.',
+        bedrooms: 2,
+        bathrooms: 2,
+        balconies: 1,
+        price: '₹50.09 Lakhs*',
       },
       {
-        type: '4 BHK Luxury Suite',
-        area: '1,450 – 1,650 Sq.Ft.',
-        bedrooms: 4,
-        bathrooms: 4,
-        balconies: 3,
-        price: '₹85.00 Lakhs*',
+        type: '2 BHK Deluxe Sky',
+        area: '950 Sq.Ft.',
+        bedrooms: 2,
+        bathrooms: 2,
+        balconies: 2,
+        price: '₹56.05 Lakhs*',
+      },
+      {
+        type: '2 BHK Executive Sky',
+        area: '1,089 Sq.Ft.',
+        bedrooms: 2,
+        bathrooms: 2,
+        balconies: 2,
+        price: '₹64.25 Lakhs*',
       },
     ],
 
     detailedPricing: {
-      bsp: '₹5,900 / Sq.Ft.',
-      startingPrice: '₹53.68 Lakhs*',
-      additionalCharges: [
-        { label: 'Covered Basement Parking', amount: '₹2,00,000' },
-        { label: 'Society Interest-Free Maintenance', amount: '₹155 / Sq.Ft.' },
-        { label: 'LPG Pipeline Infrastructure Charge', amount: '₹25,000' },
-      ],
-      paymentPlan: 'Construction Linked Payment Plan (CLP) / Special Bank Subvention Available',
-      disclaimer: 'Starting price is indicative and subject to unit selection, applicable taxes, government charges and final official cost sheet.',
+      startingPrice: '₹50.09 Lakhs*',
+      disclaimer: 'Calculated at BSP of ₹5,900/Sq.Ft. Parking and Corpus fund charges are not included in the flat base amount.',
     },
 
     groupedAmenities: [
       {
-        category: 'LIFESTYLE & RECREATION',
+        category: 'CLUBHOUSE & ENTERTAINMENT',
         items: [
-          { name: '50,000 Sq.Ft. Grand Club House', description: 'Multi-story social and indoor sports facility' },
-          { name: '72,000 Sq.Ft. Elevated Podium Garden', description: 'Vehicle-free green park' },
-          { name: 'Swimming Pool & Splash Deck', description: 'Adult pool with kids wading section' },
+          { name: '50,000 Sq.Ft. Operational Club', description: 'Rajasthan’s largest residential clubhouse' },
+          { name: 'Cafe Lounge & Elegant Reception', description: 'Lobby and leisure dining space' },
+          { name: 'Kitty Party & Multi-Purpose Halls', description: 'Banquet facilities with 450+ capacity' },
+          { name: 'Mini Theatre & E-Library', description: 'On-demand cinema and digital study hub' },
+          { name: 'Guest Rooms (6+1)', description: 'Dedicated rooms for visitor boarding' },
         ],
       },
       {
         category: 'SPORTS & FITNESS',
         items: [
-          { name: 'Cricket Practice Pitch', description: 'Enclosed net practice zone' },
-          { name: 'Basketball & Badminton Courts', description: 'Outdoor court setup' },
-          { name: 'Fully Equipped Fitness Center', description: 'Cardio & strength equipment' },
+          { name: 'Gymnasium & Aerobics Zone', description: 'Equipped fitness and aerobic decks' },
+          { name: 'Double-Height Badminton Court', description: 'Indoor courts for sports enthusiasts' },
+          { name: 'Skating Rink & Cricket Court', description: 'Outdoor recreational sports zones' },
+          { name: 'Yoga & Meditation Zone', description: 'Quiet space for wellness' },
         ],
       },
       {
-        category: 'SECURITY & CONVENIENCE',
+        category: 'OUTDOOR & FAMILY',
         items: [
-          { name: '3-Tier RFID Security', description: 'CCTV surveillance & guarded gates' },
-          { name: 'Multi-Level Basement Parking', description: 'Designated parking bays' },
-          { name: 'High-Speed Elevators', description: 'Automatic stretcher-compatible lifts' },
+          { name: '72,000 Sq.Ft. Podium Garden', description: 'Lush green walkways and lawns' },
+          { name: 'Infinity Pool & Kids Pool', description: 'Stunning elevated swimming pool facilities' },
+          { name: 'Senior Citizen & Kids Play Area', description: 'Dedicated spaces for families' },
         ],
       },
     ],
 
-    lifestyleFeature: {
-      title: '50,000 SQ.FT. GRAND CLUB & PODIUM PARK',
-      subtitle: 'REDEFINING RESIDENTIAL COMMUNITY LIVING IN JAIPUR',
-      description: 'Experience an unparalleled lifestyle centered around active recreation, green landscapes, and dedicated sports zones built for multi-generational families.',
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-      stats: [
-        { value: '50K', label: 'Sq.Ft. Club' },
-        { value: '72K', label: 'Sq.Ft. Park' },
-        { value: '8', label: 'Bigha Parcel' },
-      ],
-    },
-
     galleryImages: [
-      { url: 'https://images.pexels.com/photos/38772545/pexels-photo-38772545.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Exterior Tower Elevation', category: 'architecture' },
-      { url: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Living Lounge Interiors', category: 'interiors' },
-      { url: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Podium Garden Walkway', category: 'amenities' },
-      { url: 'https://images.pexels.com/photos/271816/pexels-photo-271816.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Master Bedroom Suite', category: 'interiors' },
+      { url: 'https://images.pexels.com/photos/38772545/pexels-photo-38772545.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Exterior Elevation', category: 'architecture' },
     ],
 
     floorPlanAssets: [
-      { type: '3 BHK', title: '3 BHK Premium Sky Residence', area: '1,280 Sq.Ft.', image: 'https://images.pexels.com/photos/8293778/pexels-photo-8293778.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
-      { type: '4 BHK', title: '4 BHK Grand Sky Suite', area: '1,650 Sq.Ft.', image: 'https://images.pexels.com/photos/8293778/pexels-photo-8293778.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+      { type: '2 BHK', title: '2 BHK Compact Sky', area: '849 Sq.Ft.', image: 'https://images.pexels.com/photos/8293778/pexels-photo-8293778.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
     ],
 
     specificationsData: [
-      { category: 'STRUCTURE', items: ['Earthquake resistant RCC framed structure certified by structural engineers'] },
-      { category: 'FLOORING', items: ['Vitrified tiles in living, dining & bedrooms', 'Anti-skid ceramic tiles in balcony & bathrooms'] },
-      { category: 'KITCHEN', items: ['Granite counter top with stainless steel sink', 'Provision for RO water purifier & exhaust fan'] },
-      { category: 'DOORS & WINDOWS', items: ['Flush doors with veneer finish', 'UPVC / Aluminum sliding windows with mosquito mesh'] },
+      { category: 'STRUCTURE', items: ['Earthquake resistant RCC framed structure'] },
+      { category: 'FLOORING', items: ['Vitrified tiles in living & dining', 'Anti-skid ceramic tiles in balcony'] },
+      { category: 'KITCHEN', items: ['Granite platform with stainless steel sink'] },
+      { category: 'DOORS & WINDOWS', items: ['Flush doors with laminates', 'UPVC/Aluminum windows'] },
     ],
 
     locationIntel: {
-      address: 'Kesar Chauraha, Arjun Marg, Mansarovar Extension, Jaipur',
+      address: 'Iskcon Road, Mansarovar Extension, Jaipur',
       locality: 'Mansarovar Extension',
       city: 'Jaipur',
       advantages: [
-        { title: 'Prime Kesar Chauraha Address', description: 'Direct frontage on Arjun Marg near Hyatt Regency.' },
-        { title: 'Metro & Ring Road Proximity', description: 'Quick access to Vande Mataram Circle & Mansarovar Metro Station.' },
+        { title: 'Iskcon Road Location', description: 'Positioned opposite Anukampa Platina on a 200 ft. wide arterial road.' },
+        { title: 'Excellent Transit Links', description: 'Rapid access to Ajmer Road, Jaipur Ring Road, and Durgapura Station.' },
       ],
       nearbyPlaces: [
-        { category: 'CONNECTIVITY', name: 'Hyatt Regency', distance: 'Approx. 200 Meters' },
-        { category: 'CONNECTIVITY', name: 'Mansarovar Metro Station', distance: 'Approx. 3.5 KM' },
-        { category: 'EDUCATION', name: 'St. Wilfred College', distance: 'Approx. 1.2 KM' },
-        { category: 'HEALTHCARE', name: 'Apex Hospital', distance: 'Approx. 2.5 KM' },
-        { category: 'SHOPPING', name: 'City Park Mansarovar', distance: 'Approx. 2.0 KM' },
+        { category: 'CONNECTIVITY', name: 'Jaipur International Airport', distance: 'Approx. 8.5 KM' },
+        { category: 'CONNECTIVITY', name: 'Durgapura Railway Station', distance: 'Approx. 6.0 KM' },
+        { category: 'SHOPPING', name: 'Mansarovar Commercial Corridor', distance: 'Approx. 1.5 KM' },
       ],
     },
 
     investmentContext: {
-      title: 'Strategic Corridor Capital Appreciation Potential',
-      description: 'Mansarovar Extension has developed into Jaipur’s premier high-rise residential growth belt, benefiting from rapid infrastructure investments, hospitality additions like Hyatt Regency, and continuous demand from corporate professionals.',
+      title: 'Established Community Growth',
+      description: 'Living in a township with 550+ active families ensures immediate social infrastructure and proven rental yields.',
       points: [
-        'High rental liquidity due to nearby educational & commercial nodes',
-        'Proven capital growth trajectory along the Arjun Marg corridor',
-        'Master-planned neighborhood infrastructure with wide arterial roads',
+        'Ready-to-move status eliminates construction risk',
+        'Large-scale township infrastructure',
+        'High demand for rental units due to operational club',
       ],
-      disclaimer: 'Investment figures and growth commentary are for market orientation and do not constitute a guarantee of future returns.',
+      disclaimer: 'Investment figures and growth commentary are for market orientation.',
     },
 
     faqsData: [
-      { question: 'Where is Anukampa Sky Lounge located?', answer: 'The project is situated at Kesar Chauraha, Arjun Marg, Mansarovar Extension, near Hotel Hyatt Regency, Jaipur.' },
-      { question: 'What configurations are available?', answer: 'Anukampa Sky Lounge offers premium 3 BHK and 4 BHK sky residences ranging from 910 to 1,650 Sq.Ft.' },
-      { question: 'What is the starting price?', answer: 'The indicative starting price is ₹53.68 Lakhs* at a BSP of ₹5,900/Sq.Ft.' },
-      { question: 'Is the project approved by regulatory authorities?', answer: 'Yes, Anukampa Sky Lounge is RERA approved and legally vetted.' },
+      { question: 'What is the flat base cost structure?', answer: 'The flats are priced at ₹5,900 per Sq.Ft. Parking and Corpus fund charges are extra.' },
     ],
   },
   {
     id: 'govindam-paradise',
     slug: 'govindam-paradise',
     name: 'Govindam Paradise',
-    tagline: 'Family-Oriented Residential Enclave at Keshar Circle',
+    tagline: 'Premium 2 & 3 BHK Apartments near Keshar Circle',
     city: 'Jaipur',
     location: 'Mansarovar Extension, Jaipur',
     locality: 'Mansarovar Extension',
-    address: 'Keshar Circle, Mansarovar Extension, Jaipur, Rajasthan 302020',
+    address: 'Near Keshar Circle, Mansarovar Extension, Jaipur, Rajasthan 302020',
     propertyType: 'Apartments',
     configurations: ['2 BHK', '3 BHK'],
     status: 'under-construction',
     priceFrom: 4443000,
-    priceLabel: 'Starting from ₹44.43L*',
-    priceIndicative: true,
+    priceLabel: '₹44.43L – ₹72.92L*',
+    priceIndicative: false,
     areaFrom: 850,
-    areaTo: 1350,
-    areaLabel: '850 – 1,350 Sq.Ft.',
+    areaTo: 1400,
+    areaLabel: '850 – 1,400 Sq.Ft.',
     heroImage: 'https://images.pexels.com/photos/16110999/pexels-photo-16110999.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     thumbnail: 'https://images.pexels.com/photos/16110999/pexels-photo-16110999.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    shortDescription: 'Family-oriented apartment community situated near Keshar Circle featuring central courtyard garden.',
-    usp: 'Landscaped central courtyard with water features and family amenities near Keshar Circle.',
+    shortDescription: 'Govindam Paradise offers premium 2 & 3 BHK apartments near Keshar Circle, Mansarovar Extension featuring 18+ amenities and top connectivity.',
+    usp: 'Premium 2 & 3 BHK flats near Keshar Circle and Muhana Mandi at ₹5,100 per Sq.Ft.',
     highlights: [
-      'Prime location near Keshar Circle',
-      'Landscaped central courtyard & green walkway',
-      'Kids play zone & community hall',
-      '24/7 multi-tier security',
+      'Basic Rate: ₹5,100/- Per Sq.Ft.',
+      'Prime Location – Near Keshar Circle & Muhana Mandi',
+      '2 BHK starts @ ₹44.43 Lakh (All Included)',
+      '3 BHK starts @ ₹58.41 Lakh (All Included)',
     ],
     featured: true,
     priority: 2,
-    tags: ['Family Home', 'First Home', 'End Use'],
+    tags: ['Family Home', 'First Home', 'Investment'],
     approvalStatus: 'JDA Approved',
     developer: 'Sigma Group',
 
     overview: {
-      title: 'Thoughtfully Planned Homes for Modern Families',
-      description: 'Govindam Paradise is designed around family wellness and everyday convenience. Located near Keshar Circle in Mansarovar Extension, it offers efficient 2 & 3 BHK floor plans surrounded by landscaped courtyards and dedicated play spaces.',
+      title: 'Premium Living near Keshar Circle',
+      description: '🏡 Govindam Paradise brings premium 2 & 3 BHK apartments to one of Jaipur’s fastest-growing residential localities, near Keshar Circle in Mansarovar Extension. Spanning sizes from 850 Sq.Ft. to 1,400 Sq.Ft., these apartments offer luxury living, prime connectivity, and smart investment features. Pricing is structured transparently at a basic rate of ₹5,100/Sq.Ft. plus ₹80/Sq.Ft. corpus fund and ₹40,000 one-time electricity/transformer charge.',
     },
 
     detailedHighlights: [
-      {
-        number: 'KESHAR CIRCLE',
-        label: 'Prime Connectivity Node',
-        description: 'Direct access to main feeder roads linking VT Road and Ajmer Expressway.',
-      },
-      {
-        number: 'CENTRAL PARK',
-        label: 'Landscaped Courtyard',
-        description: 'A serene green courtyard featuring water fountains and walking tracks.',
-      },
-    ],
-
-    visualUsps: [
-      { title: 'Family-Centric Community', description: 'Secure gated environment tailored for children and senior citizens.' },
-      { title: 'Affordable Luxury Pricing', description: 'Competitive price point starting from ₹44.43L* for premium quality construction.' },
+      { number: '2 MINS', label: 'To Keshar Circle', description: 'Immediate connectivity to top schools, markets, and transit links.' },
+      { number: '18+', label: 'Premium Amenities', description: 'Fully loaded with swimming pool, gym, banquet, and rooftop landscaped zones.' },
+      { number: 'JDA', label: 'Approved Project', description: 'JDA approved with clear titles, eligible for 100% bank financing.' },
     ],
 
     detailedConfigurations: [
-      { type: '2 BHK Compact', area: '850 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹44.43 Lakhs*' },
-      { type: '3 BHK Deluxe', area: '1,350 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹58.50 Lakhs*' },
+      { type: '2 BHK Premium', area: '850 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹44.43 Lakhs*' },
+      { type: '2 BHK Premium', area: '880 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹45.98 Lakhs*' },
+      { type: '2 BHK Premium', area: '900 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹47.02 Lakhs*' },
+      { type: '2 BHK Premium', area: '925 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹48.31 Lakhs*' },
+      { type: '2 BHK Premium', area: '950 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹49.61 Lakhs*' },
+      { type: '2 BHK Premium', area: '960 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹50.12 Lakhs*' },
+      { type: '2 BHK Premium', area: '975 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹50.90 Lakhs*' },
+      { type: '3 BHK Premium', area: '1120 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹58.41 Lakhs*' },
+      { type: '3 BHK Premium', area: '1200 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹62.56 Lakhs*' },
+      { type: '3 BHK Premium', area: '1250 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹65.15 Lakhs*' },
+      { type: '3 BHK Premium', area: '1320 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹68.77 Lakhs*' },
+      { type: '3 BHK Premium', area: '1340 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹69.81 Lakhs*' },
+      { type: '3 BHK Premium', area: '1400 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹72.92 Lakhs*' },
     ],
 
     detailedPricing: {
       startingPrice: '₹44.43 Lakhs*',
-      disclaimer: 'Starting price is indicative. Final costs are subject to unit selection and official cost sheet.',
+      disclaimer: 'Calculated at base BSP of ₹5,100/Sq.Ft. Total cost includes ₹80/Sq.Ft. Corpus Fund and ₹40,000 one-time transformer charge. Registry fees extra.',
     },
 
     groupedAmenities: [
       {
-        category: 'FAMILY & RECREATION',
+        category: 'LIFESTYLE & HEALTH',
         items: [
-          { name: 'Central Courtyard Garden', description: 'Landscaped green area' },
-          { name: 'Kids Play Zone', description: 'Safe outdoor play equipment' },
+          { name: 'Swimming Pool', description: 'Outdoor pool with splash deck' },
+          { name: 'Fully Equipped Gym', description: 'Cardio & strength equipment zone' },
+          { name: 'Yoga & Meditation', description: 'Serene deck for yoga practices' },
+          { name: 'Club House & Banquet', description: 'Community gathering space and AC celebration hall' },
+        ],
+      },
+      {
+        category: 'OUTDOOR & RECREATION',
+        items: [
+          { name: 'Landscaped Garden', description: 'Lush green pathways and sitouts' },
+          { name: 'Kids Play Arena', description: 'Outdoor slide and swing zone' },
+          { name: 'Jogging Track', description: 'Paved boundary path for running' },
+          { name: 'Indoor Games Area', description: 'Table tennis, carrom and chess room' },
+        ],
+      },
+      {
+        category: 'CONVENIENCES & SAFETY',
+        items: [
+          { name: 'Covered Parking & Lifts', description: 'Assigned parking bay and high-speed elevators' },
+          { name: '24/7 Security & Water', description: 'Guarded gates, CCTV monitoring and continuous water supply' },
+          { name: 'Premium Entrance Lobby', description: 'Double height waiting area' },
         ],
       },
     ],
@@ -286,83 +282,95 @@ export const projectsData: Project[] = [
     ],
 
     locationIntel: {
-      address: 'Keshar Circle, Mansarovar Extension, Jaipur',
+      address: 'Near Keshar Circle, Mansarovar Extension, Jaipur',
       locality: 'Mansarovar Extension',
       city: 'Jaipur',
       advantages: [
-        { title: 'Keshar Circle Proximity', description: 'Seamless access to local markets and transit lines.' },
+        { title: 'Prime Keshar Circle Address', description: 'Located just 2 minutes from Keshar Circle and Muhana Mandi.' },
+        { title: 'Excellent Transit Connectivity', description: 'Direct access to Jaipur Ring Road, ISKCON Road, and NH8 Bypass.' },
       ],
       nearbyPlaces: [
-        { category: 'CONNECTIVITY', name: 'Keshar Circle', distance: 'Approx. 100 Meters' },
-        { category: 'SHOPPING', name: 'VT Road Retail Belt', distance: 'Approx. 1.5 KM' },
+        { category: 'CONNECTIVITY', name: 'Keshar Circle', distance: 'Approx. 2 Mins' },
+        { category: 'SHOPPING', name: 'Muhana Mandi', distance: 'Approx. 2 Mins' },
+        { category: 'HEALTHCARE', name: 'Mahatma Gandhi Hospital', distance: 'Approx. 12 Mins' },
       ],
     },
 
     faqsData: [
-      { question: 'What is the starting price at Govindam Paradise?', answer: 'Prices start from ₹44.43 Lakhs* for a 2 BHK configuration.' },
-      { question: 'Is the project JDA approved?', answer: 'Yes, Govindam Paradise holds valid JDA approval.' },
+      { question: 'What is the starting total price?', answer: 'The total starting price for a 2 BHK (850 sq.ft.) is ₹44.43 Lakhs (all-inclusive basic, corpus, and transformer charges).' },
     ],
   },
   {
     id: 'arihant-dynasty',
     slug: 'arihant-dynasty',
     name: 'Arihant Dynasty',
-    tagline: 'Premium Family Residences with Rooftop Sky Deck',
+    tagline: 'Premium Family Residences near Alpha School',
     city: 'Jaipur',
     location: 'Mansarovar, Jaipur',
     locality: 'Mansarovar',
-    address: 'Mansarovar Main Corridor, Jaipur, Rajasthan 302020',
+    address: 'Near Alpha School, Patrakar Colony, Rampura Road, Mansarovar, Jaipur, Rajasthan 302020',
     propertyType: 'Apartments',
-    configurations: ['2 BHK', '3 BHK', '4 BHK'],
+    configurations: ['2 BHK', '3 BHK'],
     status: 'under-construction',
-    priceFrom: 4500000,
-    priceLabel: 'Starting from ₹45.00L*',
-    priceIndicative: true,
-    areaFrom: 1100,
-    areaTo: 1850,
-    areaLabel: '1,100 – 1,850 Sq.Ft.',
+    priceFrom: 2700000,
+    priceLabel: '₹27.00L – ₹38.00L*',
+    priceIndicative: false,
+    areaFrom: 956,
+    areaTo: 1350,
+    areaLabel: '956 – 1,350 Sq.Ft.',
     heroImage: 'https://images.pexels.com/photos/14998334/pexels-photo-14998334.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     thumbnail: 'https://images.pexels.com/photos/14998334/pexels-photo-14998334.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    shortDescription: 'Practical semi-furnished family residences in the heart of Mansarovar.',
-    usp: 'Rooftop sky deck with panoramic city views and established residential ecosystem.',
+    shortDescription: 'Arihant Dynasty offers semi-furnished 2 & 3 BHK apartments near Alpha School, Patrakar Colony, Rampura Road in Mansarovar.',
+    usp: 'Affordable luxury semi-furnished apartments near Alpha School & Patrakar Colony.',
     highlights: [
-      'Rooftop Sky Deck with lounge space',
-      'Practical family-centric layout options',
-      'Semi-furnished luxury units',
-      'Instant connectivity to VT Road & Mansarovar Metro',
+      '2 BHK (956 Sq.Ft.) @ ₹27 Lakh',
+      '3 BHK (1350 Sq.Ft.) @ ₹38 Lakh',
+      'Near Alpha School, Patrakar Colony',
+      'Up to 90% Home Loan Facility Available',
     ],
     featured: true,
     priority: 3,
-    tags: ['Family Home', 'End Use'],
+    tags: ['Family Home', 'Ready to Move', 'Investment'],
     approvalStatus: 'JDA Approved',
     developer: 'Sigma Group',
 
     overview: {
-      title: 'Established Mansarovar Living',
-      description: 'Arihant Dynasty offers semi-furnished luxury apartments in Mansarovar. Designed for practical family living, the project features a panoramic rooftop sky deck, spacious rooms, and rapid access to schools and metro transit.',
+      title: 'Your Dream Home in Mansarovar',
+      description: 'Welcome to Arihant Dynasty, a premium residential project by Sigma Builders & Developers. Ideally positioned near Alpha School in Mansarovar, Jaipur, this development features semi-furnished 2 & 3 BHK flats combining modern architecture, high-quality construction, and a peaceful neighborhood. Residents enjoy excellent connectivity to Patrakar Colony, Rampura Road markets, and the 200 ft bypass.',
     },
 
     detailedHighlights: [
-      { number: 'SKY DECK', label: 'Rooftop Terrace', description: 'Community sky deck for relaxation and city views.' },
+      { number: 'LOAN', label: '90% Facility', description: 'Gated community with easy financial approvals and up to 90% loan availability.' },
+      { number: 'FURNISHED', label: 'Semi-Furnished', description: 'Attractive prices including options for modular kitchen or interior consultation.' },
+      { number: 'JDA', label: 'JDA Approved', description: 'JDA approved with clear titles, ensuring complete legal security.' },
     ],
 
     detailedConfigurations: [
-      { type: '2 BHK Premium', area: '1,100 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹45.00 Lakhs*' },
-      { type: '3 BHK Luxury', area: '1,550 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹62.00 Lakhs*' },
-      { type: '4 BHK Grand Suite', area: '1,850 Sq.Ft.', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹88.00 Lakhs*' },
+      { type: '2 BHK Semi-Furnished', area: '956 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹27.00 Lakhs*' },
+      { type: '3 BHK Semi-Furnished', area: '1,350 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹38.00 Lakhs*' },
     ],
 
     detailedPricing: {
-      startingPrice: '₹45.00 Lakhs*',
-      disclaimer: 'Indicative pricing subject to official cost sheet.',
+      startingPrice: '₹27.00 Lakhs*',
+      disclaimer: 'Attractive pricing for semi-furnished units. GST and registration extra as applicable. Free modular kitchen or interior consultation included.',
     },
 
     groupedAmenities: [
       {
-        category: 'AMENITIES',
+        category: 'LUXURY AMENITIES',
         items: [
-          { name: 'Rooftop Sky Deck', description: 'Panoramic outdoor terrace' },
-          { name: 'Fitness Gym', description: 'Modern gym equipment' },
+          { name: 'Automatic Lift & Power Backup', description: 'High-speed automatic elevator' },
+          { name: 'Rooftop Garden', description: 'Scenic green terrace deck' },
+          { name: 'Fitness Zone / Open Gym', description: 'Well-equipped fitness area' },
+          { name: 'Kids Play Area', description: 'Safe outdoor play arena' },
+          { name: 'Vastu-Compliant Layouts', description: 'Optimized layouts for daylight and harmony' },
+        ],
+      },
+      {
+        category: 'CONVENIENCES',
+        items: [
+          { name: '24/7 Water & Reserved Parking', description: 'Borewell connection and dedicated parking bay' },
+          { name: '24/7 Gated Security', description: 'Secure gated boundary wall' },
         ],
       },
     ],
@@ -372,20 +380,22 @@ export const projectsData: Project[] = [
     ],
 
     locationIntel: {
-      address: 'Mansarovar Main Corridor, Jaipur',
+      address: 'Near Alpha School, Mansarovar, Jaipur',
       locality: 'Mansarovar',
       city: 'Jaipur',
       advantages: [
-        { title: 'Established Ecosystem', description: 'Surrounded by top schools, hospitals, and metro access.' },
+        { title: 'Near Alpha School', description: 'Walkable distance to Alpha School and nearby institutions.' },
+        { title: 'Patrakar Colony Hub', description: 'Close proximity to Patrakar Colony and Rampura Road markets.' },
       ],
       nearbyPlaces: [
-        { category: 'CONNECTIVITY', name: 'Mansarovar Metro', distance: 'Approx. 1.5 KM' },
-        { category: 'EDUCATION', name: 'Mahaveer School', distance: 'Approx. 800 Meters' },
+        { category: 'EDUCATION', name: 'Alpha School', distance: 'Walking Distance' },
+        { category: 'CONNECTIVITY', name: 'Rampura Road Market', distance: 'Approx. 500 Meters' },
+        { category: 'CONNECTIVITY', name: '200 ft Bypass', distance: 'Approx. 1.5 KM' },
       ],
     },
 
     faqsData: [
-      { question: 'What is the location of Arihant Dynasty?', answer: 'The project is located in Mansarovar, Jaipur with direct access to VT Road.' },
+      { question: 'Is a home loan facility available?', answer: 'Yes, home loan facility up to 90% is available from leading national banks.' },
     ],
   },
   {
@@ -559,29 +569,29 @@ export const projectsData: Project[] = [
     id: 'lucky-heights-4',
     slug: 'lucky-heights-4',
     name: 'Lucky Heights 4',
-    tagline: 'Low-Density Boutique Residences near Nursery Circle',
+    tagline: 'Lucky Heights 4 – Premium Living Redefined',
     city: 'Jaipur',
-    location: 'Acharya Vinoba Bhave Nagar, Nursery Circle, Jaipur',
-    locality: 'Acharya Vinoba Bhave Nagar',
-    address: 'Acharya Vinoba Bhave Nagar, Near Nursery Circle, Vaishali Extension, Jaipur, Rajasthan 302021',
+    location: 'Vaishali Nagar, Jaipur',
+    locality: 'Vaishali Nagar',
+    address: 'Near Nursery Circle, Vaishali Extension, Jaipur, Rajasthan 302021',
     propertyType: 'Apartments',
     configurations: ['3 BHK', '4 BHK'],
     status: 'under-construction',
-    priceFrom: 5800000,
-    priceLabel: 'Starting from ₹58.00L*',
+    priceFrom: 10617600,
+    priceLabel: '₹1.06 Cr – ₹1.61 Cr*',
     priceIndicative: true,
-    areaFrom: 1350,
-    areaTo: 1950,
-    areaLabel: '1,350 – 1,950 Sq.Ft.',
+    areaFrom: 1415.68,
+    areaTo: 2150.10,
+    areaLabel: '1,415.68 – 2,150.10 Sq.Ft.',
     heroImage: 'https://images.pexels.com/photos/8660084/pexels-photo-8660084.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     thumbnail: 'https://images.pexels.com/photos/8660084/pexels-photo-8660084.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    shortDescription: 'Low-density boutique apartment residence in a sought-after address near Nursery Circle.',
-    usp: 'Low-density layout with premium specs near Nursery Circle, Vaishali extension.',
+    shortDescription: 'Lucky Heights 4 offers 3 & 4 BHK luxury residences featuring premium stone top kitchen, JDA approvals, and beautiful rooftop gardens in Vaishali Nagar.',
+    usp: 'Ek floor par 4 flats (2 of 3 BHK & 2 of 4 BHK), JDA approved with high-end connectivity.',
     highlights: [
-      'Nursery Circle prime address',
-      'Boutique low-density structure',
-      'High-speed automatic elevators',
-      'Granite & wooden flooring finishes',
+      'Ek floor par 4 flats only (2 of 3 BHK & 2 of 4 BHK)',
+      'Carpet Area: 1415.68 to 2150.10 Sq.Ft.',
+      'RCC framed structure with Vastu compliant layouts',
+      'Located 500m from Mall of Jaipur',
     ],
     featured: false,
     priority: 6,
@@ -590,30 +600,53 @@ export const projectsData: Project[] = [
     developer: 'Sigma Group',
 
     overview: {
-      title: 'Refined Low-Density Urban Living',
-      description: 'Lucky Heights 4 is an exclusive boutique residential building situated near Nursery Circle in Acharya Vinoba Bhave Nagar. Designed for buyers who value privacy, low density, and high-end finishes in Vaishali Extension.',
+      title: 'Premium Living Redefined',
+      description: 'Lucky Heights 4 is an exclusive boutique residential building situated near Nursery Circle in Vaishali Extension. Designed for buyers who value privacy, low density, and high-end finishes with perfect connectivity.',
     },
 
     detailedHighlights: [
-      { number: 'LOW DENSITY', label: 'Boutique Residence', description: 'Limited units per floor ensuring peaceful, private living.' },
+      { number: '4 FLATS', label: 'Per Floor Density', description: 'Boutique structure with only two 3 BHK & two 4 BHK units per floor.' },
+      { number: 'VASTU', label: 'Compliant Layouts', description: 'Designed for harmony, positive energy, and cross-ventilation.' },
+      { number: 'JDA', label: 'Approved Land', description: 'JDA approved with clear titles, ensuring complete legal security.' },
     ],
 
     detailedConfigurations: [
-      { type: '3 BHK Boutique', area: '1,350 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹58.00 Lakhs*' },
-      { type: '4 BHK Executive', area: '1,950 Sq.Ft.', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹84.00 Lakhs*' },
+      { type: '3 BHK Luxury Flat', area: '1415.68 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹1.06 Cr*' },
+      { type: '4 BHK Luxury Flat', area: '2150.10 Sq.Ft.', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹1.61 Cr*' },
     ],
 
     detailedPricing: {
-      startingPrice: '₹58.00 Lakhs*',
-      disclaimer: 'Indicative price subject to unit availability and cost sheet.',
+      startingPrice: '₹1.06 Cr*',
+      disclaimer: 'Calculated at a rate of ₹7,500 per sq.ft. Subject to final unit size and cost sheet details.',
     },
 
     groupedAmenities: [
       {
-        category: 'BOUTIQUE FEATURES',
+        category: 'PREMIUM SPECIFICATIONS',
         items: [
-          { name: 'Low-Density Floor Layout', description: 'Fewer neighbors per landing' },
-          { name: 'Automatic Elevator', description: 'High-speed lift access' },
+          { name: 'Modular Kitchen with Chimney', description: 'Contemporary layout with high-speed exhaust chimney' },
+          { name: 'Stone Top Kitchen Platform', description: 'Premium granite/stone slab with under-counter basins' },
+          { name: 'Triple Track Windows with Jali', description: 'UPVC windows with mosquito mesh slider track' },
+          { name: 'Exhaust, Geyser & RO', description: 'Pre-installed wiring and plumbing provisions' },
+          { name: 'Semi-Furnished Interiors', description: 'Premium woodwork wardrobes and basic installations' },
+        ],
+      },
+      {
+        category: 'SAFETY & GREEN FEATURES',
+        items: [
+          { name: 'Rain Water Harvesting', description: 'Eco-friendly ground recharge network' },
+          { name: 'Fire Fighting System', description: 'Building-wide fire protection pipeline and alarms' },
+          { name: 'Solar Energy for Common Areas', description: 'Grid-tied solar backup for building illumination' },
+          { name: 'EV Charging Station', description: 'Dedicated electric vehicle charging slots' },
+          { name: 'CCTV Surveillance & Parking', description: '24/7 lobby surveillance and secure covered parking slots' },
+        ],
+      },
+      {
+        category: 'RECREATION & COMMUNITY',
+        items: [
+          { name: 'Gazebo & Rooftop Garden', description: 'Scenic terrace deck with landscaping' },
+          { name: 'Kids Play Area & Gardens', description: 'Safe slides and sandbox play zones' },
+          { name: 'Temple & Indoor Games', description: 'Dedicated community temple and indoor games zone' },
         ],
       },
     ],
@@ -623,14 +656,24 @@ export const projectsData: Project[] = [
     ],
 
     locationIntel: {
-      address: 'Acharya Vinoba Bhave Nagar, Near Nursery Circle, Jaipur',
-      locality: 'Acharya Vinoba Bhave Nagar',
+      address: 'Near Nursery Circle, Vaishali Extension, Jaipur',
+      locality: 'Vaishali Nagar',
       city: 'Jaipur',
       advantages: [
-        { title: 'Nursery Circle Address', description: 'Walker-friendly address near Vaishali Nagar commercial hubs.' },
+        { title: 'Mall of Jaipur Connectivity', description: 'Situated just 500 meters from Mall of Jaipur with key retail hubs nearby.' },
+        { title: 'Prime Vaishali Location', description: 'Easy walkability to Nursery Circle shopping centers and top food outlets.' },
       ],
       nearbyPlaces: [
-        { category: 'SHOPPING', name: 'Nursery Circle Market', distance: 'Approx. 300 Meters' },
+        { category: 'CONNECTIVITY', name: 'Jaipur Railway Station', distance: '6.0 km' },
+        { category: 'CONNECTIVITY', name: 'Sindhi Camp Bus Stand', distance: '7.0 km' },
+        { category: 'SHOPPING', name: 'Mall of Jaipur', distance: '500 meters' },
+        { category: 'SCHOOLS', name: 'Tagore International School', distance: '1.0 km' },
+        { category: 'SCHOOLS', name: 'American Kids School', distance: '1.0 km' },
+        { category: 'SCHOOLS', name: 'Alphabet School', distance: '2.0 km' },
+        { category: 'HOSPITALS', name: 'Selby Hospital', distance: '1.0 km' },
+        { category: 'HOSPITALS', name: 'Global Heart Hospital', distance: '700 meters' },
+        { category: 'HOSPITALS', name: 'Tagore Hospital', distance: '4.5 km' },
+        { category: 'HOSPITALS', name: 'Circuit Hospital', distance: '4.0 km' },
       ],
     },
 
@@ -726,61 +769,74 @@ export const projectsData: Project[] = [
     id: 'shivam-grand',
     slug: 'shivam-grand',
     name: 'Shivam Grand',
-    tagline: 'Premium 3 BHK Residences in Jagatpura Education Hub',
+    tagline: 'Premium 2 & 3 BHK Residences in Jagatpura Education Hub',
     city: 'Jaipur',
     location: 'Jagatpura, Jaipur',
     locality: 'Jagatpura',
-    address: 'Jagatpura Central Corridor, Near SKIT University, Jaipur, Rajasthan 302017',
+    address: 'Jagatpura Central Corridor, Near VIT College, Jaipur, Rajasthan 302017',
     propertyType: 'Apartments',
-    configurations: ['3 BHK'],
+    configurations: ['2 BHK', '3 BHK'],
     status: 'new-launch',
-    priceFrom: 5200000,
-    priceLabel: 'Starting from ₹52.00L*',
-    priceIndicative: true,
-    areaFrom: 1280,
-    areaTo: 1650,
-    areaLabel: '1,280 – 1,650 Sq.Ft.',
+    priceFrom: 4500000,
+    priceLabel: '₹45.00L – ₹65.00L*',
+    priceIndicative: false,
+    areaFrom: 971,
+    areaTo: 1516,
+    areaLabel: '971 – 1,516 Sq.Ft.',
     heroImage: 'https://images.pexels.com/photos/8433082/pexels-photo-8433082.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     thumbnail: 'https://images.pexels.com/photos/8433082/pexels-photo-8433082.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    shortDescription: 'Spacious 3 BHK apartments in the educational & healthcare district of Jagatpura.',
-    usp: 'Grand double-height lobby with swift access to universities and hospitals.',
+    shortDescription: 'Shivam Grand offers premium 2 & 3 BHK JDA & RERA approved apartments in Jagatpura, Jaipur starting from ₹45 Lakh.',
+    usp: 'RERA & JDA approved premium flats with modular kitchen, false ceilings, and wardrobes.',
     highlights: [
-      'Near SKIT University & Bombay Hospital',
-      'Double-height entrance lobby',
-      'Resident clubhouse & indoor games',
-      '3-tier RFID access control',
+      '2 BHK (971 - 1144 Sq.Ft.) @ ₹45 - 50 Lacs',
+      '3 BHK (1220 - 1516 Sq.Ft.) @ ₹54 - 65 Lacs',
+      'RERA & JDA Approved Property',
+      '2 Wooden Wardrobes in Each Flat & False Ceiling',
     ],
     featured: false,
     priority: 8,
-    tags: ['Family Home', 'End Use'],
+    tags: ['Family Home', 'End Use', 'Investment'],
     approvalStatus: 'JDA Approved',
     developer: 'Sigma Group',
 
     overview: {
       title: 'Connected Living in Jagatpura',
-      description: 'Shivam Grand delivers premium 3 BHK apartments in Jagatpura near SKIT University and Bombay Hospital. Featuring a double-height entrance lobby and RFID security, it offers luxury tailored for academics and healthcare professionals.',
+      description: 'Shivam Grand delivers premium 2 & 3 BHK apartments in Jagatpura, Jaipur. This JDA & RERA approved development offers highly ventilated layout configurations (971 to 1,516 Sq.Ft.) loaded with premium finishes including modular kitchens, false ceilings in halls/bedrooms, CERA brand fittings, and wooden wardrobes. The project boasts double lifts, reserved parking bays, AC pipe fittings, and up to 90% home loan approval.',
     },
 
     detailedHighlights: [
-      { number: 'JAGATPURA', label: 'Education & Health Hub', description: 'Surrounded by top universities and medical centers.' },
+      { number: 'APPROVED', label: 'RERA & JDA', description: 'JDA approved with clear titles, eligible for up to 90% home loans.' },
+      { number: 'PREMIUM', label: 'Semi-Furnished', description: 'Includes modular kitchens, double wardrobes, and false ceilings.' },
+      { number: 'ROADS', label: '40 Ft Wide', description: 'Surrounded by 40 ft. wide front and back roads for seamless movement.' },
     ],
 
     detailedConfigurations: [
-      { type: '3 BHK Executive', area: '1,280 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹52.00 Lakhs*' },
-      { type: '3 BHK Grand Suite', area: '1,650 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 3, price: '₹68.00 Lakhs*' },
+      { type: '2 BHK Premium Flat', area: '971 - 1,144 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹45.00 - 50.00 Lakhs*' },
+      { type: '3 BHK Premium Flat', area: '1,220 - 1,516 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹54.00 - 65.00 Lakhs*' },
     ],
 
     detailedPricing: {
-      startingPrice: '₹52.00 Lakhs*',
-      disclaimer: 'Indicative pricing subject to cost sheet.',
+      startingPrice: '₹45.00 Lakhs*',
+      disclaimer: 'Attractive launch pricing. Booking amount only 10%. Home loan facility up to 90% available from national banks.',
     },
 
     groupedAmenities: [
       {
-        category: 'RESIDENCES',
+        category: 'APARTMENT INTERIORS',
         items: [
-          { name: 'Double-Height Entrance Lobby', description: 'Grand reception area' },
-          { name: 'Clubhouse & Indoor Games', description: 'Social recreation space' },
+          { name: 'Modular Kitchen', description: 'Finished modern modular kitchen cabinet setup' },
+          { name: '2 Wooden Wardrobes', description: 'Wardrobes installed in master and kids bedrooms' },
+          { name: 'False Ceilings & CERA Fittings', description: 'Installed false ceilings and CERA sanitaryware' },
+          { name: 'AC Pipe Fittings & Ventilation', description: 'Pre-installed copper piping and cross ventilation' },
+        ],
+      },
+      {
+        category: 'COMMUNITY INFRA',
+        items: [
+          { name: 'Double High-Speed Lifts', description: 'Automatic lifts with backup generators' },
+          { name: 'Reserved Gated Parking', description: 'Dedicated parking spaces' },
+          { name: 'Earthquake Resistant Structure', description: 'Robust RCC structure certified by engineers' },
+          { name: '40 Ft Front & Back Roads', description: 'Wide access roads around the tower premises' },
         ],
       },
     ],
@@ -790,81 +846,97 @@ export const projectsData: Project[] = [
     ],
 
     locationIntel: {
-      address: 'Jagatpura Central Corridor, Jaipur',
+      address: 'Jagatpura, Jaipur',
       locality: 'Jagatpura',
       city: 'Jaipur',
       advantages: [
-        { title: 'Jagatpura Node', description: 'Close proximity to SKIT, JNU, and Bombay Hospital.' },
+        { title: 'Jagatpura Education Belt', description: 'Near top institutions including VIT College and Jayshree Periwal School.' },
+        { title: 'Local Infrastructure Connectivity', description: 'Easy access to D-Mart, Jeevan Rekha Hospital, Jaipur Airport, and Malls.' },
       ],
       nearbyPlaces: [
-        { category: 'EDUCATION', name: 'SKIT University', distance: 'Approx. 500 Meters' },
-        { category: 'HEALTHCARE', name: 'Bombay Hospital', distance: 'Approx. 1.2 KM' },
+        { category: 'SHOPPING', name: 'D-Mart Jagatpura', distance: '1.3 km' },
+        { category: 'EDUCATION', name: 'Jayshree Periwal Global School', distance: '2.0 km' },
+        { category: 'EDUCATION', name: 'VIT College', distance: '2.0 km' },
+        { category: 'HEALTHCARE', name: 'Jeevan Rekha Hospital', distance: '2.5 km' },
+        { category: 'HEALTHCARE', name: 'Bombay Hospital', distance: '4.0 km' },
+        { category: 'CONNECTIVITY', name: 'Jaipur International Airport', distance: '9.0 km' },
       ],
     },
 
     faqsData: [
-      { question: 'Where is Shivam Grand located?', answer: 'The project is located in Jagatpura, Jaipur near SKIT University.' },
+      { question: 'What is the booking amount?', answer: 'The special launch booking amount is only 10% of the flat cost.' },
     ],
   },
   {
     id: 'narayan-vihar-villa-2',
     slug: 'narayan-vihar-villa-2',
     name: 'Narayan Vihar Villa 2',
-    tagline: 'Park-Facing Luxury Villas with Private Terrace & Lawn',
+    tagline: 'Luxury Duplex Villas in Narayan Vihar K Block',
     city: 'Jaipur',
-    location: 'Narayan Vihar, Jaipur',
+    location: 'Narayan Vihar, K Block, Jaipur',
     locality: 'Narayan Vihar',
-    address: 'Block B, Central Park Facing Plot, Narayan Vihar, Jaipur, Rajasthan 302020',
+    address: 'K Block, Narayan Vihar, Jaipur, Rajasthan 302020',
     propertyType: 'Villas',
-    configurations: ['4 BHK', '5 BHK'],
+    configurations: ['4 BHK'],
     status: 'ready-to-move',
-    priceFrom: 11000000,
-    priceLabel: 'Starting from ₹1.10 Cr*',
-    priceIndicative: true,
-    areaFrom: 2200,
-    areaTo: 3400,
-    areaLabel: '2,200 – 3,400 Sq.Ft.',
+    priceFrom: 15000000,
+    priceLabel: '₹1.50 Cr – ₹1.70 Cr*',
+    priceIndicative: false,
+    areaFrom: 90,
+    areaTo: 114,
+    areaLabel: '90 Gaj – 114 Gaj',
     heroImage: 'https://images.pexels.com/photos/7031406/pexels-photo-7031406.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     thumbnail: 'https://images.pexels.com/photos/7031406/pexels-photo-7031406.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    shortDescription: 'Exclusive park-facing luxury villas built for ultimate privacy and grandeur.',
-    usp: 'Park-facing luxury villas featuring optional private plunge pool and expansive terrace.',
+    shortDescription: 'Modern luxury villas in Narayan Vihar K Block, offering peaceful living, modern designs, and premium neighborhood connectivity.',
+    usp: 'Premium 4 BHK villas in K Block near Bharat Mata Circle with modern design architecture.',
     highlights: [
-      'Directly facing community central park',
-      'Private terrace & landscaped lawn',
-      'Imported marble flooring options',
-      'Pre-installed solar power backup',
+      'Villa Sizes: 90 Gaj, 105 Gaj & 114 Gaj',
+      'Price Starting @ ₹1.50 Crore to ₹1.70 Crore',
+      'Prime Location – Narayan Vihar, K Block',
+      'Modern Design in a Peaceful, Premium Neighborhood',
     ],
     featured: false,
     priority: 9,
-    tags: ['Luxury', 'Family Home'],
+    tags: ['Luxury', 'Family Home', 'Ready to Move'],
     approvalStatus: 'JDA Approved',
     developer: 'Sigma Group',
 
     overview: {
-      title: 'Uncompromised Luxury & Park-Facing Privacy',
-      description: 'Narayan Vihar Villa 2 is a limited collection of bespoke park-facing luxury villas. Offering up to 3,400 Sq.Ft. of living space, private terrace gardens, and Italian marble finishes, it represents ultra-premium residential living.',
+      title: 'Modern Luxury in a Peaceful Neighborhood',
+      description: 'Welcome to Narayan Vihar Villa 2, a boutique enclave of modern luxury duplex villas situated in K Block, Narayan Vihar, Jaipur. Designed with peaceful living in mind, these premium villas offer spacious family-friendly layouts in three size options: 90 Gaj (₹1.50 Cr), 105 Gaj (₹1.60 Cr), and 114 Gaj (₹1.70 Cr). Featuring high-end finishes, modern design aesthetics, and a premium neighborhood feel.',
     },
 
     detailedHighlights: [
-      { number: 'PARK FACING', label: 'Green Views', description: 'Direct frontage facing Narayan Vihar central park.' },
+      { number: 'K BLOCK', label: 'Prime Location', description: 'Peaceful residential sector of Narayan Vihar with excellent local connectivity.' },
+      { number: 'MODERN', label: 'Bespoke Design', description: 'Premium duplex architecture with open layouts and maximum cross ventilation.' },
+      { number: 'JDA', label: 'Approved Plots', description: 'JDA approved plots with clear titles and bank loan approvals.' },
     ],
 
     detailedConfigurations: [
-      { type: '4 BHK Luxury Villa', area: '2,200 Sq.Ft.', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹1.10 Cr*' },
-      { type: '5 BHK Grand Villa', area: '3,400 Sq.Ft.', bedrooms: 5, bathrooms: 5, balconies: 4, price: '₹1.65 Cr*' },
+      { type: '90 Gaj Luxury Villa', area: '90 Gaj (810 Sq.Ft. Plot)', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹1.50 Cr*' },
+      { type: '105 Gaj Luxury Villa', area: '105 Gaj (945 Sq.Ft. Plot)', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹1.60 Cr*' },
+      { type: '114 Gaj Luxury Villa', area: '114 Gaj (1026 Sq.Ft. Plot)', bedrooms: 4, bathrooms: 4, balconies: 3, price: '₹1.70 Cr*' },
     ],
 
     detailedPricing: {
-      startingPrice: '₹1.10 Crore*',
-      disclaimer: 'Villa prices are indicative and vary based on corner plot location and custom fittings.',
+      startingPrice: '₹1.50 Crore*',
+      disclaimer: 'Prices subject to change and final registration charges. Corner plots or premium views may have additional charges.',
     },
 
     groupedAmenities: [
       {
-        category: 'LUXURY SPECIFICATIONS',
+        category: 'VILLA HIGHLIGHTS',
         items: [
-          { name: 'Private Terrace Garden', description: 'Rooftop gazebo setup' },
-          { name: 'Solar Backup System', description: 'Pre-installed solar panels' },
+          { name: '4 Spacious Bedrooms', description: 'Bespoke bedroom layouts with attached washrooms' },
+          { name: 'Modern Kitchen & Lobby', description: 'Granite counters and spacious entry lobbies' },
+          { name: 'Private Balconies', description: 'Well-ventilated spaces offering natural daylight' },
+        ],
+      },
+      {
+        category: 'CONVENIENCES',
+        items: [
+          { name: 'Private Covered Parking', description: 'Reserved slots for cars and two-wheelers' },
+          { name: 'Gated Security Layout', description: 'Peaceful and secure residential environment' },
         ],
       },
     ],
@@ -874,19 +946,21 @@ export const projectsData: Project[] = [
     ],
 
     locationIntel: {
-      address: 'Narayan Vihar Block B, Jaipur',
+      address: 'Narayan Vihar K Block, Jaipur',
       locality: 'Narayan Vihar',
       city: 'Jaipur',
       advantages: [
-        { title: 'Narayan Vihar Prime Belt', description: 'High-end residential neighborhood near Gopalpura Bypass.' },
+        { title: 'Narayan Vihar K Block Hub', description: 'Quiet residential sector away from highway noise, yet highly accessible.' },
+        { title: 'Local Infrastructure Connectivity', description: '1.5 KM from Naira Petrol Pump and Bharat Mata Circle.' },
       ],
       nearbyPlaces: [
-        { category: 'CONNECTIVITY', name: 'Gopalpura Bypass Junction', distance: 'Approx. 1.2 KM' },
+        { category: 'CONNECTIVITY', name: 'Naira Petrol Pump', distance: '1.5 km' },
+        { category: 'CONNECTIVITY', name: 'Bharat Mata Circle', distance: '1.5 km' },
       ],
     },
 
     faqsData: [
-      { question: 'Are these villas park facing?', answer: 'Yes, Narayan Vihar Villa 2 offers direct frontage facing the neighborhood central park.' },
+      { question: 'What are the available villa plot sizes?', answer: 'Villas are available in three sizes: 90 Gaj, 105 Gaj, and 114 Gaj.' },
     ],
   },
   {
@@ -970,6 +1044,791 @@ export const projectsData: Project[] = [
 
     faqsData: [
       { question: 'Are these homes ready to move?', answer: 'Yes, Vaishali Nagar 3 BHK features ready-to-move apartments with immediate possession.' },
+    ],
+  },
+  {
+    id: 'dhawas-villa',
+    slug: 'dhawas-villa',
+    name: 'Dhawas Villa',
+    tagline: 'Premium 4 BHK Duplex Villa in Vidhansabha Nagar',
+    city: 'Jaipur',
+    location: 'Narayan Vatika, Vidhansabha Nagar, Jaipur',
+    locality: 'Vidhansabha Nagar',
+    address: 'Narayan Vatika, Vidhansabha Nagar, Near Manas Hospital, Jaipur, Rajasthan 302021',
+    propertyType: 'Villas',
+    configurations: ['4 BHK'],
+    status: 'ready-to-move',
+    priceFrom: 14500000,
+    priceLabel: '₹1.45 Cr*',
+    priceIndicative: false,
+    areaFrom: 999,
+    areaTo: 1000,
+    areaLabel: '111 Gaj (20 × 50 Plot)',
+    heroImage: 'https://images.pexels.com/photos/3288184/pexels-photo-3288184.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/3288184/pexels-photo-3288184.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Premium 4 BHK duplex villa spanning 111 Gaj (20 × 50 plot) with West-facing Vastu compliance, private temple, and covered parking in Vidhansabha Nagar.',
+    usp: '111 Gaj + 4 BHK + Duplex + Semi-Furnished + West Facing in prime location.',
+    highlights: [
+      'Premium 4 BHK Duplex (111 Gaj / 20 × 50 Plot)',
+      'West facing with Vastu compliant layouts',
+      'Beautiful Temple Space & cross ventilation',
+      'Near Manas Hospital, Vidhansabha Nagar',
+    ],
+    featured: true,
+    priority: 5,
+    tags: ['Luxury', 'Villa', 'Ready to Move'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Premium Duplex Villa in Prime Location',
+      description: 'Aisi property baar-baar nahi milti! Located in Narayan Vatika, Vidhansabha Nagar, this semi-furnished 4 BHK duplex villa is built on a spacious 20 × 50 plot (111 Gaj). Designed with Vastu-compliant West-facing entry, dedicated temple space, and generous ventilation, it offers the ultimate family home layout in a prime neighborhood.',
+    },
+
+    detailedHighlights: [
+      { number: '111 GAJ', label: 'Spacious Plot size', description: 'Duplex layout built on a premium 20 × 50 land parcel.' },
+      { number: 'WEST', label: 'Vastu Facing', description: 'West-facing entry with Vastu-compliant rooms and temple zone.' },
+      { number: '4 BHK', label: 'Duplex Layout', description: 'Four spacious bedrooms with attached baths and open balconies.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '4 BHK Duplex Villa', area: '111 Gaj (999 Sq.Ft. Plot)', bedrooms: 4, bathrooms: 4, balconies: 2, price: '₹1.45 Cr*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹1.45 Cr*',
+      disclaimer: 'Serious Buyers ke liye Site Visit Available. Prices exclusive of registration fees.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'VILLA SPECIFICATIONS',
+        items: [
+          { name: '4 Spacious Bedrooms', description: 'Large bed chambers with excellent layout flow' },
+          { name: 'Beautiful Temple Space', description: 'Dedicated pooja room configured inside the home' },
+          { name: 'Semi-Furnished Setup', description: 'Fitted wardrobes, modular kitchen panels, and light fixtures' },
+          { name: 'West Facing Vastu Entry', description: 'Vastu compliant design ensuring positive energy flow' },
+        ],
+      },
+      {
+        category: 'SPACE & VENTILATION',
+        items: [
+          { name: 'Excellent Cross Ventilation', description: 'Thoughtfully designed window placements' },
+          { name: 'Natural Light', description: 'Sunlit living spaces and balconies throughout the day' },
+          { name: 'Well-Ventilated Rooms', description: 'Tall windows for healthy fresh air circulation' },
+          { name: 'Covered Parking Space', description: 'Private on-site car and bike parking bay' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/3288184/pexels-photo-3288184.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Facade View', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Narayan Vatika, Vidhansabha Nagar, Near Manas Hospital, Jaipur',
+      locality: 'Vidhansabha Nagar',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'Near Manas Hospital', description: 'Minutes away from leading healthcare providers.' },
+        { title: 'Narayan Vatika Hub', description: 'Prime residential enclave with excellent local road networks.' },
+      ],
+      nearbyPlaces: [
+        { category: 'HOSPITALS', name: 'Manas Hospital', distance: 'Approx. 500 Meters' },
+        { category: 'CONNECTIVITY', name: 'Main Road Extension', distance: '300 Meters' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'Is the property RERA / JDA approved?', answer: 'Yes, this villa is JDA approved with clear titles, ideal for bank loan financing.' },
+    ],
+  },
+  {
+    id: 'sirsi-road-residences',
+    slug: 'sirsi-road-residences',
+    name: 'Sirsi Road Premium Residences',
+    tagline: 'Quality-Constructed Spacious 3 BHK Flats on Sirsi Road',
+    city: 'Jaipur',
+    location: 'Sirsi Road, Jaipur',
+    locality: 'Sirsi Road',
+    address: 'Main Sirsi Road, Near Teoler High School, Jaipur, Rajasthan 302012',
+    propertyType: 'Apartments',
+    configurations: ['3 BHK'],
+    status: 'under-construction',
+    priceFrom: 6525000,
+    priceLabel: 'Starting from ₹65.25L*',
+    priceIndicative: true,
+    areaFrom: 1450,
+    areaTo: 1750,
+    areaLabel: '1,450 – 1,750 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Spacious 3 BHK flats on Sirsi Road near Vaishali Nagar, offering quality construction, 3 washrooms, 3 balconies, and prime neighborhood connectivity.',
+    usp: 'Only large 3 BHK layout in this budget with 3 bedrooms, 3 washrooms & 3 balconies.',
+    highlights: [
+      '3 Bedrooms | 3 Washrooms | 3 Balconies',
+      'Price Starting @ ₹4,500 per Sq.Ft.',
+      'Quality Construction & Modern Design',
+      'Near Teoler School & 2 KM from Capital Galleria Mall',
+    ],
+    featured: false,
+    priority: 8,
+    tags: ['Family Home', 'Budget Luxury'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Spacious 3 BHK Flats on Sirsi Road',
+      description: 'सभी के लिए शानदार 3 BHK फ्लैट्स — स्पेस, लोकेशन और बजट का परफेक्ट कॉम्बिनेशन! अब वैशाली नगर / सिरसी रोड क्षेत्र में पाएं इस बजट के एकमात्र बड़े 3 BHK फ्लैट्स, जहाँ मिलते हैं 3 बेडरूम, 3 वॉश रूम, 3 बालकनी (भरपूर रोशनी और खुला जीवन), आधुनिक डिजाइन और मजबूत कंस्ट्रक्शन क्वालिटी।',
+    },
+
+    detailedHighlights: [
+      { number: '3 BHK', label: '3 Wash & 3 Balcony', description: 'Maximum open space and daylight layout with three side balconies.' },
+      { number: '₹4,500', label: 'Rate per Sq.Ft.', description: 'Highly competitive pricing for premium quality construction.' },
+      { number: '2 KM', label: 'From Capital Galleria', description: 'Rajasthan’s biggest mall and main lifestyle zone within a 5-minute drive.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '3 BHK Premium Flat', area: '1,450 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 3, price: '₹65.25 Lakhs*' },
+      { type: '3 BHK Executive Flat', area: '1,750 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 3, price: '₹78.75 Lakhs*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹65.25 Lakhs*',
+      disclaimer: 'Calculated at a rate of ₹4,500 per sq.ft. Subject to final unit sizes and layout selections.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'LAYOUT FEATURES',
+        items: [
+          { name: '3 Bedrooms & 3 Washrooms', description: 'Spacious private layouts for families' },
+          { name: '3 Deep Balconies', description: 'Excellent daylight and panoramic natural air circulation' },
+          { name: 'Spacious Kitchen Space', description: 'Granite workspace counters and cabinet setups' },
+        ],
+      },
+      {
+        category: 'LOCATION ADVANTAGES',
+        items: [
+          { name: '1 Min from Sirsi Road', description: 'Direct transit links and easy commuting' },
+          { name: 'Near Teoler School', description: 'Walkable distance for children schooling' },
+          { name: '3 Mins from Rangoli Garden', description: 'Proximity to Jaipur’s flagship premium townships' },
+          { name: '5 Mins Core Services', description: 'Markets, retail banks, and colleges close by' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Facade View', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Main Sirsi Road, Jaipur',
+      locality: 'Sirsi Road',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'Prime Sirsi Connectivity', description: '1 minute drive to main highway, linking easily with Jaipur Bypass.' },
+        { title: 'Education & Commercial Hub', description: 'Surrounded by top institutes like Teoler School and banks.' },
+      ],
+      nearbyPlaces: [
+        { category: 'SCHOOLS', name: 'Teoler High School', distance: 'Approx. 200 Meters' },
+        { category: 'SHOPPING', name: 'Capital Galleria Mall', distance: '2.0 km' },
+        { category: 'TOWNSHIPS', name: 'Rangoli Garden Township', distance: '1.5 km' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'What is the base pricing structure?', answer: 'The pricing starts from ₹4,500 per sq.ft. based on unit carpet areas.' },
+    ],
+  },
+  {
+    id: 'utsav-greens',
+    slug: 'utsav-greens',
+    name: 'Utsav Greens',
+    tagline: 'Modern 2 & 3 BHK Luxury Apartments in Mansarovar',
+    city: 'Jaipur',
+    location: 'Mansarovar, Jaipur',
+    locality: 'Mansarovar',
+    address: 'Near Mahima Elanza, Mansarovar Extension, Jaipur, Rajasthan 302020',
+    propertyType: 'Apartments',
+    configurations: ['2 BHK', '3 BHK'],
+    status: 'under-construction',
+    priceFrom: 4378000,
+    priceLabel: '₹43.78L – ₹65.00L*',
+    priceIndicative: true,
+    areaFrom: 970,
+    areaTo: 1426,
+    areaLabel: '970 – 1,426 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Utsav Greens offers premium 2 & 3 BHK luxury flats in Mansarovar, featuring modern designs, lift, parking, gym, and CCTV security near Mahima Elanza.',
+    usp: 'Modern design 2 & 3 BHK luxury flats in a peaceful and secure Mansarovar community.',
+    highlights: [
+      '2 BHK (970 Sq.Ft.) @ ₹43.78 Lakh',
+      '3 BHK (1283 - 1426 Sq.Ft.) @ ₹57 - 65 Lakh',
+      'Ideally located in Mansarovar, near Mahima Elanza',
+      'Modern Amenities: Gym, Kids Play Area, Lift & CCTV',
+    ],
+    featured: false,
+    priority: 7,
+    tags: ['Family Home', 'Budget Luxury'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Your Dream Home Awaits at Utsav Greens',
+      description: 'Experience premium living with spacious 2 & 3 BHK luxury flats at Utsav Greens, ideally located in Mansarovar, just near Mahima Elanza. Offering the perfect blend of comfort, convenience, and value, this project features modern architecture, quality construction, and a secure peaceful community close to schools, hospitals, and markets.',
+    },
+
+    detailedHighlights: [
+      { number: 'MANSAROVAR', label: 'Prime Location', description: 'Situated near Mahima Elanza with top connectivity to major city hubs.' },
+      { number: 'AMENITIES', label: 'Fully Loaded', description: 'Features modern lift, CCTV surveillance, covered parking, gym, and kids play area.' },
+      { number: 'VALUE', label: 'Best Price Point', description: 'Premium construction starting from just ₹43.78 Lakhs.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '2 BHK Luxury Apartment', area: '970 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹43.78 Lakhs*' },
+      { type: '3 BHK Luxury Apartment', area: '1,283 - 1,426 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹57.00L - ₹65.00L*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹43.78 Lakhs*',
+      disclaimer: 'Prices subject to change and final cost sheet registration fees.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'MODERN AMENITIES',
+        items: [
+          { name: 'Fitness Gym Center', description: 'Equipped workout space' },
+          { name: 'Kids Play Zone', description: 'Safe outdoor play equipment' },
+          { name: 'Automatic Lift System', description: 'High-speed elevator access' },
+          { name: 'Covered Parking Bay', description: 'Dedicated vehicle slots' },
+        ],
+      },
+      {
+        category: 'SAFETY & CONVENIENCE',
+        items: [
+          { name: 'CCTV Surveillance', description: '24/7 security monitoring' },
+          { name: 'Secure Gated Entrance', description: 'Restricted community entry checks' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Facade View', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Near Mahima Elanza, Mansarovar Extension, Jaipur',
+      locality: 'Mansarovar',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'Mansarovar Extension Hub', description: 'Prime residential enclave near top shopping blocks.' },
+        { title: 'Near Mahima Elanza', description: 'Well-known landmark location with walkable supermarkets.' },
+      ],
+      nearbyPlaces: [
+        { category: 'SHOPPING', name: 'Mahima Elanza Markets', distance: 'Approx. 200 Meters' },
+        { category: 'SCHOOLS', name: 'St. Wilfred School', distance: '1.5 km' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'What security systems are installed?', answer: 'The community features 24/7 gated security with active CCTV surveillance.' },
+    ],
+  },
+  {
+    id: 'udayraj',
+    slug: 'udayraj',
+    name: 'Udayraj',
+    tagline: 'Premium G+12 High-Rise Residences near Mansarovar',
+    city: 'Jaipur',
+    location: 'Rampura Road, Jaipur',
+    locality: 'Rampura Road',
+    address: 'Main Rampura Road, 200 Ft Road Junction, Jaipur, Rajasthan 302029',
+    propertyType: 'Apartments',
+    configurations: ['2 BHK', '2.5 BHK'],
+    status: 'new-launch',
+    priceFrom: 3320000,
+    priceLabel: '₹33.20L – ₹38.50L*',
+    priceIndicative: false,
+    areaFrom: 700,
+    areaTo: 858,
+    areaLabel: '700 – 858 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/373893/pexels-photo-373893.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/373893/pexels-photo-373893.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Udayraj offers 612 premium G+12 apartments near Mansarovar with 30+ lifestyle amenities, easy EMI financing, and great appreciation potential.',
+    usp: 'High-rise luxury lifestyle near Mansarovar in this budget is extremely rare.',
+    highlights: [
+      '2 BHK (700 Sq.Ft.) @ ₹33.20 Lakh all included',
+      '2.5 BHK (858 Sq.Ft.) @ ₹38.50 Lakh all included',
+      'Only 5 KM from Jaipur Ring Road on Rampura Road (200 Ft Road)',
+      'G+12 premium luxury living with 30+ lifestyle amenities',
+    ],
+    featured: true,
+    priority: 4,
+    tags: ['Luxury', 'Launch Offer', 'Investment'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Premium High-Rise Living Near Mansarovar',
+      description: '🏡📍 Located on Rampura Road (200 Ft Road), just 5 km from the Jaipur Ring Road. Udayraj brings you a rare opportunity for G+12 high-rise luxury living near Mansarovar with a massive list of 30+ premium lifestyle amenities. Offers include 2 BHK (700 Sq. Ft.) and 2.5 BHK (858 Sq. Ft.) layouts starting from ₹33.20L with 100% bank loan approvals and easy EMIs.',
+    },
+
+    detailedHighlights: [
+      { number: 'G+12', label: 'Luxury High-Rise', description: 'Tower architecture providing scenic views and well-ventilated spaces.' },
+      { number: '30+', label: 'Amenities Offered', description: 'Fully loaded with premium lifestyle amenities for the entire family.' },
+      { number: '5 KM', label: 'From Ring Road', description: 'Excellent connectivity on the fast-growing Rampura 200 Ft Road corridor.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '2 BHK Premium Flat', area: '700 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹33.20 Lakhs*' },
+      { type: '2.5 BHK Executive Flat', area: '858 Sq.Ft.', bedrooms: 2.5, bathrooms: 2, balconies: 2, price: '₹38.50 Lakhs*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹33.20 Lakhs*',
+      disclaimer: 'GST 1% extra. Additional charges: Parking ₹2L, Corpus Fund ₹1L. Limited units available.',
+    },
+
+    groupedAmenities: [
+      {
+        category: '30+ LIFESTYLE FEATURES',
+        items: [
+          { name: 'Fitness Gym & Club', description: 'Modern community clubhouse and health club' },
+          { name: 'Swimming Pool', description: 'Premium pool for adults and children' },
+          { name: 'Kids Play Zone', description: 'Safe slides and sandbox play park' },
+          { name: 'Covered Car Parking', description: 'Assigned private parking bay slots' },
+        ],
+      },
+      {
+        category: 'SECURITY & INFRA',
+        items: [
+          { name: 'CCTV & Security', description: '24/7 lobby and common area monitoring' },
+          { name: 'Power Backup & Lifts', description: 'High-speed automatic elevators with power backup systems' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/373893/pexels-photo-373893.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Tower Facade', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Rampura Road, Jaipur',
+      locality: 'Rampura Road',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'Mansarovar Proximity', description: 'Close proximity to Mansarovar prime markets, schools, and commercial complexes.' },
+        { title: 'Ring Road Corridor', description: 'Just 5 km from Ring Road, ensuring high future capital appreciation.' },
+      ],
+      nearbyPlaces: [
+        { category: 'CONNECTIVITY', name: 'Jaipur Ring Road', distance: '5.0 km' },
+        { category: 'CONNECTIVITY', name: 'Mansarovar Metro Station', distance: 'Approx. 15 Mins' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'Is bank loan financing available?', answer: 'Yes, this project is eligible for 100% bank loan approval with easy EMIs.' },
+    ],
+  },
+  {
+    id: 'sunflower',
+    slug: 'sunflower',
+    name: 'Sunflower',
+    tagline: 'Premium 2 & 3 BHK Spacious Flats with Patrakar Colony Address',
+    city: 'Jaipur',
+    location: 'Patrakar Colony, Mansarovar Extension, Jaipur',
+    locality: 'Mansarovar',
+    address: 'Near Mahima Elanza, Patrakar Colony, Mansarovar Extension, Jaipur, Rajasthan 302020',
+    propertyType: 'Apartments',
+    configurations: ['2 BHK', '3 BHK'],
+    status: 'under-construction',
+    priceFrom: 4041000,
+    priceLabel: '₹40.41L – ₹55.50L*',
+    priceIndicative: true,
+    areaFrom: 868,
+    areaTo: 1356,
+    areaLabel: '868 – 1,356 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Sunflower offers premium 2 & 3 BHK spacious flats in Patrakar Colony, Mansarovar Extension, featuring biometric app security and rich club and rooftop amenities.',
+    usp: 'Affordable luxury with biometric security app and rooftop garden and kitchen facilities.',
+    highlights: [
+      '2 BHK (868 - 1168 Sq.Ft.) starting from ₹40.41 Lakh',
+      '3 BHK (1263 - 1356 Sq.Ft.) starting from ₹55.50 Lakh',
+      'Ideally located in Patrakar Colony, Mansarovar Extension',
+      'Smart Security: Biometric & Intercom Mobile App',
+    ],
+    featured: false,
+    priority: 8,
+    tags: ['Family Home', 'Smart Home', 'Budget Luxury'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Get Your New Address at Sunflower',
+      description: 'Experience premium living with spacious 2 & 3 BHK luxury flats at Sunflower, ideally located in Patrakar Colony, Mansarovar Extension, near Mahima Elanza. Sunflower combines smart biometric app security, robust building quality, and modern lifestyle amenities (such as a clubhouse, air-conditioned gym, and rooftop kitchen & gazebo gardens) at an affordable luxury price point.',
+    },
+
+    detailedHighlights: [
+      { number: 'SECURITY', label: 'Biometric & Intercom', description: 'Smart entry gates with intercom mobile application connectivity.' },
+      { number: 'ROOFTOP', label: 'Garden & Kitchen', description: 'Scenic terrace deck with catering facilities for family gatherings.' },
+      { number: 'ADDRESS', label: 'Patrakar Colony', description: 'Most sought-after, rapid-appreciation address in Mansarovar Extension.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '2 BHK Premium Flat', area: '868 - 1,168 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹40.41 Lakhs*' },
+      { type: '3 BHK Premium Flat', area: '1,263 - 1,356 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹55.50 Lakhs*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹40.41 Lakhs*',
+      disclaimer: 'Prices subject to changes. Contact sales office for custom payment sheets.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'AMENITIES & LIFESTYLE',
+        items: [
+          { name: 'Entrance Lobby & Waiting Area', description: 'Double height waiting lobby' },
+          { name: 'Club House & Banquet Hall', description: 'Community gathering space' },
+          { name: 'A.C. Gym & Yoga Studio', description: 'Equipped wellness studio' },
+          { name: 'Indoor Games & Library', description: 'Recreation room and study room' },
+          { name: 'Rooftop Garden & Kitchen', description: 'Terrace entertainment space' },
+        ],
+      },
+      {
+        category: 'SECURITY & CONVENIENCES',
+        items: [
+          { name: 'Biometric Security App', description: 'Smart smartphone integrated entry' },
+          { name: 'High-Speed Lifts', description: 'Passenger elevators with backup power' },
+          { name: 'Temple inside Premises', description: 'Private community temple' },
+          { name: 'CCTV & Guards', description: '24/7 guarded security desk' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Building Facade', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Patrakar Colony, Mansarovar Extension, Jaipur',
+      locality: 'Mansarovar',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'Patrakar Colony Address', description: 'Sought-after residential area near top institutions.' },
+        { title: 'Near Mahima Elanza', description: 'Close proximity to prime local markets and supermarkets.' },
+      ],
+      nearbyPlaces: [
+        { category: 'SHOPPING', name: 'Patrakar Colony Market', distance: 'Approx. 400 Meters' },
+        { category: 'SCHOOLS', name: 'Neerja Modi School', distance: '2.5 km' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'What security features are offered?', answer: 'The project features biometric entry locks and intercom app connectivity for residents.' },
+    ],
+  },
+  {
+    id: 'raghav-heights',
+    slug: 'raghav-heights',
+    name: 'Raghav Heights',
+    tagline: 'Luxury 3 BHK Flats near New Sanganer Road',
+    city: 'Jaipur',
+    location: 'Mangyawas, Rajat Path, Mansarovar, Jaipur',
+    locality: 'Mansarovar',
+    address: 'Shiv Vihar C Block, Mangyawas, Rajat Path, Mansarovar, Jaipur, Rajasthan 302020',
+    propertyType: 'Apartments',
+    configurations: ['3 BHK'],
+    status: 'under-construction',
+    priceFrom: 7500000,
+    priceLabel: 'Starting from ₹75.00L*',
+    priceIndicative: true,
+    areaFrom: 1550,
+    areaTo: 1650,
+    areaLabel: '1,550 – 1,650 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Raghav Heights offers premium 3 BHK luxury semi-furnished apartments in Mangyawas, Mansarovar with Bisalpur water connections and G+12 high-end amenities.',
+    usp: 'Luxury 3 BHK flats near New Sanganer Road with dedicated Bisalpur water supply connection.',
+    highlights: [
+      'Luxury 3 BHK Flats (1550 - 1650 Sq.Ft.)',
+      'Price Starting @ ₹75 Lakh (Semi-Furnished)',
+      'Ideally located at Shiv Vihar C Block, Mangyawas',
+      'Bisalpur Water Supply & dedicated Water Boring',
+    ],
+    featured: false,
+    priority: 8,
+    tags: ['Family Home', 'Luxury', 'RERA Approved'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Luxury Living Redefined at Raghav Heights',
+      description: 'Raghav Heights by Sigma Homes offers exceptionally spacious 3 BHK luxury apartments (1550 - 1650 Sq.Ft.) in Shiv Vihar C Block, Mangyawas, Rajat Path, Mansarovar. Designed for premium family comfort, these semi-furnished flats are located near New Sanganer Road and feature a reliable Bisalpur water supply, G+12 architecture, and 15+ modern lifestyle amenities.',
+    },
+
+    detailedHighlights: [
+      { number: 'BISALPUR', label: 'Water Supply', description: 'Equipped with municipal Bisalpur water supply and dedicated borewell backup.' },
+      { number: 'SPACIOUS', label: '1650 Sq.Ft.', description: 'Generously proportioned rooms, large windows, and open balconies.' },
+      { number: 'PRIME', label: 'Mansarovar Hub', description: 'Shiv Vihar C Block, Mangyawas location offering quick access to Rajat Path and New Sanganer Road.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '3 BHK Premium Flat', area: '1,550 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹75.00 Lakhs*' },
+      { type: '3 BHK Executive Flat', area: '1,650 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 3, price: '₹80.00 Lakhs*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹75.00 Lakhs*',
+      disclaimer: 'Semi-furnished base price. Taxes, registry charges, and GST are extra as applicable.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'AMENITIES & HEALTH',
+        items: [
+          { name: 'Electric Gym & Fitness', description: 'Fully equipped indoor fitness center' },
+          { name: 'Yoga & Aerobics Area', description: 'Quiet community space for meditation and exercises' },
+          { name: 'Jogging Track & Gardens', description: 'Outdoor walking trails and landscaped greens' },
+          { name: 'Bonfire & Gazebo Arena', description: 'Terrace bonfire zone and wooden gazebo sitting spaces' },
+        ],
+      },
+      {
+        category: 'CONVENIENCES & GREEN',
+        items: [
+          { name: 'Bisalpur Water & Boring', description: 'Dual municipal and ground water extraction infrastructure' },
+          { name: 'EV Car Charging Point', description: 'Dedicated electric vehicle charging docks' },
+          { name: 'Banquet Hall & Bird Pavilion', description: 'Air-conditioned celebration hall and outdoor bird garden' },
+          { name: 'Rooftop Garden & Deck', description: 'Lush green terrace spaces' },
+          { name: 'Power Backup & Fire Safety', description: 'Common area generator backup and pipeline fire hydrants' },
+        ],
+      },
+      {
+        category: 'SECURITY SERVICES',
+        items: [
+          { name: 'CCTV Surveillance Room', description: '24/7 lobby and perimeter camera networks' },
+          { name: 'Gated Security Guards', description: 'Professional guards managing check-ins' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Facade View', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Shiv Vihar C Block, Mangyawas, Rajat Path, Mansarovar, Jaipur',
+      locality: 'Mansarovar',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'New Sanganer Road Connectivity', description: 'Rapid transit links via major local arterial roads.' },
+        { title: 'Shiv Vihar Residential Belt', description: 'Quiet family-focused locality near Rajat Path commercial blocks.' },
+      ],
+      nearbyPlaces: [
+        { category: 'CONNECTIVITY', name: 'New Sanganer Road', distance: 'Approx. 500 Meters' },
+        { category: 'SHOPPING', name: 'Rajat Path Markets', distance: 'Approx. 800 Meters' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'Is Bisalpur water connected to Raghav Heights?', answer: 'Yes, the building features active dual Bisalpur municipal connections and dedicated water boring backup.' },
+    ],
+  },
+  {
+    id: 'pratham',
+    slug: 'pratham',
+    name: 'Pratham',
+    tagline: 'Ready to Shift Apartments in Mansarovar Extension',
+    city: 'Jaipur',
+    location: 'Mansarovar Extension, Jaipur',
+    locality: 'Mansarovar',
+    address: 'Mansarovar Extension, Near Rajat Path, Jaipur, Rajasthan 302020',
+    propertyType: 'Apartments',
+    configurations: ['2 BHK', '3 BHK'],
+    status: 'ready-to-move',
+    priceFrom: 4000000,
+    priceLabel: 'Starting from ₹40.00L*',
+    priceIndicative: true,
+    areaFrom: 950,
+    areaTo: 1450,
+    areaLabel: '950 – 1,450 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Pratham offers ready to shift 2 & 3 BHK apartments in Mansarovar Extension starting at ₹40 Lakh, featuring complete clubhouse amenities and an active community with 180+ families shifted.',
+    usp: 'Ready-to-shift apartments near Rajat Path with a vibrant active community of 180+ families.',
+    highlights: [
+      'Ready to Shift 2 & 3 BHK Apartments',
+      'Starting from ₹40 Lakh (Raw units)',
+      '1 km from New Sanganer Road & Rajat Path',
+      'Vibrant community with 180+ families shifted',
+    ],
+    featured: false,
+    priority: 8,
+    tags: ['Ready to Move', 'Family Home', 'Budget Home'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Ready to Shift Homes at Pratham',
+      description: '🏡 Experience instant settlement at Pratham, a premium ready-to-move apartment project in Mansarovar Extension, Jaipur. Spanning spacious configurations starting from ₹40L, this project offers ready keys for immediate possession. Enjoy a complete premium clubhouse lifestyle, a podium garden, and join a thriving neighborhood with over 180+ families already shifted.',
+    },
+
+    detailedHighlights: [
+      { number: '180+', label: 'Families Shifted', description: 'Active, lively neighborhood with families already residing in the complex.' },
+      { number: 'READY', label: 'To Shift', description: 'No construction delays, JDA approved, ready for immediate registration and possession.' },
+      { number: '1 KM', label: 'From Rajat Path', description: 'Situated in a prime extension pocket near New Sanganer Road junctions.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '2 BHK Ready Apartment', area: '950 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹40.00 Lakhs*' },
+      { type: '3 BHK Ready Apartment', area: '1,450 Sq.Ft.', bedrooms: 3, bathrooms: 3, balconies: 2, price: '₹55.00 Lakhs*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹40.00 Lakhs*',
+      disclaimer: 'Base raw price. Registration, maintenance fees, and final unit choices subject to standard cost sheet.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'PREMIUM CLUBHOUSE',
+        items: [
+          { name: 'Gymnasium Center', description: 'Equipped workout fitness club' },
+          { name: 'Community Hall', description: 'Indoor celebration and banquet space' },
+          { name: 'Swimming Pool', description: 'Refreshed pool for adults and kids' },
+          { name: 'Games Room & Yoga', description: 'Indoor billiards/table tennis and yoga deck' },
+        ],
+      },
+      {
+        category: 'OUTDOOR & LIFESTYLE',
+        items: [
+          { name: 'Kids Play Area', description: 'Outdoor swings and slide park' },
+          { name: 'Podium Garden', description: 'Elevated green garden area' },
+          { name: 'Temple inside Complex', description: 'Dedicated community temple space' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Building Facade', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Mansarovar Extension, Jaipur',
+      locality: 'Mansarovar',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'New Sanganer Road Proximity', description: 'Situated just 1 km from New Sanganer Road and Rajat Path.' },
+        { title: 'Top Schools Accessibility', description: 'Surrounded by top institutes like EIS, St. Anselm’s, and St. Wilfrid’s.' },
+      ],
+      nearbyPlaces: [
+        { category: 'HOSPITALS', name: 'Dhanwantri Hospital', distance: '2.4 km' },
+        { category: 'CONNECTIVITY', name: 'Mansarovar Metro Station', distance: '3.4 km' },
+        { category: 'CONNECTIVITY', name: 'Jaipur Airport', distance: '8.5 km' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'How many families currently live here?', answer: 'Over 180+ families have already shifted and are residing in Pratham.' },
+    ],
+  },
+  {
+    id: 'prangan',
+    slug: 'prangan',
+    name: 'Prangan',
+    tagline: 'Budget-Friendly JDA Approved Flats at Muhana Mandi Gate No.1',
+    city: 'Jaipur',
+    location: 'Muhana Mandi Link Road, Jaipur',
+    locality: 'Mansarovar',
+    address: 'Muhana Mandi Gate No.1, Muhana–Sanganer Link Road, Jaipur, Rajasthan 302029',
+    propertyType: 'Apartments',
+    configurations: ['1 BHK', '2 BHK'],
+    status: 'under-construction',
+    priceFrom: 1400000,
+    priceLabel: '₹14.00L – ₹25.00L*',
+    priceIndicative: true,
+    areaFrom: 650,
+    areaTo: 850,
+    areaLabel: '650 – 850 Sq.Ft.',
+    heroImage: 'https://images.pexels.com/photos/209224/pexels-photo-209224.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    thumbnail: 'https://images.pexels.com/photos/209224/pexels-photo-209224.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    shortDescription: 'Prangan offers affordable 1 & 2 BHK flats on the Muhana-Sanganer Link Road at Gate No. 1, Muhana Mandi, featuring high-quality construction, JDA approval, and kids play area.',
+    usp: 'Affordable JDA approved flats at Muhana Mandi Gate No. 1 with parking and community space.',
+    highlights: [
+      '1 BHK (650 Sq.Ft.) starting from ₹14 Lakh',
+      '2 BHK (750 - 850 Sq.Ft.) starting from ₹25 Lakh',
+      'JDA Approved Project with quality construction',
+      'East & West Facing Units (Vastu compliant)',
+    ],
+    featured: false,
+    priority: 8,
+    tags: ['Budget Home', 'Investment'],
+    approvalStatus: 'JDA Approved',
+    developer: 'Sigma Group',
+
+    overview: {
+      title: 'Affordable Living at Prangan',
+      description: '✨ Sigma Builders brings you a perfect budget-friendly housing solution at Prangan. Strategically located near Muhana Mandi Gate No. 1 along the Muhana–Sanganer Link Road, this project offers high-quality construction, JDA-approved land titles, and Vastu-compliant East/West facing units. Ideal for first-time buyers and rental-yield investors.',
+    },
+
+    detailedHighlights: [
+      { number: 'BUDGET', label: 'Starts @ ₹14L', description: 'Highly budget-friendly pricing structures for premium JDA approved flats.' },
+      { number: 'VASTU', label: 'East/West Facing', description: 'Vastu-compliant layouts offering optimum daylight and ventilation.' },
+      { number: 'JDA', label: 'Approved Title', description: 'Fully approved JDA land with zero title complications, bank loan eligible.' },
+    ],
+
+    detailedConfigurations: [
+      { type: '1 BHK Apartment', area: '650 Sq.Ft.', bedrooms: 1, bathrooms: 1, balconies: 1, price: '₹14.00 Lakhs*' },
+      { type: '2 BHK Apartment', area: '750 - 850 Sq.Ft.', bedrooms: 2, bathrooms: 2, balconies: 1, price: '₹25.00 Lakhs*' },
+    ],
+
+    detailedPricing: {
+      startingPrice: '₹14.00 Lakhs*',
+      disclaimer: 'Prices subject to changes. Stamp duty and registry charges extra as per JDA guidelines.',
+    },
+
+    groupedAmenities: [
+      {
+        category: 'CONVENIENCES & BASIC INFRA',
+        items: [
+          { name: '24/7 Water & Power', description: 'Round the clock electricity and water storage' },
+          { name: 'Covered Parking Area', description: 'Dedicated parking slots for all units' },
+          { name: 'Boundary Wall & Security', description: 'Full gated security and perimeter wall' },
+        ],
+      },
+      {
+        category: 'COMMUNITY & OUTDOOR',
+        items: [
+          { name: 'Kids Play Zone', description: 'Dedicated children swings and play zone' },
+          { name: 'Community Center', description: 'Common gathering space for residents' },
+        ],
+      },
+    ],
+
+    galleryImages: [
+      { url: 'https://images.pexels.com/photos/209224/pexels-photo-209224.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', caption: 'Building Facade', category: 'architecture' },
+    ],
+
+    locationIntel: {
+      address: 'Muhana Mandi Gate No.1, Muhana–Sanganer Link Road, Jaipur',
+      locality: 'Mansarovar',
+      city: 'Jaipur',
+      advantages: [
+        { title: 'Muhana Mandi Proximity', description: 'Situated within easy walking distance from Muhana Mandi Gate No. 1.' },
+        { title: 'Excellent Transit Connectivity', description: 'Direct links to Mansarovar metro corridors, Sanganer, and Ring Road.' },
+      ],
+      nearbyPlaces: [
+        { category: 'SHOPPING', name: 'Muhana Mandi', distance: 'Walking Distance' },
+        { category: 'CONNECTIVITY', name: 'Ring Road Junction', distance: 'Approx. 4.0 km' },
+      ],
+    },
+
+    faqsData: [
+      { question: 'Is bank loan financing available?', answer: 'Yes, because it is JDA approved, you can easily secure bank loans from major financial institutions.' },
     ],
   },
 ];

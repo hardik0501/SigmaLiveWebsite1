@@ -12,7 +12,6 @@ import { PropertyTypes } from '@/components/sections/PropertyTypes';
 import { WhySigma } from '@/components/sections/WhySigma';
 import { BusinessEcosystem } from '@/components/sections/BusinessEcosystem';
 import { Founder } from '@/components/sections/Founder';
-import { CareerJourney } from '@/components/sections/CareerJourney';
 import { SuccessStory } from '@/components/sections/SuccessStory';
 import { WorkingMarkets } from '@/components/sections/WorkingMarkets';
 import { Insights } from '@/components/sections/Insights';
@@ -69,7 +68,6 @@ function HomePage() {
       <WhySigma />
       <BusinessEcosystem />
       <Founder />
-      <CareerJourney />
       <SuccessStory />
       <WorkingMarkets />
       <Insights />

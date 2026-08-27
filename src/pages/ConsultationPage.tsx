@@ -17,7 +17,7 @@ export function ConsultationPage() {
   });
 
   useEffect(() => {
-    document.title = 'Property Consultation | Sigma Homes India';
+    document.title = 'Property Advisory | Sigma Homes India';
   }, []);
 
   const handleNext = () => setStep((prev) => Math.min(prev + 1, 3));
@@ -49,12 +49,12 @@ export function ConsultationPage() {
     <div className="min-h-screen bg-sigma-ivory-50 text-sigma-graphite-900 pt-32 pb-20 md:pt-40">
       <div className="container-content max-w-2xl">
         <div className="text-center mb-8 space-y-2">
-          <span className="eyebrow text-sigma-blue-600">Guided Consultation</span>
+          <span className="eyebrow text-sigma-blue-600">Property Advisory</span>
           <h1 className="text-3xl md:text-4xl font-bold font-serif text-sigma-graphite-900">
-            Let's Find the Right Direction for You.
+            Expert Guidance for Your Next Home
           </h1>
           <p className="text-xs md:text-sm text-sigma-stone-600">
-            Tell us your preferences in 3 quick steps to receive curated property recommendations.
+            Data-backed advisory to help you find, verify, and secure the right residential property in Jaipur.
           </p>
         </div>
 

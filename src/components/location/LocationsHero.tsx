@@ -46,16 +46,16 @@ export function LocationsHero({
         </motion.div>
 
         {/* Market Selector & Locality Search Input */}
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 md:p-6 border border-sigma-stone-200/80 shadow-xl space-y-4">
-          <div className="flex flex-wrap gap-2 pb-3 border-b border-sigma-stone-200/60">
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl p-5 md:p-6 border border-white/10 shadow-2xl space-y-4">
+          <div className="flex flex-wrap gap-2 pb-3 border-b border-white/10">
             {markets.map((m) => (
               <button
                 key={m.id}
                 onClick={() => onSelectMarket(m.id)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                   selectedMarket === m.id
-                    ? 'bg-sigma-blue-700 text-white shadow-xs'
-                    : 'bg-sigma-stone-100 text-sigma-graphite-800 hover:bg-sigma-stone-200'
+                    ? 'bg-sigma-amber-500 text-sigma-navy-950 shadow-md'
+                    : 'bg-white/5 text-sigma-blue-100 hover:bg-white/10'
                 }`}
               >
                 {m.label}
@@ -64,13 +64,13 @@ export function LocationsHero({
           </div>
 
           <div className="relative flex items-center">
-            <Search className="absolute left-4 h-4 w-4 text-sigma-stone-400 pointer-events-none" />
+            <Search className="absolute left-4 h-4 w-4 text-sigma-blue-100/50 pointer-events-none" />
             <input
               type="text"
               placeholder="Search by neighborhood, road, or locality (e.g., Mansarovar, Vaishali Nagar, Kalwar Road)..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-sigma-stone-100/70 border border-sigma-stone-200 rounded-xl text-sm font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500 focus:bg-white transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-white placeholder-sigma-blue-100/40 focus:outline-none focus:ring-2 focus:ring-sigma-amber-500 focus:bg-white/10 transition-all"
             />
           </div>
         </div>

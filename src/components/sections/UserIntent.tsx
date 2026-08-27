@@ -14,7 +14,7 @@ const intents = [
   {
     icon: Tag,
     title: 'Sell Your Property',
-    description: 'Connect your property with the right buyer through Sigma.',
+    description: 'Reach qualified buyers and close transactions seamlessly.',
     cta: 'Sell With Sigma',
     href: '#final-cta',
     image: 'https://images.pexels.com/photos/7736029/pexels-photo-7736029.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
@@ -33,10 +33,10 @@ export function UserIntent() {
   return (
     <section id="user-intent" className="py-section md:py-30 bg-sigma-ivory-50">
       <div className="container-content">
-        <Reveal className="max-w-2xl mb-16">
-          <span className="eyebrow">How Can We Help</span>
-          <h2 className="mt-4 text-h2 text-sigma-graphite-900 text-balance">
-            How Can We Help You Today?
+        <Reveal className="max-w-4xl mb-16">
+          <span className="eyebrow">Get started with Sigma</span>
+          <h2 className="mt-4 text-h2 text-sigma-graphite-900">
+            How Can Sigma Support Your Journey?
           </h2>
         </Reveal>
 

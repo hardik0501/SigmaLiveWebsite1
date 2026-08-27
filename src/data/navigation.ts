@@ -9,11 +9,10 @@ export const navItems: NavItem[] = [
     label: 'Properties',
     href: '/properties',
     children: [
-      { label: 'All Properties', href: '/properties' },
-      { label: 'Compare Projects', href: '/compare' },
       { label: 'Apartments', href: '/properties?type=Apartments' },
       { label: 'Villas', href: '/properties?type=Villas' },
       { label: 'Plots & Land', href: '/properties?type=Plots+%26+Land' },
+      { label: 'Farmhouses', href: '/properties?type=Farmhouses' },
       { label: 'Commercial', href: '/properties?type=Commercial' },
     ],
   },
@@ -24,7 +23,7 @@ export const navItems: NavItem[] = [
       { label: 'Investment Hub', href: '/investment' },
       { label: 'NRI Real Estate Services', href: '/nri-services' },
       { label: 'Sell Your Property', href: '/sell-property' },
-      { label: 'Guided Consultation', href: '/consultation' },
+      { label: 'Property Advisory', href: '/consultation' },
     ],
   },
   {

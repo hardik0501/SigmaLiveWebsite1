@@ -1,11 +1,13 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Link, useNavigate } from 'react-router-dom';
 
 const heroImage = 'https://images.pexels.com/photos/38505310/pexels-photo-38505310.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1920';
 
 export function Hero() {
   const reduced = useReducedMotion();
+  const navigate = useNavigate();
 
   return (
     <section id="top" className="relative min-h-screen w-full overflow-hidden bg-sigma-navy-950">
@@ -19,18 +21,18 @@ export function Hero() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: reduced ? 0.5 : 6, ease: [0.22, 1, 0.36, 1] }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-sigma-navy-950 via-sigma-navy-950/70 to-sigma-navy-950/20" />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-gradient-to-t from-sigma-navy-950 via-transparent to-sigma-navy-950/30" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 container-wide min-h-screen flex flex-col justify-center pt-28 pb-32 lg:pb-20">
-        <div className="max-w-2xl">
+        <div className="max-w-3xl mx-auto text-center">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-eyebrow uppercase text-sigma-amber-400"
+            className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-sigma-amber-400 block"
           >
             Sigma Homes India
           </motion.span>
@@ -66,27 +68,20 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.9 }}
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            className="mt-10 flex flex-wrap items-center justify-center gap-4"
           >
             <Button href="#featured-projects" variant="light" size="lg">
               Explore Properties
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button href="#final-cta" variant="outline-light" size="lg">
+            <Button onClick={() => navigate('/book-site-visit')} variant="outline-light" size="lg">
+              <Calendar className="h-4 w-4" />
+              Book a Site Visit
+            </Button>
+            <Button onClick={() => navigate('/request-callback')} variant="outline-light" size="lg">
               Talk to an Expert
             </Button>
           </motion.div>
-
-          <motion.a
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 1.1 }}
-            href="#locations"
-            className="mt-8 inline-flex items-center gap-2 text-sm text-sigma-ivory-200/50 hover:text-sigma-amber-400 transition-colors duration-300"
-          >
-            <Calendar className="h-4 w-4" />
-            Book a Site Visit
-          </motion.a>
         </div>
       </div>
 

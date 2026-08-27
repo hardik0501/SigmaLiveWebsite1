@@ -15,13 +15,17 @@ export function WhySigma() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* Left: heading + highlights */}
           <div className="lg:col-span-5">
-            <SectionHeader
-              eyebrow="Why Sigma"
-              title="Built on Trust. Driven by Experience."
-              supporting="Two and a half decades of real estate expertise, distilled into a process that puts the customer first."
-              variant="light"
-              className="mb-12"
-            />
+            <Reveal className="flex flex-col gap-4 max-w-2xl mb-12">
+              <span className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-sigma-amber-400">
+                Why Sigma
+              </span>
+              <h2 className="text-h2 text-white text-balance">
+                Built on Trust. Driven by Experience.
+              </h2>
+              <p className="text-lg md:text-xl leading-relaxed text-white/90">
+                Two and a half decades of real estate expertise, distilled into a process that puts the customer first.
+              </p>
+            </Reveal>
 
             <div className="space-y-6">
               {highlights.map((item, i) => {
@@ -34,7 +38,7 @@ export function WhySigma() {
                       </span>
                       <div>
                         <h3 className="font-semibold text-white">{item.title}</h3>
-                        <p className="mt-1 text-sm text-sigma-ivory-200/50 leading-relaxed">
+                        <p className="mt-1 text-sm text-white/75 leading-relaxed">
                           {item.description}
                         </p>
                       </div>
@@ -51,12 +55,12 @@ export function WhySigma() {
               {rest.map((item, i) => (
                 <Reveal key={item.title} delay={i * 0.05}>
                   <div className="flex gap-4 py-5 border-b border-white/10">
-                    <span className="text-2xl font-extrabold text-sigma-amber-400/40 tabular-nums w-8 flex-shrink-0">
+                    <span className="text-2xl font-extrabold text-sigma-amber-400/60 tabular-nums w-8 flex-shrink-0">
                       {String(i + 5).padStart(2, '0')}
                     </span>
                     <div>
                       <h3 className="font-semibold text-white text-sm">{item.title}</h3>
-                      <p className="mt-1 text-xs text-sigma-ivory-200/40 leading-relaxed">
+                      <p className="mt-1 text-xs text-white/70 leading-relaxed">
                         {item.description}
                       </p>
                     </div>

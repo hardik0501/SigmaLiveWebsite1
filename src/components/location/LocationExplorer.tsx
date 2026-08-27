@@ -18,23 +18,23 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
     : 0;
 
   return (
-    <section className="py-16 md:py-24 bg-sigma-stone-100/60">
+    <section className="py-16 md:py-24 bg-white/[0.01] border-y border-white/5 relative z-10">
       <div className="container-content">
-        <div className="max-w-2xl mb-12">
-          <span className="eyebrow text-sigma-blue-600">Jaipur Neighborhoods</span>
-          <h2 className="text-3xl md:text-4xl font-bold font-serif text-sigma-graphite-900 mt-1">
+        <div className="max-w-2xl mb-12 space-y-3">
+          <span className="eyebrow text-sigma-amber-400 font-semibold tracking-wider text-xs uppercase">Jaipur Neighborhoods</span>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif text-white">
             Explore Jaipur Corridors
           </h2>
-          <p className="mt-2 text-sm md:text-base text-sigma-stone-600">
+          <p className="text-base md:text-lg text-sigma-blue-100/80 leading-relaxed font-sans">
             Find properties across Jaipur’s established residential hubs, growth corridors, and emerging investment destinations.
           </p>
         </div>
 
         {/* Interactive Desktop Split Screen Showcase */}
         {activeLocation && (
-          <div className="hidden lg:grid lg:grid-cols-12 gap-8 bg-white rounded-3xl border border-sigma-stone-200/80 p-4 shadow-xl overflow-hidden mb-12">
+          <div className="hidden lg:grid lg:grid-cols-12 gap-8 bg-white/[0.02] backdrop-blur-md rounded-3xl border border-white/10 p-5 shadow-2xl overflow-hidden mb-12">
             {/* Left Preview Image Panel */}
-            <div className="lg:col-span-7 relative min-h-[460px] rounded-2xl overflow-hidden bg-sigma-graphite-950">
+            <div className="lg:col-span-7 relative min-h-[480px] rounded-2xl overflow-hidden bg-[#0A1222]">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={activeLocation.id}
@@ -48,34 +48,34 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
                 />
               </AnimatePresence>
               
-              <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950 via-sigma-graphite-950/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#090F1C] via-transparent to-transparent" />
 
               <div className="relative z-10 p-8 h-full flex flex-col justify-between text-white">
                 <div className="flex items-center justify-between">
-                  <span className="px-3.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider text-white border border-white/20">
+                  <span className="px-3.5 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider text-white border border-white/15">
                     {activeLocation.city}
                   </span>
                   {activeProjectCount > 0 && (
-                    <span className="px-3 py-1 bg-sigma-blue-600 text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5">
+                    <span className="px-3.5 py-1.5 bg-sigma-amber-500 text-sigma-navy-950 rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5">
                       <Building2 className="h-3.5 w-3.5" />
                       {activeProjectCount} Available Projects
                     </span>
                   )}
                 </div>
 
-                <div className="space-y-3">
-                  <span className="text-xs font-bold uppercase tracking-widest text-sigma-amber-400">
+                <div className="space-y-4">
+                  <span className="text-xs font-extrabold uppercase tracking-widest text-sigma-amber-400">
                     Spotlight Neighborhood
                   </span>
-                  <h3 className="text-3xl font-bold font-serif text-white">{activeLocation.name}</h3>
-                  <p className="text-sm text-sigma-stone-200 leading-relaxed max-w-xl">
+                  <h3 className="text-3xl md:text-4xl font-bold font-serif text-white">{activeLocation.name}</h3>
+                  <p className="text-base text-sigma-blue-100/90 leading-relaxed max-w-xl font-sans">
                     {activeLocation.shortDescription}
                   </p>
 
-                  <div className="pt-3 flex items-center gap-3">
+                  <div className="pt-4 flex items-center gap-3">
                     <Link
                       to={`/locations/${activeLocation.slug}`}
-                      className="px-5 py-2.5 bg-sigma-amber-500 hover:bg-sigma-amber-600 text-sigma-graphite-950 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2 group"
+                      className="px-6 py-3 bg-sigma-amber-500 hover:bg-sigma-amber-600 text-sigma-navy-950 rounded-xl text-xs font-extrabold shadow-md transition-all flex items-center gap-2 group"
                     >
                       <span>Explore Area Guide</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -83,7 +83,7 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
 
                     <Link
                       to={`/properties?location=${encodeURIComponent(activeLocation.name)}`}
-                      className="px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white rounded-xl text-xs font-bold backdrop-blur-xs transition-colors"
+                      className="px-6 py-3 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-xl text-xs font-bold transition-all"
                     >
                       View Properties
                     </Link>
@@ -94,7 +94,7 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
 
             {/* Right Interactive Selection List */}
             <div className="lg:col-span-5 flex flex-col justify-center space-y-2 p-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-sigma-stone-400 px-4 mb-1">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-sigma-blue-100/40 px-4 mb-2">
                 Select Locality to Preview:
               </span>
               {locations.map((loc) => {
@@ -110,21 +110,21 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
                     onClick={() => setSelectedLocId(loc.id)}
                     className={`w-full p-4 rounded-2xl text-left transition-all flex items-center justify-between border ${
                       isSelected
-                        ? 'bg-sigma-graphite-950 text-white border-sigma-graphite-950 shadow-md translate-x-1'
-                        : 'bg-sigma-stone-50 hover:bg-sigma-stone-100 text-sigma-graphite-900 border-sigma-stone-200/80'
+                        ? 'bg-white/5 text-white border-white/20 shadow-lg translate-x-1'
+                        : 'bg-white/[0.01] hover:bg-white/[0.04] text-sigma-blue-100/80 border-white/5 hover:border-white/10'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs ${
-                          isSelected ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-sigma-stone-200 text-sigma-stone-700'
+                          isSelected ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-white/5 text-sigma-blue-100/60'
                         }`}
                       >
                         <MapPin className="h-4 w-4" />
                       </div>
                       <div>
                         <h4 className="font-bold text-sm font-serif">{loc.name}</h4>
-                        <span className={`text-xs ${isSelected ? 'text-sigma-stone-300' : 'text-sigma-stone-500'}`}>
+                        <span className={`text-xs ${isSelected ? 'text-sigma-blue-100/60' : 'text-sigma-blue-100/40'}`}>
                           {loc.city} • {loc.propertyTypes.slice(0, 2).join(', ')}
                         </span>
                       </div>
@@ -133,14 +133,14 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
                     <div className="flex items-center gap-2">
                       {count > 0 && (
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                            isSelected ? 'bg-white/20 text-sigma-amber-300' : 'bg-sigma-stone-200 text-sigma-stone-700'
+                          className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${
+                            isSelected ? 'bg-white/10 text-sigma-amber-300' : 'bg-white/5 text-sigma-blue-100/60'
                           }`}
                         >
                           {count} {count === 1 ? 'Project' : 'Projects'}
                         </span>
                       )}
-                      <ChevronRight className={`h-4 w-4 ${isSelected ? 'text-sigma-amber-400' : 'text-sigma-stone-400'}`} />
+                      <ChevronRight className={`h-4 w-4 ${isSelected ? 'text-sigma-amber-400' : 'text-sigma-blue-100/40'}`} />
                     </div>
                   </button>
                 );
@@ -159,22 +159,22 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
             return (
               <div
                 key={loc.id}
-                className="group relative flex flex-col bg-white rounded-3xl border border-sigma-stone-200/80 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-500"
+                className="group relative flex flex-col bg-white/[0.03] backdrop-blur-md rounded-3xl border border-white/10 overflow-hidden shadow-lg hover:border-sigma-amber-500/20 transition-all duration-300"
               >
-                <div className="relative h-52 w-full overflow-hidden bg-sigma-stone-900">
+                <div className="relative h-56 w-full overflow-hidden bg-[#0A1222]">
                   <img
                     src={loc.heroImage}
                     alt={loc.name}
                     loading="lazy"
-                    className="w-full h-full object-cover opacity-85 transition-transform duration-700 ease-sigma group-hover:scale-104"
+                    className="w-full h-full object-cover opacity-80 transition-transform duration-700 ease-sigma group-hover:scale-104"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950/80 via-transparent to-transparent" />
-                  <span className="absolute top-4 left-4 px-3 py-1 bg-black/40 backdrop-blur-md text-white rounded-full text-xs font-semibold border border-white/15">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#090F1C] via-transparent to-transparent" />
+                  <span className="absolute top-4 left-4 px-3.5 py-1 bg-white/10 backdrop-blur-md text-white rounded-full text-xs font-semibold border border-white/15">
                     {loc.city}
                   </span>
                   {count > 0 && (
-                    <span className="absolute top-4 right-4 px-2.5 py-1 bg-sigma-blue-700 text-white rounded-lg text-xs font-bold shadow-xs flex items-center gap-1">
-                      <Building2 className="h-3 w-3" />
+                    <span className="absolute top-4 right-4 px-2.5 py-1 bg-sigma-amber-500 text-sigma-navy-950 rounded-lg text-xs font-extrabold shadow-md flex items-center gap-1">
+                      <Building2 className="h-3.5 w-3.5" />
                       {count} {count === 1 ? 'Project' : 'Projects'}
                     </span>
                   )}
@@ -184,22 +184,22 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
                 </div>
 
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                  <p className="text-xs text-sigma-stone-600 leading-relaxed line-clamp-2">
+                  <p className="text-sm text-sigma-blue-100/70 leading-relaxed font-sans line-clamp-2">
                     {loc.shortDescription}
                   </p>
 
                   <div className="pt-2 flex flex-wrap gap-1.5">
                     {loc.propertyTypes.map((pt) => (
-                      <span key={pt} className="px-2.5 py-0.5 bg-sigma-stone-100 rounded-md text-[11px] font-semibold text-sigma-stone-600">
+                      <span key={pt} className="px-2.5 py-0.5 bg-white/5 rounded-md text-[11px] font-semibold text-sigma-blue-100/60 border border-white/5">
                         {pt}
                       </span>
                     ))}
                   </div>
 
-                  <div className="pt-4 border-t border-sigma-stone-200/60 flex items-center justify-between gap-2">
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-2">
                     <Link
                       to={`/locations/${loc.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-sigma-blue-700 group-hover:text-sigma-blue-900 transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm font-bold text-sigma-amber-400 hover:text-sigma-amber-300 transition-colors"
                     >
                       Explore Area Guide
                       <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -207,7 +207,7 @@ export function LocationExplorer({ locations }: LocationExplorerProps) {
 
                     <Link
                       to={`/properties?location=${encodeURIComponent(loc.name)}`}
-                      className="text-xs font-semibold text-sigma-stone-500 hover:text-sigma-graphite-900 underline"
+                      className="text-xs font-semibold text-sigma-blue-100/60 hover:text-white underline"
                     >
                       View Properties
                     </Link>

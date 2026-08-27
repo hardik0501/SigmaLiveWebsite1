@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CareerJourneyTimeline } from '@/components/company/CareerJourneyTimeline';
+import { CareerJourney } from '@/components/sections/CareerJourney';
 import { CareerApplicationModal } from '@/components/company/CareerApplicationModal';
 import { FinalCTA } from '@/components/sections/FinalCTA';
 import { Link } from 'react-router-dom';
@@ -94,7 +95,10 @@ export function CareersPage() {
           </div>
         </div>
 
-        {/* 3. 5-Stage Career Progression Timeline */}
+        {/* 3. Growth Journey Timeline */}
+        <CareerJourney />
+
+        {/* 4. 5-Stage Career Progression Timeline */}
         <CareerJourneyTimeline />
 
         {/* 4. Target Audiences & Opportunities */}

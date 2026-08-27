@@ -1,6 +1,6 @@
 export type ProjectStatus = 'ready-to-move' | 'under-construction' | 'new-launch' | 'limited-inventory';
 
-export type PropertyCategory = 'Apartments' | 'Villas' | 'Plots & Land' | 'Farm Houses' | 'Commercial';
+export type PropertyCategory = 'Apartments' | 'Villas' | 'Plots & Land' | 'Farmhouses' | 'Commercial';
 
 export type BuyerIntent = 'End Use' | 'Investment' | 'Luxury' | 'First Home' | 'Family Home' | 'Commercial';
 

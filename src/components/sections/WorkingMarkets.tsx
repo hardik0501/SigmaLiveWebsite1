@@ -42,17 +42,17 @@ export function WorkingMarkets() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950 via-sigma-graphite-950/20 to-transparent" />
                 <div className="relative z-10 flex h-full flex-col justify-end p-5">
-                  <span className={`inline-flex w-fit px-2.5 py-1 rounded-full text-[0.625rem] font-semibold mb-3 ${
+                  <span className={`inline-flex w-fit px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider mb-3 shadow-md ${
                     market.type === 'Primary Market'
-                      ? 'bg-sigma-blue-500/20 text-sigma-blue-200'
+                      ? 'bg-sigma-blue-600 text-white'
                       : market.type === 'Working Zone'
-                      ? 'bg-sigma-green-500/20 text-sigma-green-300'
-                      : 'bg-sigma-amber-500/20 text-sigma-amber-300'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-sigma-amber-500 text-sigma-navy-950'
                   }`}>
                     {market.type}
                   </span>
                   <h3 className="text-lg font-bold text-white">{market.name}</h3>
-                  <p className="mt-1.5 text-xs text-sigma-ivory-200/50 leading-relaxed line-clamp-2">
+                  <p className="mt-1.5 text-xs text-white/80 leading-relaxed line-clamp-2">
                     {market.description}
                   </p>
                   <ArrowRight className="mt-3 h-4 w-4 text-sigma-amber-400 transition-transform duration-300 group-hover:translate-x-1" />
