@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
   const socialLinks = [
-    { label: 'Facebook', href: '#', icon: Facebook },
-    { label: 'Instagram', href: '#', icon: Instagram },
-    { label: 'LinkedIn', href: '#', icon: Linkedin },
+    { label: 'Facebook', href: 'https://www.facebook.com/share/19Th6stqMg/', icon: Facebook },
+    { label: 'Instagram', href: 'https://www.instagram.com/sigmahomes_india', icon: Instagram },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/groups/25740060/', icon: Linkedin },
     { label: 'YouTube', href: '#', icon: Youtube },
   ];
 
@@ -136,7 +136,9 @@ export function Footer() {
             {socialLinks.map((link) => (
               <a
                 key={link.label}
-                href="#"
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={link.label}
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/5 hover:bg-sigma-blue-700 hover:border-sigma-blue-600 transition-all duration-300"
               >
