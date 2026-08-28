@@ -2,7 +2,7 @@ import { ArrowRight, UserCircle } from 'lucide-react';
 import { Reveal } from '@/components/ui/Reveal';
 import { ArrowButton } from '@/components/ui/Button';
 
-const placeholderImage = 'https://images.pexels.com/photos/30228707/pexels-photo-30228707.jpeg?auto=compress&cs=tinysrgb&h=700&w=560';
+const placeholderImage = '/images/Founder/Homepagefounder1.jpeg';
 
 const journeySteps = [
   { year: 'Year 1', title: 'Joined Sigma', description: 'Started without prior knowledge of the company.' },

@@ -2,7 +2,7 @@ import { ArrowRight, Quote } from 'lucide-react';
 import { Reveal } from '@/components/ui/Reveal';
 import { ArrowButton } from '@/components/ui/Button';
 
-const founderImage = 'https://images.pexels.com/photos/17049771/pexels-photo-17049771.jpeg?auto=compress&cs=tinysrgb&h=900&w=700';
+const founderImage = '/images/Founder/HomePage.jpeg';
 
 const pillars = [
   { label: 'Leadership', description: 'Guiding Sigma with a vision rooted in discipline and long-term thinking.' },

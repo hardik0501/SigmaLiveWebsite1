@@ -11,7 +11,7 @@ export const founderData: FounderProfile = {
   title: 'Founder & Chairman',
   philosophyHindi: 'जन सेवा ही राष्ट्र सेवा है।',
   philosophyEnglish: 'Public Service is National Service.',
-  portrait: 'https://images.pexels.com/photos/775358/pexels-photo-775358.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  portrait: '/images/Founder/HeroImage.jpeg',
   personalProfile: {
     name: 'Jitendra Kumar Sharma',
     placeOfBirth: 'Village Lakheri, Bansur, Alwar, Rajasthan',
@@ -100,7 +100,7 @@ export const leadersData: Leader[] = [
     name: 'Jitendra Kumar Sharma',
     designation: 'Founder & Chairman',
     category: 'CHAIRMAN',
-    portrait: 'https://images.pexels.com/photos/775358/pexels-photo-775358.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    portrait: '/images/Founder/HeroImage.jpeg',
     shortBio: 'Founder of Sigma Group with over two decades of vision, leadership, and public service.',
     fullBio:
       'Shri Jitendra Kumar Sharma established Sigma Homes to deliver transparent property development, ethical real estate transactions, and sustainable community creation across Rajasthan and North India.',

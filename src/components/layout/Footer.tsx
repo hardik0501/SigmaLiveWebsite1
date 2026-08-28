@@ -7,7 +7,7 @@ export function Footer() {
     { label: 'Facebook', href: 'https://www.facebook.com/share/19Th6stqMg/', icon: Facebook },
     { label: 'Instagram', href: 'https://www.instagram.com/sigmahomes_india', icon: Instagram },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/groups/25740060/', icon: Linkedin },
-    { label: 'YouTube', href: '#', icon: Youtube },
+    { label: 'YouTube', href: 'https://www.youtube.com/@SIGMAHOMESJAIPUR', icon: Youtube },
   ];
 
   return (

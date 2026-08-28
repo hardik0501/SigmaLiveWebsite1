@@ -18,9 +18,9 @@ export function FounderHero() {
           >
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-sigma-stone-900">
               <img
-                src={founderData.portrait}
+                src="/images/Founder/HeroImage.jpeg"
                 alt={founderData.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950/80 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-6 right-6">
