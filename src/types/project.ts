@@ -2,7 +2,21 @@ export type ProjectStatus = 'ready-to-move' | 'under-construction' | 'new-launch
 
 export type PropertyCategory = 'Apartments' | 'Villas' | 'Plots & Land' | 'Farmhouses' | 'Commercial';
 
-export type BuyerIntent = 'End Use' | 'Investment' | 'Luxury' | 'First Home' | 'Family Home' | 'Commercial';
+export type BuyerIntent =
+  | 'End Use'
+  | 'Investment'
+  | 'Luxury'
+  | 'First Home'
+  | 'Family Home'
+  | 'Commercial'
+  | 'Ready to Move'
+  | 'Budget Luxury'
+  | 'Villa'
+  | 'Launch Offer'
+  | 'Smart Home'
+  | 'RERA Approved'
+  | 'Budget Home'
+  | string;
 
 export interface ProjectHighlightItem {
   number: string;
@@ -76,7 +90,7 @@ export interface SpecificationCategory {
 }
 
 export interface NearbyPlace {
-  category: 'EDUCATION' | 'HEALTHCARE' | 'SHOPPING' | 'CONNECTIVITY';
+  category: 'EDUCATION' | 'HEALTHCARE' | 'SHOPPING' | 'CONNECTIVITY' | 'SCHOOLS' | 'HOSPITALS' | 'TOWNSHIPS' | string;
   name: string;
   distance: string;
 }

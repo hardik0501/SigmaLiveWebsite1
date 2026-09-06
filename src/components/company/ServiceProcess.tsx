@@ -2,11 +2,18 @@ import React from 'react';
 import { ServiceProcessStep } from '@/types/company';
 
 interface ServiceProcessProps {
-  steps: ServiceProcessStep[];
+  steps?: ServiceProcessStep[];
 }
 
-export function ServiceProcess({ steps }: ServiceProcessProps) {
-  if (!steps || steps.length === 0) return null;
+const DEFAULT_STEPS: ServiceProcessStep[] = [
+  { stepNumber: 1, title: 'Discovery & Consultation', description: 'Understanding your investment goals, budget, and location preferences in detail.' },
+  { stepNumber: 2, title: 'Curated Options & Due Diligence', description: 'Screening verified properties, title deed verification, and RERA compliance check.' },
+  { stepNumber: 3, title: 'Site Visit & Negotiation', description: 'Assisted site visits, transparent financial breakdowns, and best developer negotiations.' },
+  { stepNumber: 4, title: 'Documentation & Handover', description: 'End-to-end legal registration, home loan processing, and seamless possession handover.' }
+];
+
+export function ServiceProcess({ steps = DEFAULT_STEPS }: ServiceProcessProps) {
+  const processSteps = steps && steps.length > 0 ? steps : DEFAULT_STEPS;
 
   return (
     <section className="py-16 md:py-24 bg-white border-b border-sigma-stone-200/60">
@@ -22,7 +29,7 @@ export function ServiceProcess({ steps }: ServiceProcessProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {steps.map((step) => (
+          {processSteps.map((step) => (
             <div key={step.stepNumber} className="p-6 bg-sigma-stone-50 border border-sigma-stone-200/80 rounded-3xl space-y-3 relative">
               <span className="w-8 h-8 rounded-xl bg-sigma-blue-700 text-white font-extrabold text-xs flex items-center justify-center">
                 0{step.stepNumber}

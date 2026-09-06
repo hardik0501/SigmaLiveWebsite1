@@ -86,8 +86,80 @@
         ]
       }
     </script>
+
+    <!-- Meta / Facebook Pixel -->
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+      fbq('init', '415054881409452');
+    </script>
+
+    <!-- Facebook Pixel Lead Event Config -->
+    <script>
+      var fcaPcEvents = [{
+        "triggerType": "url",
+        "trigger": "https://sigmahome.in/contact/",
+        "parameters": {
+          "content_name": "{post_title}",
+          "content_category": "{post_category}"
+        },
+        "pixel_type": "Facebook",
+        "event": "Lead",
+        "delay": "0",
+        "scroll": "0",
+        "apiAction": "track"
+      }];
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DCXMGL9W7Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DCXMGL9W7Z');
+    </script>
+
+    <!-- Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10780021599"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-10780021599');
+    </script>
+
+    <!-- Google Site Kit / Google Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-MB6T62Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('set', 'linker', {
+        domains: ['sigmahome.in']
+      });
+      gtag('js', new Date());
+      gtag('set', 'developer_id.dZTNiMT', true);
+      gtag('config', 'GT-MB6T62Z');
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xy06e4t69a");
+    </script>
   </head>
   <body class="bg-sigma-ivory-50 text-sigma-graphite-900 antialiased selection:bg-sigma-amber-400 selection:text-sigma-graphite-950">
+    <!-- Meta Pixel Noscript Fallback -->
+    <noscript>
+      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=415054881409452&ev=PageView&noscript=1" />
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
