@@ -1,79 +1,122 @@
-import { motion } from 'framer-motion';
 import { Home, Tag, TrendingUp, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
 
-const intents = [
+const quickActions = [
   {
     icon: Home,
-    title: 'Buy a Property',
-    description: 'Find the right property for your lifestyle or investment.',
+    tag: 'BUY A PROPERTY',
+    title: 'Your Next Home Starts With the Right Address.',
+    description: 'Looking for a home that fits your lifestyle, budget and future plans? Explore carefully selected apartments, villas and residential properties across Jaipur.',
     cta: 'Explore Properties',
-    href: '#featured-projects',
+    link: '/properties',
     image: 'https://images.pexels.com/photos/280239/pexels-photo-280239.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    badge: 'Residential & Luxury',
+    pastelBg: 'from-blue-50/60 to-white',
+    badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
+    iconColor: 'bg-blue-600 text-white',
+    accentHover: 'group-hover:border-blue-300',
   },
   {
     icon: Tag,
-    title: 'Sell Your Property',
-    description: 'Reach qualified buyers and close transactions seamlessly.',
+    tag: 'SELL YOUR PROPERTY',
+    title: 'Have a Property to Sell? Let the Right Buyers Find It.',
+    description: 'Get professional assistance to present, market and sell your property with a smoother, more transparent experience from enquiry to closure.',
     cta: 'Sell With Sigma',
-    href: '#final-cta',
+    link: '/sell-property',
     image: 'https://images.pexels.com/photos/7736029/pexels-photo-7736029.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    badge: 'Fast & Transparent',
+    pastelBg: 'from-amber-50/60 to-white',
+    badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+    iconColor: 'bg-amber-600 text-white',
+    accentHover: 'group-hover:border-amber-300',
   },
   {
     icon: TrendingUp,
-    title: 'Invest With Sigma',
-    description: 'Explore real-estate opportunities with professional guidance.',
+    tag: 'INVEST WITH SIGMA',
+    title: 'Invest in Property With a Bigger Picture in Mind.',
+    description: 'Real estate is more than bricks and walls. Location, infrastructure, demand and future growth all matter. Our team helps you discover opportunities that make sense for your investment goals.',
     cta: 'Explore Investment',
-    href: '#ecosystem',
+    link: '/investment',
     image: 'https://images.pexels.com/photos/8089172/pexels-photo-8089172.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    badge: 'High ROI & Growth',
+    pastelBg: 'from-emerald-50/60 to-white',
+    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200',
+    iconColor: 'bg-emerald-600 text-white',
+    accentHover: 'group-hover:border-emerald-300',
   },
 ];
 
 export function UserIntent() {
   return (
-    <section id="user-intent" className="py-section md:py-30 bg-sigma-ivory-50">
+    <section id="quick-action" className="py-20 md:py-28 bg-[#FAF7F2] border-b border-amber-200/40">
       <div className="container-content">
-        <Reveal className="max-w-4xl mb-16">
-          <span className="eyebrow">Get started with Sigma</span>
-          <h2 className="mt-4 text-h2 text-sigma-graphite-900">
+        <Reveal className="text-center max-w-3xl mx-auto mb-14">
+          <span className="text-xs md:text-sm font-extrabold uppercase tracking-[0.2em] text-amber-700 block mb-2">
+            QUICK ACTION SECTION
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold font-serif text-slate-900">
             How Can Sigma Support Your Journey?
           </h2>
+          <p className="mt-3 text-sm md:text-base text-slate-600">
+            Choose how you wish to engage with Jaipur's most trusted real estate ecosystem.
+          </p>
         </Reveal>
 
-        <Stagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {intents.map((intent, i) => {
-            const isWide = i === 0;
+        <Stagger className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
             return (
-              <StaggerItem
-                key={intent.title}
-                className={isWide ? 'md:col-span-1' : ''}
-              >
-                <a
-                  href={intent.href}
-                  className="group relative block h-full overflow-hidden rounded-2xl bg-sigma-graphite-900"
+              <StaggerItem key={action.tag}>
+                <Link
+                  to={action.link}
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-white border border-slate-200/80 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 min-h-[440px] ${action.accentHover}`}
                 >
-                  <div className="absolute inset-0">
+                  {/* Top Image Preview */}
+                  <div className="relative h-48 w-full overflow-hidden bg-slate-100">
                     <img
-                      src={intent.image}
-                      alt={intent.title}
+                      src={action.image}
+                      alt={action.title}
                       loading="lazy"
-                      className="h-full w-full object-cover opacity-50 transition-all duration-700 ease-sigma group-hover:scale-105 group-hover:opacity-60"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-sigma group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950 via-sigma-graphite-950/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
+
+                    {/* Floating Icon & Badge */}
+                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                      <div className={`h-11 w-11 rounded-2xl flex items-center justify-center shadow-md ${action.iconColor}`}>
+                        <Icon className="h-5 w-5" strokeWidth={2} />
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border shadow-xs ${action.badgeColor}`}>
+                        {action.badge}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="relative z-10 flex h-full flex-col justify-end p-8 min-h-[320px]">
-                    <intent.icon className="h-7 w-7 text-sigma-amber-400 mb-4" strokeWidth={1.8} />
-                    <h3 className="text-xl font-bold text-white">{intent.title}</h3>
-                    <p className="mt-2 text-sm text-sigma-ivory-200/70 leading-relaxed">
-                      {intent.description}
-                    </p>
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sigma-amber-400">
-                      {intent.cta}
-                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </span>
+                  {/* Body Content */}
+                  <div className={`p-6 sm:p-7 flex flex-col flex-1 justify-between bg-gradient-to-b ${action.pastelBg}`}>
+                    <div>
+                      <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-amber-700 mb-1.5 block">
+                        {action.tag}
+                      </span>
+                      <h3 className="text-lg sm:text-xl font-bold font-serif text-slate-900 group-hover:text-blue-700 transition-colors leading-snug">
+                        {action.title}
+                      </h3>
+                      <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        {action.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                      <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-700 group-hover:text-blue-900 transition-colors">
+                        {action.cta}
+                      </span>
+                      <div className="h-8 w-8 rounded-full bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
+                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      </div>
+                    </div>
                   </div>
-                </a>
+                </Link>
               </StaggerItem>
             );
           })}

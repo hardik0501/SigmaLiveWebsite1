@@ -1,92 +1,123 @@
-import { useState } from 'react';
-import { ArrowRight, Play, FileText, TrendingUp, MapPin, Users, BarChart3, Video } from 'lucide-react';
-import { Reveal } from '@/components/ui/Reveal';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { insightCategories } from '@/data/site';
+import { ArrowRight, FileText, TrendingUp, MapPin, Users, BarChart3, Video } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
+import { insightArticles } from '@/data/site';
 
 const categoryIcons: Record<string, typeof FileText> = {
-  property: FileText,
-  investment: TrendingUp,
-  locations: MapPin,
-  leadership: Users,
-  'market-insights': BarChart3,
-  video: Video,
+  PROPERTY: FileText,
+  INVESTMENT: TrendingUp,
+  LOCATIONS: MapPin,
+  LEADERSHIP: Users,
+  'MARKET INSIGHTS': BarChart3,
+  VIDEO: Video,
+};
+
+const categoryBadgeColors: Record<string, string> = {
+  PROPERTY: 'bg-blue-100 text-blue-900 border-blue-200',
+  INVESTMENT: 'bg-emerald-100 text-emerald-900 border-emerald-200',
+  LOCATIONS: 'bg-amber-100 text-amber-900 border-amber-200',
+  LEADERSHIP: 'bg-purple-100 text-purple-900 border-purple-200',
+  'MARKET INSIGHTS': 'bg-rose-100 text-rose-900 border-rose-200',
+  VIDEO: 'bg-red-100 text-red-900 border-red-200',
 };
 
 export function Insights() {
-  const [activeCategory, setActiveCategory] = useState(insightCategories[0].id);
-
   return (
-    <section id="insights" className="py-section md:py-30 bg-sigma-ivory-50">
+    <section id="insights" className="py-20 md:py-28 bg-white border-b border-slate-200">
       <div className="container-content">
-        <SectionHeader
-          eyebrow="Inside Sigma"
-          title="Inside Sigma"
-          supporting="Property insights, market knowledge, project stories and leadership perspectives."
-          className="mb-10"
-        />
+        {/* Section Header */}
+        <Reveal className="max-w-3xl mb-14">
+          <span className="text-xs md:text-sm font-extrabold uppercase tracking-[0.25em] text-amber-700 block mb-2">
+            PROPERTY INSIGHTS
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-4.5xl font-bold font-serif text-slate-900 leading-tight">
+            Know the Market Before You Make Your Move.
+          </h2>
+          <p className="mt-4 text-sm md:text-base text-slate-600 leading-relaxed font-sans">
+            Property decisions become easier when you have the right information. From buying a home in Jaipur to understanding emerging investment locations, our insights are created to help buyers and investors make more informed decisions.
+          </p>
+        </Reveal>
 
-        {/* Category filter */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {insightCategories.map((cat) => {
-            const Icon = categoryIcons[cat.id] || FileText;
-            const isActive = activeCategory === cat.id;
+        {/* 6 Insight Cards Grid */}
+        <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {insightArticles.map((article) => {
+            const Icon = categoryIcons[article.category] || FileText;
+            const isExternal = article.href.startsWith('http');
+            const badgeClass = categoryBadgeColors[article.category] || 'bg-slate-100 text-slate-800 border-slate-200';
+
             return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                  isActive
-                    ? 'bg-sigma-blue-700 text-white'
-                    : 'bg-white border border-sigma-stone-200 text-sigma-graphite-700 hover:border-sigma-blue-300'
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {cat.label}
-              </button>
+              <StaggerItem key={article.id}>
+                {isExternal ? (
+                  <a
+                    href={article.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group h-full flex flex-col justify-between p-7 rounded-3xl bg-[#F8FAFC] border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-5">
+                        <div className="h-11 w-11 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center group-hover:bg-blue-700 group-hover:text-white transition-colors duration-300 shadow-xs">
+                          <Icon className="h-5 w-5" strokeWidth={1.8} />
+                        </div>
+                        <span className={`text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border shadow-2xs ${badgeClass}`}>
+                          {article.category}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold font-serif text-slate-900 group-hover:text-blue-700 transition-colors">
+                        {article.title}
+                      </h3>
+                      <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        {article.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+                      <span className="text-xs font-bold text-blue-700 group-hover:text-blue-900 transition-colors">
+                        {article.ctaText}
+                      </span>
+                      <div className="h-8 w-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all">
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </div>
+                    </div>
+                  </a>
+                ) : (
+                  <Link
+                    to={article.href}
+                    className="group h-full flex flex-col justify-between p-7 rounded-3xl bg-[#F8FAFC] border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-5">
+                        <div className="h-11 w-11 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center group-hover:bg-blue-700 group-hover:text-white transition-colors duration-300 shadow-xs">
+                          <Icon className="h-5 w-5" strokeWidth={1.8} />
+                        </div>
+                        <span className={`text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border shadow-2xs ${badgeClass}`}>
+                          {article.category}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold font-serif text-slate-900 group-hover:text-blue-700 transition-colors">
+                        {article.title}
+                      </h3>
+                      <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        {article.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+                      <span className="text-xs font-bold text-blue-700 group-hover:text-blue-900 transition-colors">
+                        {article.ctaText}
+                      </span>
+                      <div className="h-8 w-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all">
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </div>
+                    </div>
+                  </Link>
+                )}
+              </StaggerItem>
             );
           })}
-        </div>
-
-        {/* Placeholder content grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <article className="group flex flex-col overflow-hidden rounded-2xl bg-white border border-sigma-stone-200/70 shadow-sm hover:shadow-lg hover:shadow-sigma-blue-950/5 transition-all duration-500 ease-sigma">
-                {/* Placeholder media area */}
-                <div className="relative h-48 bg-sigma-stone-100 flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-sigma-blue-50 to-sigma-stone-100" />
-                  {activeCategory === 'video' ? (
-                    <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-sigma-blue-700">
-                      <Play className="h-6 w-6 text-white ml-0.5" fill="white" />
-                    </span>
-                  ) : (
-                    <FileText className="relative z-10 h-10 w-10 text-sigma-stone-400" strokeWidth={1.5} />
-                  )}
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/80 backdrop-blur-sm text-xs font-semibold text-sigma-graphite-700 capitalize">
-                    {activeCategory.replace('-', ' ')}
-                  </span>
-                </div>
-
-                <div className="flex flex-1 flex-col p-6">
-                  <p className="text-xs text-sigma-stone-400 font-medium">
-                    Article title to be added
-                  </p>
-                  <h3 className="mt-2 font-bold text-sigma-graphite-900 text-lg leading-snug">
-                    Future {activeCategory.replace('-', ' ')} insight — placeholder content
-                  </h3>
-                  <p className="mt-3 text-sm text-sigma-stone-500 leading-relaxed flex-1">
-                    This slot is reserved for future CMS content. Article copy, author and publish date will be connected when the content system is implemented.
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sigma-blue-700 group-hover:text-sigma-blue-900 transition-colors">
-                    Read More
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

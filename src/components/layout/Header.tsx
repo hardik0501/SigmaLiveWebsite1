@@ -206,7 +206,7 @@ export function Header() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-sigma ${
           isTransparent
             ? 'bg-transparent py-4'
-            : 'bg-sigma-ivory-50/95 backdrop-blur-md border-b border-sigma-stone-200/60 py-2.5 shadow-sm'
+            : 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 py-2.5 shadow-sm'
         }`}
       >
         <div className="container-wide flex items-center justify-between gap-4 relative">
@@ -224,7 +224,7 @@ export function Header() {
                   className={`px-3.5 py-2 text-sm font-semibold transition-colors duration-200 ${
                     isTransparent
                       ? 'text-white/90 hover:text-white'
-                      : 'text-sigma-graphite-700 hover:text-sigma-blue-700'
+                      : 'text-slate-700 hover:text-blue-700'
                   }`}
                 >
                   {item.label}
@@ -237,13 +237,17 @@ export function Header() {
             <a
               href={`tel:${contact.salesHelplineRaw}`}
               className={`flex items-center gap-2 text-sm font-semibold transition-colors duration-200 ${
-                isTransparent ? 'text-white/90 hover:text-white' : 'text-sigma-graphite-700 hover:text-sigma-blue-700'
+                isTransparent ? 'text-white/90 hover:text-amber-300' : 'text-slate-700 hover:text-blue-700'
               }`}
             >
-              <Phone className="h-4 w-4" />
+              <Phone className="h-4 w-4 text-amber-400" />
               {contact.salesHelpline}
             </a>
-            <Button href="/properties" variant={isTransparent ? 'outline-light' : 'primary'} size="sm">
+            <Button
+              href="/properties"
+              variant={isTransparent ? 'outline-light' : 'primary'}
+              size="sm"
+            >
               Explore Properties
             </Button>
           </div>
@@ -253,7 +257,7 @@ export function Header() {
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
           >
-            <Menu className={`h-6 w-6 ${isTransparent ? 'text-white' : 'text-sigma-graphite-900'}`} />
+            <Menu className={`h-6 w-6 ${isTransparent ? 'text-white' : 'text-slate-900'}`} />
           </button>
         </div>
 

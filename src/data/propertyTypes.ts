@@ -1,39 +1,51 @@
 export interface PropertyTypeData {
   id: string;
   name: string;
+  heading: string;
   description: string;
   image: string;
+  cta: string;
 }
 
 export const propertyTypes: PropertyTypeData[] = [
   {
     id: 'apartments',
     name: 'Apartments',
-    description: 'Modern 2, 3 & 4 BHK residences built for everyday comfort.',
+    heading: 'Find a Home That Fits Your Life.',
+    description: "Discover thoughtfully designed residences, including modern 2, 3 and 4 BHK homes in some of Jaipur's sought-after locations.",
     image: 'https://images.pexels.com/photos/14998334/pexels-photo-14998334.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    cta: 'Explore Apartments',
   },
   {
     id: 'villas',
     name: 'Villas',
-    description: 'Independent luxury homes featuring private lawns and premium amenities.',
+    heading: 'More Space. More Privacy. More Yours.',
+    description: 'Discover villas for sale in Jaipur designed for families who want independent living, generous spaces and a little more freedom.',
     image: 'https://images.pexels.com/photos/7031594/pexels-photo-7031594.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    cta: 'Explore Villas',
   },
   {
     id: 'plots-land',
     name: 'Plots & Land',
-    description: 'JDA-approved residential plots prime for investment or custom building.',
+    heading: 'Own the Land. Build Your Vision.',
+    description: 'Explore JDA approved plots in Jaipur and residential land opportunities in locations with strong connectivity and future growth potential.',
     image: 'https://images.pexels.com/photos/17079478/pexels-photo-17079478.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    cta: 'Explore Plots',
   },
   {
     id: 'farmhouses',
     name: 'Farmhouses',
-    description: 'Peaceful getaway properties and weekend retreats surrounded by nature.',
+    heading: 'Your Weekend Escape Could Be Your Own.',
+    description: 'Looking for space away from the everyday rush? Explore farmhouse for sale in Jaipur options for weekend living, family gatherings or long-term ownership.',
     image: 'https://images.pexels.com/photos/14021175/pexels-photo-14021175.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    cta: 'Explore Farmhouses',
   },
   {
     id: 'commercial',
     name: 'Commercial',
-    description: 'Office, retail and showroom spaces in prime locations',
+    heading: 'Give Your Business the Right Address.',
+    description: 'Explore commercial property for sale in Jaipur, from business spaces to retail and investment opportunities in strategically located areas.',
     image: 'https://images.pexels.com/photos/1313534/pexels-photo-1313534.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    cta: 'Explore Commercial',
   },
 ];

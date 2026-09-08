@@ -1,42 +1,37 @@
-import { ArrowRight, UserCircle } from 'lucide-react';
-import { Reveal } from '@/components/ui/Reveal';
-import { ArrowButton } from '@/components/ui/Button';
+import { ArrowRight, Trophy, TrendingUp, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
+import { careerJourney } from '@/data/site';
 
-const placeholderImage = '/images/Founder/Homepagefounder1.jpeg';
-
-const journeySteps = [
-  { year: 'Year 1', title: 'Joined Sigma', description: 'Started without prior knowledge of the company.' },
-  { year: 'Year 2', title: 'Professional', description: 'Built client relationships and market expertise.' },
-  { year: 'Year 3', title: 'Leadership', description: 'Began managing teams and key projects.' },
-  { year: 'Year 5', title: 'Director / Partner', description: 'Reached partnership level through consistent growth.' },
-];
+const spotlightImage = '/images/Founder/Homepagefounder1.jpeg';
 
 export function SuccessStory() {
   return (
-    <section id="success-story" className="py-section md:py-28 bg-sigma-graphite-950 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
-
+    <section id="leadership-spotlight" className="py-20 md:py-28 bg-gradient-to-br from-[#F0F6FF] via-[#FAF7F2] to-[#FFFDF8] border-b border-blue-200/40 relative overflow-hidden">
       <div className="container-content relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Portrait / Feature Image */}
-          <div className="lg:col-span-5">
+          {/* Visual Showcase */}
+          <div className="lg:col-span-5 order-2 lg:order-1">
             <Reveal>
-              <div className="relative overflow-hidden rounded-2xl bg-sigma-navy-900 border border-white/15 shadow-2xl group">
-                <img
-                  src={placeholderImage}
-                  alt="Sigma Leadership Growth Journey"
-                  loading="lazy"
-                  className="w-full h-[450px] md:h-[520px] object-cover opacity-75 transition-transform duration-700 ease-sigma group-hover:scale-103"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950 via-sigma-graphite-950/20 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-sigma-amber-500/20 border border-sigma-amber-400/40 text-sigma-amber-400 flex items-center justify-center font-bold text-xs">
-                      5Y
-                    </div>
-                    <div>
-                      <p className="text-base font-bold font-serif text-white">Sigma Leadership Career Path</p>
-                      <p className="text-xs text-sigma-amber-400 font-medium">Fresher to Director Progression</p>
+              <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200 shadow-xl p-2 group">
+                <div className="relative overflow-hidden rounded-2xl h-[440px] sm:h-[480px]">
+                  <img
+                    src={spotlightImage}
+                    alt="Sigma Leadership Career Growth Journey"
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-sigma group-hover:scale-103"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                  <div className="absolute bottom-4 left-4 right-4 p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg">
+                    <div className="flex items-center gap-3.5">
+                      <div className="h-12 w-12 rounded-2xl bg-amber-100 border border-amber-300 text-amber-900 flex items-center justify-center font-extrabold text-sm shrink-0">
+                        5Y
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold font-serif text-slate-900">Merit-Based Growth Path</p>
+                        <p className="text-xs text-blue-700 font-bold">From Day 1 Associate to Partner Equity</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -44,32 +39,37 @@ export function SuccessStory() {
             </Reveal>
           </div>
 
-          {/* Story + Timeline */}
-          <div className="lg:col-span-7 space-y-6">
+          {/* Timeline & Content */}
+          <div className="lg:col-span-7 space-y-6 order-1 lg:order-2">
             <Reveal>
-              <span className="eyebrow text-sigma-amber-400">Leadership Spotlight</span>
-              <h2 className="mt-3 text-3xl md:text-5xl font-bold font-serif text-white leading-tight">
+              <span className="text-xs md:text-sm font-extrabold uppercase tracking-[0.25em] text-amber-700 block mb-2">
+                LEADERSHIP SPOTLIGHT
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-slate-900 leading-tight">
                 From First Day to Director Level.
               </h2>
-              <p className="mt-4 text-xs md:text-sm text-sigma-stone-300 leading-relaxed max-w-xl font-sans">
-                A testament to Sigma Group's meritocratic growth ecosystem where talent evolves from entry-level advisory into strategic partner ownership.
+              <p className="mt-4 text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
+                A company grows when its people grow with it. At Sigma, we believe talent should have room to learn, take ownership and build a career.
+              </p>
+              <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Our growth stories reflect an environment where commitment and performance can open the door to bigger opportunities.
               </p>
             </Reveal>
 
-            {/* Journey Timeline Steps */}
-            <div className="pt-2 space-y-1">
-              {journeySteps.map((step, i) => (
-                <Reveal key={step.title} delay={0.15 + i * 0.08}>
-                  <div className="flex items-start gap-5 py-3.5 border-b border-white/10 group">
-                    <span className="text-xs font-mono font-bold text-sigma-amber-400 uppercase tracking-widest w-20 shrink-0 pt-0.5 group-hover:translate-x-1 transition-transform">
-                      {step.year}
+            {/* Career Milestones */}
+            <div className="pt-2 space-y-3">
+              {careerJourney.map((milestone, idx) => (
+                <Reveal key={milestone.year} delay={0.15 + idx * 0.08}>
+                  <div className="flex items-start gap-4 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-blue-300 hover:shadow-md transition-all group">
+                    <span className="text-xs font-mono font-extrabold text-amber-900 bg-amber-100 border border-amber-300 px-3 py-1 rounded-xl shrink-0">
+                      {milestone.year}
                     </span>
-                    <div className="flex-1">
-                      <h3 className="font-bold font-serif text-white text-sm group-hover:text-sigma-amber-300 transition-colors">
-                        {step.title}
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                        {milestone.title}
                       </h3>
-                      <p className="mt-1 text-xs text-sigma-stone-400 leading-relaxed">
-                        {step.description}
+                      <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+                        {milestone.description}
                       </p>
                     </div>
                   </div>
@@ -77,15 +77,16 @@ export function SuccessStory() {
               ))}
             </div>
 
+            {/* CTA */}
             <Reveal delay={0.4}>
-              <div className="pt-4">
-                <a
-                  href="/success-stories"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold backdrop-blur-xs transition-all border border-white/15 group"
+              <div className="pt-3">
+                <Link
+                  to="/success-stories"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-md shadow-blue-700/20 group"
                 >
                   <span>Explore All Success Stories</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1.5" />
-                </a>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
               </div>
             </Reveal>
           </div>

@@ -1,75 +1,76 @@
-import { ShieldCheck, Users, FileText, TrendingUp } from 'lucide-react';
-import { Reveal } from '@/components/ui/Reveal';
-import { SectionHeader } from '@/components/ui/SectionHeader';
+import { MapPin, ShieldCheck, Users, UserCheck, MessageSquare, HeartHandshake } from 'lucide-react';
+import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
 import { whySigmaItems } from '@/data/site';
 
-const highlightIcons = [ShieldCheck, Users, FileText, TrendingUp];
+const pillarIcons = [
+  MapPin,
+  ShieldCheck,
+  Users,
+  UserCheck,
+  MessageSquare,
+  HeartHandshake,
+];
 
 export function WhySigma() {
-  const highlights = whySigmaItems.slice(0, 4);
-  const rest = whySigmaItems.slice(4);
-
   return (
-    <section id="why-sigma" className="py-section md:py-30 bg-sigma-navy-950 text-white">
-      <div className="container-content">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          {/* Left: heading + highlights */}
-          <div className="lg:col-span-5">
-            <Reveal className="flex flex-col gap-4 max-w-2xl mb-12">
-              <span className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-sigma-amber-400">
-                Why Sigma
-              </span>
-              <h2 className="text-h2 text-white text-balance">
-                Built on Trust. Driven by Experience.
-              </h2>
-              <p className="text-lg md:text-xl leading-relaxed text-white/90">
-                Two and a half decades of real estate expertise, distilled into a process that puts the customer first.
-              </p>
-            </Reveal>
+    <section id="why-sigma" className="py-20 md:py-30 bg-gradient-to-br from-[#F0F6FF] via-[#FFFDF5] to-[#FAF7F2] border-b border-amber-200/50 relative overflow-hidden">
+      {/* Subtle Pastel Glow Blurs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="space-y-6">
-              {highlights.map((item, i) => {
-                const Icon = highlightIcons[i];
-                return (
-                  <Reveal key={item.title} delay={i * 0.1}>
-                    <div className="flex gap-4 items-start">
-                      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-white/5 border border-white/10">
-                        <Icon className="h-5 w-5 text-sigma-amber-400" strokeWidth={1.8} />
-                      </span>
-                      <div>
-                        <h3 className="font-semibold text-white">{item.title}</h3>
-                        <p className="mt-1 text-sm text-white/75 leading-relaxed">
-                          {item.description}
-                        </p>
+      <div className="container-content relative z-10">
+        {/* Section Header */}
+        <Reveal className="max-w-3xl mb-16">
+          <span className="text-xs md:text-sm font-extrabold uppercase tracking-[0.25em] text-amber-700 block mb-2">
+            WHY SIGMA HOMES
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-slate-900 leading-tight">
+            A Property Decision Should Come With Confidence.
+          </h2>
+          <p className="mt-5 text-base sm:text-lg text-slate-700 leading-relaxed font-sans">
+            Buying property is a big decision. You deserve more than a brochure and a sales pitch. You need someone who understands the market, listens to what you need and stays with you through the process.
+          </p>
+          <p className="mt-2 text-sm sm:text-base font-bold text-blue-700">
+            That's where Sigma Homes comes in.
+          </p>
+        </Reveal>
+
+        {/* 6 Value Pillars Grid */}
+        <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {whySigmaItems.map((item, idx) => {
+            const Icon = pillarIcons[idx] || ShieldCheck;
+            return (
+              <StaggerItem key={item.title}>
+                <div className="h-full p-7 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200/80 border border-amber-300 text-amber-900 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
+                        <Icon className="h-6 w-6" strokeWidth={2} />
                       </div>
+                      <span className="text-xl font-mono font-black text-slate-300">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
                     </div>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
 
-          {/* Right: numbered list of remaining items */}
-          <div className="lg:col-span-7">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
-              {rest.map((item, i) => (
-                <Reveal key={item.title} delay={i * 0.05}>
-                  <div className="flex gap-4 py-5 border-b border-white/10">
-                    <span className="text-2xl font-extrabold text-sigma-amber-400/60 tabular-nums w-8 flex-shrink-0">
-                      {String(i + 5).padStart(2, '0')}
-                    </span>
-                    <div>
-                      <h3 className="font-semibold text-white text-sm">{item.title}</h3>
-                      <p className="mt-1 text-xs text-white/70 leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
+                    <h3 className="text-base sm:text-lg font-bold font-serif text-slate-900 tracking-wide group-hover:text-blue-700 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
+
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-700">
+                      Sigma Commitment
+                    </span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  </div>
+                </div>
+              </StaggerItem>
+            );
+          })}
+        </Stagger>
       </div>
     </section>
   );

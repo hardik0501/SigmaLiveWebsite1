@@ -1,8 +1,6 @@
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight, Globe, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/Reveal';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { ArrowButton } from '@/components/ui/Button';
 import { markets } from '@/data/site';
 
 const marketImages: Record<string, string> = {
@@ -21,50 +19,88 @@ const slugMap: Record<string, string> = {
   dholera: '/locations/dholera-smart-city',
 };
 
+const marketBadgeStyles: Record<string, string> = {
+  'PRIMARY MARKET': 'bg-amber-100 text-amber-900 border-amber-300',
+  'GROWING MARKET': 'bg-blue-100 text-blue-900 border-blue-300',
+  'INTERNATIONAL MARKET': 'bg-purple-100 text-purple-900 border-purple-300',
+  'EMERGING MARKET': 'bg-emerald-100 text-emerald-900 border-emerald-300',
+};
+
 export function WorkingMarkets() {
   return (
-    <section id="markets" className="py-section md:py-30 bg-sigma-stone-100">
+    <section id="markets" className="py-20 md:py-28 bg-[#FAF7F2] border-b border-amber-200/40">
       <div className="container-content">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
-          <SectionHeader
-            eyebrow="Our Reach"
-            title="Growing Across Markets"
-            supporting="From our headquarters in Jaipur to future zones in Dubai and Dholera."
-          />
-          <Reveal delay={0.2}>
-            <ArrowButton href="#markets">Explore Markets</ArrowButton>
+        {/* Section Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-14">
+          <Reveal className="max-w-3xl">
+            <span className="text-xs md:text-sm font-extrabold uppercase tracking-[0.25em] text-amber-700 block mb-2">
+              GROWING ACROSS MARKETS
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-4.5xl font-bold font-serif text-slate-900 leading-tight">
+              From Jaipur to Emerging Real Estate Markets.
+            </h2>
+            <p className="mt-4 text-sm md:text-base text-slate-600 leading-relaxed font-sans">
+              Jaipur remains at the heart of our journey, but opportunities don't stop at one city. Sigma is building its presence across locations where infrastructure, economic activity and long-term development are creating new possibilities for homeowners and investors.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.2} className="shrink-0">
+            <Link
+              to="/locations"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-md shadow-blue-700/20 group"
+            >
+              <span>Explore Our Markets</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </Reveal>
         </div>
 
-        <Stagger className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" stagger={0.08}>
+        {/* 5 Markets Grid */}
+        <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5" stagger={0.08}>
           {markets.map((market) => (
             <StaggerItem key={market.id}>
               <Link
                 to={slugMap[market.id] || '/locations'}
-                className="group relative block overflow-hidden rounded-xl bg-sigma-graphite-900 h-[280px] md:h-[320px]"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 h-[380px]"
               >
-                <img
-                  src={marketImages[market.id]}
-                  alt={market.name}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover opacity-55 transition-all duration-700 ease-sigma group-hover:scale-105 group-hover:opacity-65"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-sigma-graphite-950 via-sigma-graphite-950/20 to-transparent" />
-                <div className="relative z-10 flex h-full flex-col justify-end p-5">
-                  <span className={`inline-flex w-fit px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider mb-3 shadow-md ${
-                    market.type === 'Primary Market'
-                      ? 'bg-sigma-blue-600 text-white'
-                      : market.type === 'Working Zone'
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-sigma-amber-500 text-sigma-navy-950'
-                  }`}>
-                    {market.type}
-                  </span>
-                  <h3 className="text-lg font-bold text-white">{market.name}</h3>
-                  <p className="mt-1.5 text-xs text-white/80 leading-relaxed line-clamp-2">
-                    {market.description}
-                  </p>
-                  <ArrowRight className="mt-3 h-4 w-4 text-sigma-amber-400 transition-transform duration-300 group-hover:translate-x-1" />
+                {/* Image */}
+                <div className="relative h-40 w-full overflow-hidden bg-slate-100">
+                  <img
+                    src={marketImages[market.id] || marketImages.jaipur}
+                    alt={market.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-sigma group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+
+                  {/* Top Badge */}
+                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider border shadow-xs ${
+                      marketBadgeStyles[market.type] || 'bg-slate-100 text-slate-800 border-slate-300'
+                    }`}>
+                      {market.type}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bottom Content Card */}
+                <div className="p-5 flex flex-col flex-1 justify-between bg-gradient-to-b from-white to-[#F9FBFD]">
+                  <div>
+                    <div className="flex items-center gap-1.5 text-blue-700 mb-1">
+                      <MapPin className="h-3.5 w-3.5 shrink-0" />
+                      <h3 className="text-lg font-bold font-serif text-slate-900 group-hover:text-blue-700 transition-colors">
+                        {market.name}
+                      </h3>
+                    </div>
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed line-clamp-3">
+                      {market.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-700">
+                    <span>Explore Market</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </div>
                 </div>
               </Link>
             </StaggerItem>
