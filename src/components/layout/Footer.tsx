@@ -235,13 +235,25 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Legal Block */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        {/* Bottom Legal Block & Designer Credit */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
           <p>© 2026 Sigma Homes India · All rights reserved.</p>
-          <div className="flex items-center gap-6">
+
+          <div className="flex items-center gap-4 sm:gap-5">
             <Link to="/contact" className="hover:text-blue-700 transition-colors">Privacy Policy</Link>
             <span className="text-slate-300">|</span>
             <Link to="/contact" className="hover:text-blue-700 transition-colors">Terms & Conditions</Link>
+            <span className="text-slate-300">|</span>
+            <span className="text-slate-400">
+              Designed by{' '}
+              <a
+                href="mailto:Hardikgothwal0501@gmail.com"
+                className="font-extrabold text-slate-700 hover:text-blue-700 transition-colors"
+                title="Contact: Hardikgothwal0501@gmail.com"
+              >
+                HG
+              </a>
+            </span>
           </div>
         </div>
       </div>
