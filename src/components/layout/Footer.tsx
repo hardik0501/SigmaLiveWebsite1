@@ -20,7 +20,7 @@ export function Footer() {
             <Logo variant="dark" />
             <div className="mt-4">
               <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-amber-800 block">
-                INDIA · A VENTURE BY JITENDRA KUMAR SHARMA
+                INDIA · A VENTURE BY JITENDRA SHARMA
               </span>
               <p className="text-sm text-slate-600 leading-relaxed mt-2">
                 Building Dreams. Creating Wealth. Delivering Trust Since 2001.

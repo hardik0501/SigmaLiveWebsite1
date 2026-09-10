@@ -195,7 +195,7 @@ function AdminPageContent() {
     try {
       const data = await fetchBlogs(true);
       if (Array.isArray(data)) setBlogsList(data);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleOpenNewBlog = () => {
@@ -282,7 +282,7 @@ function AdminPageContent() {
               setLastUpdated(new Date().toLocaleTimeString());
             }
           })
-          .catch(() => {});
+          .catch(() => { });
       }, 6000);
 
       const handleLeadsUpdated = (e: Event) => {
@@ -551,9 +551,8 @@ function AdminPageContent() {
             <button
               onClick={() => exportLeadsToCsv(filteredLeads)}
               disabled={filteredLeads.length === 0}
-              className={`px-4 py-2 bg-sigma-green-600 hover:bg-sigma-green-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5 ${
-                filteredLeads.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className={`px-4 py-2 bg-sigma-green-600 hover:bg-sigma-green-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5 ${filteredLeads.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
             >
               <Download className="h-3.5 w-3.5" />
               Export CSV ({filteredLeads.length})
@@ -571,9 +570,8 @@ function AdminPageContent() {
             <button
               onClick={refreshLeads}
               disabled={isSyncing}
-              className={`px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
-                isSyncing ? 'opacity-70' : ''
-              }`}
+              className={`px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${isSyncing ? 'opacity-70' : ''
+                }`}
               title="Sync Lead Data"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
@@ -595,11 +593,10 @@ function AdminPageContent() {
       <div className="container-content mb-6 flex items-center gap-3">
         <button
           onClick={() => setActiveMainSection('crm')}
-          className={`px-5 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 border transition-all ${
-            activeMainSection === 'crm'
+          className={`px-5 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 border transition-all ${activeMainSection === 'crm'
               ? 'bg-sigma-blue-700 text-white border-sigma-blue-700 shadow-md'
               : 'bg-white text-sigma-stone-700 hover:bg-sigma-stone-100 border-sigma-stone-200/80 shadow-2xs'
-          }`}
+            }`}
         >
           <Radio className="h-4 w-4" />
           Form Leads CRM ({leads.length})
@@ -607,11 +604,10 @@ function AdminPageContent() {
 
         <button
           onClick={() => setActiveMainSection('blogs')}
-          className={`px-5 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 border transition-all ${
-            activeMainSection === 'blogs'
+          className={`px-5 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 border transition-all ${activeMainSection === 'blogs'
               ? 'bg-sigma-blue-700 text-white border-sigma-blue-700 shadow-md'
               : 'bg-white text-sigma-stone-700 hover:bg-sigma-stone-100 border-sigma-stone-200/80 shadow-2xs'
-          }`}
+            }`}
         >
           <BookOpen className="h-4 w-4" />
           Blog CMS Articles ({blogsList.length})
@@ -631,7 +627,6 @@ function AdminPageContent() {
                 Create, update, publish, or delete blog posts served directly from backend databases.
               </p>
             </div>
-
             <button
               onClick={handleOpenNewBlog}
               className="px-5 py-2.5 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
@@ -652,11 +647,10 @@ function AdminPageContent() {
                   <div className="aspect-video rounded-2xl overflow-hidden bg-sigma-stone-100 relative">
                     <img src={blog.coverImage} alt={blog.title} className="w-full h-full object-cover" />
                     <span
-                      className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase shadow-xs ${
-                        blog.published !== false
+                      className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase shadow-xs ${blog.published !== false
                           ? 'bg-emerald-500 text-white'
                           : 'bg-amber-500 text-sigma-graphite-950'
-                      }`}
+                        }`}
                     >
                       {blog.published !== false ? 'Published' : 'Draft'}
                     </span>
@@ -857,18 +851,16 @@ function AdminPageContent() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-2 border ${
-                      isActive
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-2 border ${isActive
                         ? 'bg-sigma-graphite-950 text-white border-sigma-graphite-950 shadow-sm scale-102'
                         : 'bg-sigma-stone-50 hover:bg-sigma-stone-100 text-sigma-stone-700 border-sigma-stone-200'
-                    }`}
+                      }`}
                   >
                     <span>{cat.icon}</span>
                     <span>{cat.label}</span>
                     <span
-                      className={`px-1.5 py-0.5 rounded-md text-[10px] font-extrabold ${
-                        isActive ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-sigma-stone-200 text-sigma-stone-800'
-                      }`}
+                      className={`px-1.5 py-0.5 rounded-md text-[10px] font-extrabold ${isActive ? 'bg-sigma-amber-500 text-sigma-graphite-950' : 'bg-sigma-stone-200 text-sigma-stone-800'
+                        }`}
                     >
                       {count}
                     </span>
@@ -878,224 +870,224 @@ function AdminPageContent() {
             </div>
           </div>
 
-        {/* Filter Controls */}
-        <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-xs">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Search Input */}
-            <div className="relative lg:col-span-2">
-              <Search className="h-4 w-4 text-sigma-stone-400 absolute left-3.5 top-3" />
-              <input
-                type="text"
-                placeholder="Search name, phone, email, project, location or message..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
-              />
-            </div>
+          {/* Filter Controls */}
+          <div className="p-4 bg-white rounded-2xl border border-sigma-stone-200/80 shadow-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Search Input */}
+              <div className="relative lg:col-span-2">
+                <Search className="h-4 w-4 text-sigma-stone-400 absolute left-3.5 top-3" />
+                <input
+                  type="text"
+                  placeholder="Search name, phone, email, project, location or message..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                />
+              </div>
 
-            {/* Status Filter */}
-            <div>
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
-              >
-                <option value="all">All CRM Statuses</option>
-                <option value="New">Status: New</option>
-                <option value="Contacted">Status: Contacted</option>
-                <option value="In Progress">Status: In Progress</option>
-                <option value="Closed">Status: Closed</option>
-              </select>
-            </div>
+              {/* Status Filter */}
+              <div>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                >
+                  <option value="all">All CRM Statuses</option>
+                  <option value="New">Status: New</option>
+                  <option value="Contacted">Status: Contacted</option>
+                  <option value="In Progress">Status: In Progress</option>
+                  <option value="Closed">Status: Closed</option>
+                </select>
+              </div>
 
-            {/* Timeframe Filter */}
-            <div>
-              <select
-                value={selectedTimeframe}
-                onChange={(e) => setSelectedTimeframe(e.target.value)}
-                className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
-              >
-                <option value="all">All Time</option>
-                <option value="today">Submitted Today</option>
-                <option value="7days">Last 7 Days</option>
-                <option value="30days">Last 30 Days</option>
-              </select>
+              {/* Timeframe Filter */}
+              <div>
+                <select
+                  value={selectedTimeframe}
+                  onChange={(e) => setSelectedTimeframe(e.target.value)}
+                  className="w-full px-3 py-2 bg-sigma-stone-50 border border-sigma-stone-200 rounded-xl text-xs font-semibold text-sigma-graphite-900 focus:outline-none focus:ring-2 focus:ring-sigma-blue-500"
+                >
+                  <option value="all">All Time</option>
+                  <option value="today">Submitted Today</option>
+                  <option value="7days">Last 7 Days</option>
+                  <option value="30days">Last 30 Days</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Lead Table or Empty State */}
-        <div className="bg-white rounded-3xl border border-sigma-stone-200/80 shadow-xl overflow-hidden">
-          {filteredLeads.length === 0 ? (
-            <div className="p-12 text-center space-y-4 max-w-md mx-auto">
-              <div className="w-16 h-16 mx-auto rounded-full bg-sigma-amber-50 text-sigma-amber-600 flex items-center justify-center border border-sigma-amber-200/60">
-                <Inbox className="h-8 w-8" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold font-serif text-sigma-graphite-900">
-                  {leads.length === 0 ? 'No Form Submissions Yet' : 'No Submissions Match Filters'}
-                </h3>
-                <p className="text-xs text-sigma-stone-500 leading-relaxed">
-                  {leads.length === 0
-                    ? 'All forms filled on the website will instantly show up here in real time with complete details and form categories.'
-                    : 'Try clearing search keywords or changing category tabs to see other submissions.'}
-                </p>
-              </div>
-              {leads.length === 0 && (
-                <div className="pt-2">
-                  <a
-                    href="/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white rounded-xl font-bold text-xs shadow-md transition-colors"
-                  >
-                    <Send className="h-3.5 w-3.5" />
-                    Open Main Website & Fill a Form
-                  </a>
+          {/* Lead Table or Empty State */}
+          <div className="bg-white rounded-3xl border border-sigma-stone-200/80 shadow-xl overflow-hidden">
+            {filteredLeads.length === 0 ? (
+              <div className="p-12 text-center space-y-4 max-w-md mx-auto">
+                <div className="w-16 h-16 mx-auto rounded-full bg-sigma-amber-50 text-sigma-amber-600 flex items-center justify-center border border-sigma-amber-200/60">
+                  <Inbox className="h-8 w-8" />
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="overflow-x-auto no-scrollbar">
-              <table className="w-full text-left border-collapse min-w-[950px]">
-                <thead>
-                  <tr className="border-b border-sigma-stone-200 bg-sigma-stone-50 text-[11px] font-bold uppercase tracking-wider text-sigma-stone-500">
-                    <th className="p-4">Ref ID / Time</th>
-                    <th className="p-4">Form Category</th>
-                    <th className="p-4">Customer Info</th>
-                    <th className="p-4">Target / Context</th>
-                    <th className="p-4">CRM Status</th>
-                    <th className="p-4 text-right">Quick Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-sigma-stone-200/60 text-xs font-medium">
-                  {filteredLeads.map((l) => {
-                    const leadId = l.id || 'SIG-000000';
-                    const leadName = l.name || 'Anonymous';
-                    const leadPhone = l.phone || 'N/A';
-                    const badge = getCategoryBadge(l.leadType);
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold font-serif text-sigma-graphite-900">
+                    {leads.length === 0 ? 'No Form Submissions Yet' : 'No Submissions Match Filters'}
+                  </h3>
+                  <p className="text-xs text-sigma-stone-500 leading-relaxed">
+                    {leads.length === 0
+                      ? 'All forms filled on the website will instantly show up here in real time with complete details and form categories.'
+                      : 'Try clearing search keywords or changing category tabs to see other submissions.'}
+                  </p>
+                </div>
+                {leads.length === 0 && (
+                  <div className="pt-2">
+                    <a
+                      href="/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-sigma-blue-700 hover:bg-sigma-blue-800 text-white rounded-xl font-bold text-xs shadow-md transition-colors"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      Open Main Website & Fill a Form
+                    </a>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="overflow-x-auto no-scrollbar">
+                <table className="w-full text-left border-collapse min-w-[950px]">
+                  <thead>
+                    <tr className="border-b border-sigma-stone-200 bg-sigma-stone-50 text-[11px] font-bold uppercase tracking-wider text-sigma-stone-500">
+                      <th className="p-4">Ref ID / Time</th>
+                      <th className="p-4">Form Category</th>
+                      <th className="p-4">Customer Info</th>
+                      <th className="p-4">Target / Context</th>
+                      <th className="p-4">CRM Status</th>
+                      <th className="p-4 text-right">Quick Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-sigma-stone-200/60 text-xs font-medium">
+                    {filteredLeads.map((l) => {
+                      const leadId = l.id || 'SIG-000000';
+                      const leadName = l.name || 'Anonymous';
+                      const leadPhone = l.phone || 'N/A';
+                      const badge = getCategoryBadge(l.leadType);
 
-                    const whatsappLink = generateWhatsAppLink({
-                      targetPhone: leadPhone,
-                      message: `Hi ${leadName}, following up regarding your ${badge.label} with Sigma Homes.`,
-                    });
-                    const statusColor =
-                      l.status === 'Closed'
-                        ? 'bg-gray-100 text-gray-700 border-gray-300'
-                        : l.status === 'In Progress'
-                        ? 'bg-blue-50 text-blue-700 border-blue-200'
-                        : l.status === 'Contacted'
-                        ? 'bg-purple-50 text-purple-700 border-purple-200'
-                        : 'bg-amber-50 text-amber-800 border-amber-300 font-bold';
+                      const whatsappLink = generateWhatsAppLink({
+                        targetPhone: leadPhone,
+                        message: `Hi ${leadName}, following up regarding your ${badge.label} with Sigma Homes.`,
+                      });
+                      const statusColor =
+                        l.status === 'Closed'
+                          ? 'bg-gray-100 text-gray-700 border-gray-300'
+                          : l.status === 'In Progress'
+                            ? 'bg-blue-50 text-blue-700 border-blue-200'
+                            : l.status === 'Contacted'
+                              ? 'bg-purple-50 text-purple-700 border-purple-200'
+                              : 'bg-amber-50 text-amber-800 border-amber-300 font-bold';
 
-                    return (
-                      <tr key={leadId} className="hover:bg-sigma-stone-50/70 transition-colors">
-                        {/* Ref ID / Time */}
-                        <td className="p-4">
-                          <span className="font-bold font-mono text-sigma-graphite-900 block">{leadId}</span>
-                          <span className="text-[11px] text-sigma-stone-400 block mt-0.5">
-                            {l.createdAt
-                              ? new Date(l.createdAt).toLocaleString('en-IN', {
+                      return (
+                        <tr key={leadId} className="hover:bg-sigma-stone-50/70 transition-colors">
+                          {/* Ref ID / Time */}
+                          <td className="p-4">
+                            <span className="font-bold font-mono text-sigma-graphite-900 block">{leadId}</span>
+                            <span className="text-[11px] text-sigma-stone-400 block mt-0.5">
+                              {l.createdAt
+                                ? new Date(l.createdAt).toLocaleString('en-IN', {
                                   dateStyle: 'short',
                                   timeStyle: 'short',
                                 })
-                              : 'N/A'}
-                          </span>
-                        </td>
+                                : 'N/A'}
+                            </span>
+                          </td>
 
-                        {/* Form Category Badge */}
-                        <td className="p-4">
-                          <span
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold inline-flex items-center gap-1.5 shadow-2xs ${badge.color}`}
-                          >
-                            <span>{badge.icon}</span>
-                            <span>{badge.label}</span>
-                          </span>
-                        </td>
+                          {/* Form Category Badge */}
+                          <td className="p-4">
+                            <span
+                              className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold inline-flex items-center gap-1.5 shadow-2xs ${badge.color}`}
+                            >
+                              <span>{badge.icon}</span>
+                              <span>{badge.label}</span>
+                            </span>
+                          </td>
 
-                        {/* Customer Info */}
-                        <td className="p-4">
-                          <span className="font-bold text-sigma-graphite-900 block text-sm">{leadName}</span>
-                          <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                            <span className="text-sigma-stone-700 font-sans font-semibold">{leadPhone}</span>
-                            {l.email && <span className="text-[11px] text-sigma-stone-500">({l.email})</span>}
-                          </div>
-                        </td>
+                          {/* Customer Info */}
+                          <td className="p-4">
+                            <span className="font-bold text-sigma-graphite-900 block text-sm">{leadName}</span>
+                            <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                              <span className="text-sigma-stone-700 font-sans font-semibold">{leadPhone}</span>
+                              {l.email && <span className="text-[11px] text-sigma-stone-500">({l.email})</span>}
+                            </div>
+                          </td>
 
-                        {/* Target / Context */}
-                        <td className="p-4">
-                          <span className="font-bold text-sigma-graphite-900 block">
-                            {l.projectName || l.location || 'General Website Enquiry'}
-                          </span>
-                          {l.configuration && (
-                            <span className="text-[11px] text-sigma-stone-500 block">Config: {l.configuration}</span>
-                          )}
-                          {l.budget && (
-                            <span className="text-[11px] text-sigma-stone-500 block">Budget: {l.budget}</span>
-                          )}
-                        </td>
+                          {/* Target / Context */}
+                          <td className="p-4">
+                            <span className="font-bold text-sigma-graphite-900 block">
+                              {l.projectName || l.location || 'General Website Enquiry'}
+                            </span>
+                            {l.configuration && (
+                              <span className="text-[11px] text-sigma-stone-500 block">Config: {l.configuration}</span>
+                            )}
+                            {l.budget && (
+                              <span className="text-[11px] text-sigma-stone-500 block">Budget: {l.budget}</span>
+                            )}
+                          </td>
 
-                        {/* CRM Status */}
-                        <td className="p-4">
-                          <select
-                            value={l.status || 'New'}
-                            onChange={(e) => handleStatusChange(leadId, e.target.value as LeadStatus)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] focus:outline-none cursor-pointer ${statusColor}`}
-                          >
-                            <option value="New">New</option>
-                            <option value="Contacted">Contacted</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Closed">Closed</option>
-                          </select>
-                        </td>
+                          {/* CRM Status */}
+                          <td className="p-4">
+                            <select
+                              value={l.status || 'New'}
+                              onChange={(e) => handleStatusChange(leadId, e.target.value as LeadStatus)}
+                              className={`px-2.5 py-1 rounded-lg border text-[11px] focus:outline-none cursor-pointer ${statusColor}`}
+                            >
+                              <option value="New">New</option>
+                              <option value="Contacted">Contacted</option>
+                              <option value="In Progress">In Progress</option>
+                              <option value="Closed">Closed</option>
+                            </select>
+                          </td>
 
-                        {/* Actions */}
-                        <td className="p-4 text-right space-x-1.5">
-                          <button
-                            onClick={() => setActiveDetailLead(l)}
-                            className="px-2.5 py-1.5 bg-sigma-stone-100 hover:bg-sigma-stone-200 text-sigma-graphite-900 rounded-lg text-[11px] font-bold transition-colors inline-flex items-center gap-1"
-                            title="View Full Submission Details"
-                          >
-                            <ExternalLink className="h-3 w-3" />
-                            Details
-                          </button>
+                          {/* Actions */}
+                          <td className="p-4 text-right space-x-1.5">
+                            <button
+                              onClick={() => setActiveDetailLead(l)}
+                              className="px-2.5 py-1.5 bg-sigma-stone-100 hover:bg-sigma-stone-200 text-sigma-graphite-900 rounded-lg text-[11px] font-bold transition-colors inline-flex items-center gap-1"
+                              title="View Full Submission Details"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              Details
+                            </button>
 
-                          <a
-                            href={whatsappLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-1.5 bg-sigma-green-50 text-sigma-green-600 hover:bg-sigma-green-600 hover:text-white rounded-lg transition-colors inline-block"
-                            title="Chat on WhatsApp"
-                          >
-                            <MessageCircle className="h-3.5 w-3.5" />
-                          </a>
+                            <a
+                              href={whatsappLink}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="p-1.5 bg-sigma-green-50 text-sigma-green-600 hover:bg-sigma-green-600 hover:text-white rounded-lg transition-colors inline-block"
+                              title="Chat on WhatsApp"
+                            >
+                              <MessageCircle className="h-3.5 w-3.5" />
+                            </a>
 
-                          <a
-                            href={`tel:${leadPhone.replace(/\s+/g, '')}`}
-                            className="p-1.5 bg-sigma-blue-50 text-sigma-blue-700 hover:bg-sigma-blue-700 hover:text-white rounded-lg transition-colors inline-block"
-                            title="Call Customer"
-                          >
-                            <Phone className="h-3.5 w-3.5" />
-                          </a>
+                            <a
+                              href={`tel:${leadPhone.replace(/\s+/g, '')}`}
+                              className="p-1.5 bg-sigma-blue-50 text-sigma-blue-700 hover:bg-sigma-blue-700 hover:text-white rounded-lg transition-colors inline-block"
+                              title="Call Customer"
+                            >
+                              <Phone className="h-3.5 w-3.5" />
+                            </a>
 
-                          <button
-                            onClick={() => handleDeleteLead(leadId)}
-                            className="p-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-colors inline-block"
-                            title="Delete Submission Record"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+                            <button
+                              onClick={() => handleDeleteLead(leadId)}
+                              className="p-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-colors inline-block"
+                              title="Delete Submission Record"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
       {/* Form Submission Detail Modal */}
       {activeDetailLead && (
@@ -1117,9 +1109,8 @@ function AdminPageContent() {
             <div className="space-y-2">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
-                  className={`px-2.5 py-1 rounded-lg border text-xs font-bold inline-flex items-center gap-1.5 ${
-                    getCategoryBadge(activeDetailLead.leadType).color
-                  }`}
+                  className={`px-2.5 py-1 rounded-lg border text-xs font-bold inline-flex items-center gap-1.5 ${getCategoryBadge(activeDetailLead.leadType).color
+                    }`}
                 >
                   <span>{getCategoryBadge(activeDetailLead.leadType).icon}</span>
                   <span>{getCategoryBadge(activeDetailLead.leadType).label}</span>
@@ -1242,9 +1233,8 @@ function AdminPageContent() {
               <a
                 href={generateWhatsAppLink({
                   targetPhone: activeDetailLead.phone,
-                  message: `Hi ${activeDetailLead.name || 'Customer'}, following up regarding your ${
-                    getCategoryBadge(activeDetailLead.leadType).label
-                  } with Sigma Homes.`,
+                  message: `Hi ${activeDetailLead.name || 'Customer'}, following up regarding your ${getCategoryBadge(activeDetailLead.leadType).label
+                    } with Sigma Homes.`,
                 })}
                 target="_blank"
                 rel="noreferrer"
